@@ -1,0 +1,83 @@
+
+
+<h4>Please select an Answer.</h4>
+
+
+
+
+<body>
+
+<p class="right"  > {{storyboxID}}</p>
+<div class="Time" id="time_x" name="time_x"><span >01:00</span> minutes!</div>
+
+
+</body>
+<form action="/dashboard/Question_Loop"   method="get">
+
+    <label for="Answer_A">
+        A.)
+        <p id="para1" >{{Answer_A}} </p>
+
+    </label>
+    <label for="Answer B">
+        B.)
+        <p id="para1" >{{Answer_B}} </p>
+
+    </label>
+    <label for="Answer_C">
+        C.)
+        <p id="para1" >{{Answer_C}} </p>
+
+    </label>
+    <label for="Answer_D">
+        D.)
+        <p id="para1" >{{Answer_D}} </p>
+
+    </label>
+    <label for="Answer_E">
+        E.)
+        <p id="para1" >{{Answer_E}} </p>
+
+    </label>
+
+    <select id="combo" name="combo">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option disabled selected value> -- select an option -- </option>
+    </select>
+    <button type="submit">Submit</button>
+
+</form>
+
+<form action="/dashboard" method = "/MethodQuestion">
+    <button>Similar Problem</button>
+</form>
+
+
+
+<script type="text/javascript">
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10)
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1000);
+    }
+
+    window.onload = function () {
+        var fiveMinutes = 60 * 1,
+                display = document.querySelector('#time_x');
+        startTimer(fiveMinutes, display);
+    };
+</script>

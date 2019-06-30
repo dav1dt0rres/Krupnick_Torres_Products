@@ -1,0 +1,47 @@
+<body>
+
+
+
+<form action="/dashboard"  method="get">
+
+
+
+    <label for="Time_Limit">
+        Time Limit for each question
+        <input  id="Time_Limit" name="Time_Limit" value="{{Time_Limit}}"  />
+
+
+
+        <select id="Test"  name="Test" value="{{Test}}" >
+            <option value="0">Select Test</option>
+            <option value="B04">B04</option>
+            <option value="A11">A11</option>
+            <option value="A10">A10</option>
+            <option value="A09">A09</option>
+            <option value="74C">74C</option>
+            <option value="74G">74G</option>
+            <option value="73E">73E</option>
+            <option value="71H">71H</option>
+            <option value="71H">71H</option>
+        </select>
+
+
+
+
+        <select id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
+            <option value="0">Select Test Type</option>
+            <option value="ACT-English">ACT-English</option>
+            <option value="ACT-Math">ACT-Math</option>
+            <option value="ACT-Reading">ACT-Reading</option>
+            <option value="ACT-Science">ACT-Science</option>
+
+
+        </select>
+
+    </label>
+
+    <button  id="submit_button" name="submit_button" type="submit">Start Exam</button>
+
+
+</form>
+</body>

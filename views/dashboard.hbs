@@ -1,0 +1,49 @@
+<h1>{{user.profile.firstName}}'s Dashboard</h1>
+
+<p>Please Select what kind of test you would like?</p>
+
+<form action="/Test_Options" method="get">
+    <label for="FirstName">
+        FirstName
+        <input id="FirstName" name="FirstName" value="{{FirstName}}" />
+
+    </label>
+    <label for="LastName">
+       LastName
+        <input id="LastName" name="LastName" value="{{LastName}}" />
+
+    </label>
+    <label for="Email">
+        Email
+        <input id="Email" name="Email" value="{{Email}}" />
+
+    </label>
+    <button  id="ACT_Button" name="ACT_Button" type="submit">ACT EXAM</button>
+    <button  name="SAT_Button" id="SAT_Button">SAT EXAM</button>
+    <button  name="Skill_Button" id="Skill_Button">Skill Builders</button>
+
+</form>
+
+<button onclick="ACT()">ACT </button>
+<script type="text/javascript">
+    function ACT() {
+        window.location.href = '/dashboard/ACT'
+    }
+
+</script>
+
+<button onclick="SAT()">SAT </button>
+<script type="text/javascript">
+    function SAT() {
+        window.location.href = '/dashboard/SAT'
+    }
+
+</script>
+
+<button onclick="Skill()">Skill Builders </button>
+<script type="text/javascript">
+    function Skill() {
+        window.location.href = '/dashboard/Skill'
+    }
+
+</script>

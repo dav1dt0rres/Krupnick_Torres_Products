@@ -1,0 +1,166 @@
+/* Copyright (c) 2017 MIT 6.813/6.831 course staff, all rights reserved.
+ * Redistribution of original or derived work requires permission of course staff.
+ */
+
+/* REMOVE ME - dashed lines and height for debugging */
+
+#mainColumn {
+
+  height: 200px;
+}
+.column {
+  float: left;
+  position: relative;
+  width: 20%;
+
+  /*for demo purposes only */
+  background: #f2f2f2;
+  border: 1px solid #e6e6e6;
+  box-sizing: border-box;
+}
+table,
+tr,
+td {
+  border: 1px solid black;
+  padding: 5px;
+  color: white;
+}
+#Test {
+  width: 30%;
+  height: 50%
+}
+#submit_button{
+  top: -13px;
+  margin: 10px 0;
+  height: 50px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.input {
+  width: 30%;
+  height: 50px;
+  padding: 14px;
+  margin: 3px 0;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid gray;
+
+}
+label {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+label_1{
+  top: -43px;
+  left: 610px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.red{
+  background: red;
+}
+.yellow{
+  background: yellow;
+}
+.blue{
+  background: blue;
+}
+.green{
+  background: green;
+}
+.purple{
+  background: purple;
+}
+.purple{
+  background: orange;
+}
+/* Your css code here! */
+
+
+body {
+  padding: 0;
+  margin: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+#storyboxID
+{
+
+  height: 50px;
+
+  width: 30%;
+  font-size:14pt;
+  text-align: right;
+
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #208075;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  margin: 10px 0;
+  height: 50px;
+  font-size: 14px;
+  border-radius: 4px;
+  top: -13px;
+
+}
+textarea {
+  width: 300px;
+  height: 150px;
+}
+.button_x {
+  background-color: #4CAF50;
+  position: relative;
+  top: -43px;
+  left: 610px;
+  border: none;
+  color: white;
+  padding: 10px 24px;;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.button_y {
+  background-color: #4CAF50;
+  position: relative;
+  top: -43px;
+  left: 810px;
+  border: none;
+  color: white;
+  padding: 10px 24px;;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.button_z {
+  background-color: #4CAF50;
+  position: relative;
+  top: -43px;
+  left: 1010px;
+  border: none;
+  color: white;
+  padding: 10px 24px;;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
