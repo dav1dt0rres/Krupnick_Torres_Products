@@ -1,0 +1,20 @@
+<h1>{{user.profile.firstName}}'s Student Predictor</h1>
+
+<p>Enter your High School</p>
+
+
+<label for="high_school">
+    High School
+    <input id="high_school" name="high_school" value="{{high_school}}" />
+
+</label>
+
+<button  id="Calculate" name="Calculate" type="submit">Search High School</button>
+
+
+<script type="text/javascript">
+    function read_sheets() {
+        window.location.href = '/ReadWriteSheets/student'
+    }
+
+</script>

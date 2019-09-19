@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "razvan-251803",
+  "private_key_id": "579c7c6068ea4d8a4cb78196dc25e82018bcea7a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDX7as95pkpdygB\n5rHUFODW3g6zsa0qIYg2ejrMC4Eg8o/nkfwrpVVyyCmdB9j4oAE20zl4mbeW9h8Z\nzR9nc4vTnV/bPsH43XD7Dz+p30D7Cj6Oi6G3s/Q2V3I8EzcctJCRvGwjQpunxcqk\nM04DZnU+c4gxz9IquVZbKV0byY+Q68cpEOhN53ta18kRHiacrFt1wDRVdCILYYzr\n+96+WpI1dVmwwh/aKob0fHrqyhUkpX/tpQjUzLGafQ/a21/Woic3uugpBEje/MD0\nhiy8t/Bdg2afmVE9R0qMoJDc/oU54daoajXyEhz6Ye4vqAIyR8Y7bJugvn4ozwd9\nZSxdReQLAgMBAAECggEAW6qsHdU9hFrvgw8awzwxz0Xp2+M77jzaBLaTK3he00vm\nR5q0ARtpURckg2OHetUCbvHw3f/z7oSB44QvJs3ouGeBACR+WFY51ns8vbLndSt+\nLymb987PiBpLhrFpnigRj6z8A2QNjIXtZxPYtJzUfTSyxuLBCB4ySPUgb+F7rzuB\nTbWLHdKQ4FSD24w+iRXmqs4uy3u8WJe0w8znq0s98gZ0b3XHWNeF0q0wwxeDotBC\nV6ctdDdDdkysrj9B6unZUQvVP1WZe0Bcr4ULZZLmF/jFFc15wNAwM75PK6MnoKXT\nGZm2Qyw2/mRcnSwNJXIyOiH4A/PBwIOvkDoS/mrHQQKBgQDzQv3G0R3yG983LmmK\n28EoNHqaHO28fZkgEpW6Z1D183hNf38Br+zTRDy+M0ZPKJqI/CareGX4feuVOqvv\nriptPORTqHYnc7sothjVsGM0esPKk2rdwU5s1Wa93BrAvVxRikDvyqNJR53+mKYL\ncGKC46uxPgjTJg6s5WyTR/ZmcQKBgQDjPEPj762hlaKJFqfH7R42+/Wgwb/CbeP6\n3g7TdVHr7ggaeUUdxdilhD0hEG8ebMdcYT0+6PkQeSapI6ef6Vk7KJhbm9H5SxJD\ndrR+rpEGNMxVojHzo1YHlR73XiIar73HhSKhxeA0V/2jNFzxpWVUmfusjaB4h5ZW\n/M2GQLTIOwKBgHRMfs9igpKRSLI0+jhsv3fdPxAW7IHE+kQfHn4zjr1HXSiP38SK\nuwp2ASRdlyuZGeiLxGEN+pJGgS6jEjhQZ/A5wF9Ols5dwgjApjbjUUpxttFOkTTb\nigb2L1xtskybO1uwYUNC+bW7C4oAqMGnRTGWbysZoVZxR2rZdIMlUGPBAoGAVVRy\nIgwE5aKtMFGDm73dFMS0zjMzcS2W6MOuSZXKt4/hFx/m5nE/E5h+5AWp1IEAtB4H\nw7H0pUz5SZaMAa68xUxPOkdfKAAa0Z6n1NJ0vyHggV+w5k61pY9H25hLsj3AREYo\nZRtLQByysDCfnlZ/oK9aJMfiNKClwfCYtQtjV7UCgYEAkg2pwXl++Z/o5ruV+qBp\noSC/TZMjwoJp/KxB/8qcH/AC8QLgVrRana3mqXBUscEucVXSWEARqzHa0M9hrvbr\nibe/rkYrVaYQ4NYiuq37MfSRHIVcaudSdvombjyTRFpVXcqebxTphWsAhxZPRhGs\nz4TwzSG+LIuzSgDyAXaxQrk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "krupnick-torres@razvan-251803.iam.gserviceaccount.com",
+  "client_id": "112725914266096641920",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/krupnick-torres%40razvan-251803.iam.gserviceaccount.com"
+}

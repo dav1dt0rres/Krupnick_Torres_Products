@@ -3,6 +3,7 @@ const Question = require('../Models/Question.js');
 var Database=require('../Models/Database.js');
 const Student = require('../Models/Student.js');
 
+
 const router = express.Router()
 var counter=0;
 var timer;
@@ -68,6 +69,12 @@ router.get('/SAT',function (req, res, next) {
     console.log("inside SAT!!!!!!")
 
     res.redirect('/AddQuestions')
+
+})
+
+router.get('/Razvan',function (req, res, next){
+    console.log("Inside Dashboard function Razvan")
+    res.redirect(307,'/ModelPredictor');
 
 })
 router.get('/Skill',function (req, res, next) {

@@ -1,0 +1,55 @@
+<h1>{{user.profile.firstName}}'s Dashboard for Model Predictor</h1>
+
+
+
+<form action="/ReadWriteSheets" method="get">
+    <select id="High_School" name="High_School" onChange="selection_change()" value="{{High_School}}">
+        {{#each highschool.options}}
+            <option >{{this.text}}</option>
+        {{/each}}
+
+    </select>
+
+    <select id="University" name="University" onChange=""  >
+        {{#each university.options}}
+            <option >{{this.text}}</option>
+        {{/each}}
+
+    </select>
+
+
+    <button  id="calculate_button" name="calculate_button" type="submit">Calculate Odds for this pair</button>
+    <p>Or if you don't see your university, input your Naviance Credentials to get your odds</p>
+    <select id = "University_Input" name="University_Input" for="University_Input" value="{{University_Input}}">
+        {{#each universityInput.options}}
+            <option >{{this.text}}</option>
+        {{/each}}
+    </select>
+    <label for="HighSchool_Input">
+        Input High School
+        <input id="HighSchool_Input" name="HighSchool_Input"  value="{{HighSchool_Input}}" />
+
+    </label>
+
+    <label for="N_user_name">
+        Naviance UserName
+        <input id="N_user_name" name="N_user_name" value="{{N_user_name}}"  />
+    </label>
+    <label for="N_password">
+        Naviance Password
+        <input id="N_password" name="N_password"  value="{{N_password}}" />
+
+    </label>
+
+
+
+    <button  id="naviance_button" name="naviance_button" type="submit">Search Naviance for the Inputted Pair</button>
+
+</form>
+
+<script type="text/javascript">
+    function selection_change() {
+        window.location.href = '/ReadWriteSheets/University_finder'
+    }
+
+</script>

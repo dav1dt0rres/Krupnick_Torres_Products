@@ -1,0 +1,39 @@
+<h1>{{user.profile.firstName}}'s Dashboard for Model Predictor</h1>
+
+
+
+<form action="/ReadWriteSheets/Calculate_Odds" method="get">
+    <label for="highschool">
+        highschool
+        <input id="highschool" name="highschool"  value="{{highschool}}" />
+
+    </label>
+    <label for="university">
+        University
+        <input id="university" name="university" value="{{university}}"  />
+    </label>
+
+
+    <label for="GPA">
+        GPA
+        <input id="GPA" name="GPA"  value="{{GPA}}" />
+
+    </label>
+    <label for="ACT">
+        ACT Score
+        <input id="ACT" name="ACT" value="{{ACT}}"  />
+    </label>
+    <label for="SAT_1600">
+        SAT 1600 Score
+        <input id="SAT_1600" name="SAT_1600" value="{{SAT_1600}}"  />
+    </label>
+    <label for="SAT_2400">
+        SAT 2400 Score
+        <input id="SAT_2400" name="SAT_2400" value="{{SAT_2400}}"  />
+    </label>
+
+    <button  id="svm_button" name="svm_button" type="submit">Calculate Odds for this pair</button>
+
+
+
+</form>
