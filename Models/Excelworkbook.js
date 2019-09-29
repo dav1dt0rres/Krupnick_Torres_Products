@@ -49,7 +49,7 @@ module.exports= class Excelworkbook {
         option.text=university;
         university_element.add(option)
 
-        res.render('tutor_credentials', {title:"Please check Excel Sheets for Progress of for Naviance collection",university:university_element, highschool: highschool_element})
+        res.render('tutor_credentials', {title:"Please check back in 10 minutes and request the same pair of:"+" "+high_school+" "+"and"+" "+university+"",university:university_element, highschool: highschool_element})
         pythonProcess.stdout.on('data', function(data) {
             console.log("Returning from Python program"+" "+data.toString())
 
@@ -164,50 +164,90 @@ module.exports= class Excelworkbook {
         }
         else if (high_school.length!= 0 && high_school!= "Input HighSchool"){//Just entered the High school
             console.log("User input Highschool"+" "+high_school)
-            async.series([
-                function setAuth(step) {
-                    doc.useServiceAccountAuth(creds, step);
-                },
-                function getInfoAndWorksheets(step) {
-                    doc.getInfo(function (err, info) {
-                        for (var i=0;i<info.worksheets.length;++i){
-                            sheet_list.push(info.worksheets[i])
-                            //console.log('row and column count: ' + info.worksheets[i].title + ' ' + info.worksheets[i].rowCount + 'x' + info.worksheets[i].colCount);
-
-                        }
-
-                        step()
-                    })
-
-                },
-                function getRows(step){
-                    sheet_list[0].getCells({
-                        'min-row': 1,
-                        'max-row': sheet_list[0].rowCount,
-                        'min-col': 1,
-                        'max-col': 1,
-                        'return-empty': false,
-                    }, function(err, cells) {
-
-                        for (var i=0; i<cells.length; ++i){
-                            console.log("Comparing"+" "+cells[i].value+" "+high_school);
-                            if (subStringSearch(cells[i].value,high_school)){
-                                console.log('found highs school row'+cells[i].row);
-                                high_school_row_list.push(cells[i].row);
+            if (high_school=="None"){
+                console.log("User selected the Pooled data")
+                async.series([
+                    function setAuth(step) {
+                        doc.useServiceAccountAuth(creds, step);
+                    },
+                    function getInfoAndWorksheets(step) {
+                        doc.getInfo(function (err, info) {
+                            for (var i=2;i<info.worksheets.length;++i){
+                                sheet_list.push(info.worksheets[i].title)
+                                //console.log('row and column count: ' + info.worksheets[i].title + ' ' + info.worksheets[i].rowCount + 'x' + info.worksheets[i].colCount);
 
                             }
 
+                            step()
+                        })
+
+                    },
+                    function final(step){
+
+                        var university=document.createElement('select')
+                        var highschool=document.createElement('select')
+
+                        for(var i =0; i<sheet_list.length;++i){
+                            var option=document.createElement('option')
+                            option.value=sheet_list[i]
+                            option.text=sheet_list[i];
+                            university.add(option)
                         }
-                        if (high_school_row_list.length==0){
-                            res.render('naviance_credentials', {title:"University is not on Database, enter your Naviance Credentials" +
-                                    "in order to calculate Odds",naviance_username:"username", naviance_password: "Password"})
-                            return
-                        }
-                        step()
-                    });
-                },
-                function getUniversities(step){
-                    console.log("high school row")
+                        var option=document.createElement('option')
+                        option.value="pool";
+                        option.text="Pool";
+                        highschool.add(option)
+
+                        res.render('Calculate_Odds', {title:"Calculate Odds for this Pair",university:university, highschool:highschool})
+
+                    }
+                    ])
+            }
+        else{
+                async.series([
+                    function setAuth(step) {
+                        doc.useServiceAccountAuth(creds, step);
+                    },
+                    function getInfoAndWorksheets(step) {
+                        doc.getInfo(function (err, info) {
+                            for (var i=0;i<info.worksheets.length;++i){
+                                sheet_list.push(info.worksheets[i])
+                                //console.log('row and column count: ' + info.worksheets[i].title + ' ' + info.worksheets[i].rowCount + 'x' + info.worksheets[i].colCount);
+
+                            }
+
+                            step()
+                        })
+
+                    },
+                    function getRows(step){
+                        sheet_list[0].getCells({
+                            'min-row': 1,
+                            'max-row': sheet_list[0].rowCount,
+                            'min-col': 1,
+                            'max-col': 1,
+                            'return-empty': false,
+                        }, function(err, cells) {
+
+                            for (var i=0; i<cells.length; ++i){
+                                console.log("Comparing"+" "+cells[i].value+" "+high_school);
+                                if (subStringSearch(cells[i].value,high_school)){
+                                    console.log('found highs school row'+cells[i].row);
+                                    high_school_row_list.push(cells[i].row);
+
+                                }
+
+                            }
+                            if (high_school_row_list.length==0){
+                                res.render('naviance_credentials', {title:"University is not on Database, enter your Naviance Credentials" +
+                                        "in order to calculate Odds",naviance_username:"username", naviance_password: "Password"})
+                                return
+                            }
+                            step()
+                        });
+                    },
+                    function getUniversities(step){
+                        console.log("high school row")
                         sheet_list[0].getCells({
                             'min-row': high_school_row_list[0],
                             'max-row': high_school_row_list[high_school_row_list.length-1],
@@ -224,40 +264,42 @@ module.exports= class Excelworkbook {
                         });
 
 
-                },
-                function final_step(step){
+                    },
+                    function final_step(step){
 
-                    if (university_list.length==0){
-                        console.log("No Universities came up")
-                        res.render('naviance_credentials', {title:"High School is not on Database, enter your Naviance Credentials" +
-                                "in order to calculate Odds",naviance_username:"username", naviance_password: "Password"})
-                    }
-                    else {
-
-                        console.log("Returnning inside final step"+" "+university_list)
-
-                        var university=document.createElement('select')
-                        var highschool=document.createElement('select')
-
-                        for(var i =0; i<university_list.length;++i){
-                            var option=document.createElement('option')
-                            option.value=university_list[i]
-                            option.text=university_list[i];
-                            university.add(option)
+                        if (university_list.length==0){
+                            console.log("No Universities came up")
+                            res.render('naviance_credentials', {title:"High School is not on Database, enter your Naviance Credentials" +
+                                    "in order to calculate Odds",naviance_username:"username", naviance_password: "Password"})
                         }
-                        var option=document.createElement('option')
-                        option.value=high_school;
-                        option.text=high_school;
-                        highschool.add(option)
-                        //res.render('tutor_credentials', {title:"Here are the Matches for your High School, pick one to Calculate odds",university:university, highschool:highschool})
-                        res.render('Calculate_Odds', {title:"Calculate Odds for this Pair"+university,university:university, highschool:highschool,universityInput:masteruniversitylist})
+                        else {
+
+                            console.log("Returnning inside final step"+" "+university_list)
+
+                            var university=document.createElement('select')
+                            var highschool=document.createElement('select')
+
+                            for(var i =0; i<university_list.length;++i){
+                                var option=document.createElement('option')
+                                option.value=university_list[i]
+                                option.text=university_list[i];
+                                university.add(option)
+                            }
+                            var option=document.createElement('option')
+                            option.value=high_school;
+                            option.text=high_school;
+                            highschool.add(option)
+                            //res.render('tutor_credentials', {title:"Here are the Matches for your High School, pick one to Calculate odds",university:university, highschool:highschool})
+                            res.render('Calculate_Odds', {title:"Calculate Odds for this Pair"+university,university:university, highschool:highschool,universityInput:masteruniversitylist})
+
+                        }
+
+                        step();
 
                     }
+                ])
+            }
 
-                    step();
-
-                }
-            ])
         }
         else{///Its a tutor signing in
             console.log("User is a Tutor"+" ")
@@ -357,15 +399,18 @@ module.exports= class Excelworkbook {
     }
     Calculate_Odds(university,highschool,res,req){
 
+        if(req.query.University_List_Input.length>0){
+            res.render('Calculate_Odds__v2', {title:"Please enter pertinent information",university:req.query.University_List_Input, highschool: req.query.High_School})
 
+        }
         res.render('Calculate_Odds__v2', {title:"Please enter pertinent information",university:req.query.University, highschool: req.query.High_School})
 
 
     }
     SVM_Model(university,highschool,res,req){//THe req.query is from Calculate_Odds__v2
         var pythonProcess;
-        console.log("Spawning out SVM Python program")
-        pythonProcess = spawn('python',["C:\\Users\\david\\IdeaProjects\\CalculateOdds\\main.py",highschool,university,req.query.ACT,req.query.GPA]);
+        console.log("Spawning out SVM Python program"+" "+req.query.checkbox_1 +" "+ req.query.checkbox_2 +" "+ req.query.checkbox_3)
+        pythonProcess = spawn('python',["C:\\Users\\david\\IdeaProjects\\CalculateOdds\\main.py",highschool,university,req.query.ACT,req.query.GPA,req.query.checkbox_1+" "+ req.query.checkbox_2+" "+req.query.checkbox_3]);
         pythonProcess.stdout.on('data', function(data) {
             console.log("Returning from Python program"+" "+data.toString())
 
