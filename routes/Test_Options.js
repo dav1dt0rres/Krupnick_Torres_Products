@@ -1,7 +1,7 @@
 const express = require('express')
-const Question = require('../Models/Question.js');
-var Database=require('../Models/Database.js');
-const Student = require('../Models/Student.js');
+const Question = require('../Objects/Question.js');
+var Database=require('../Objects/Database.js');
+const Student = require('../Objects/Student.js');
 
 const router = express.Router()
 var counter=0;

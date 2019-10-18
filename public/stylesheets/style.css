@@ -46,6 +46,9 @@ td {
   border: 1px solid gray;
 
 }
+#Passage_Box{
+  float: right;
+}
 label {
   margin: 10px 0;
   display: flex;

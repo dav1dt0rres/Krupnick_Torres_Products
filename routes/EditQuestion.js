@@ -1,10 +1,10 @@
 
 const express = require('express')
 var mongoose = require( 'mongoose' )
-var Question_database = mongoose.model('Question');
-var Database=require('../Models/Database.js');
+var Question_database = mongoose.model('ReadingQuestion');
+var Database=require('../Objects/Database.js');
 const router = express.Router();
-const Question = require('../Models/Question.js');
+const Question = require('../Objects/Question.js');
 
 
 

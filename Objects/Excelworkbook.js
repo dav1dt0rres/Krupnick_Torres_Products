@@ -407,19 +407,41 @@ module.exports= class Excelworkbook {
 
 
     }
-    SVM_Model(university,highschool,res,req){//THe req.query is from Calculate_Odds__v2
+    async SVM_Model(university,highschool,res,req){//THe req.query is from Calculate_Odds__v2
         var pythonProcess;
-        console.log("Spawning out SVM Python program"+" "+req.query.checkbox_1 +" "+ req.query.checkbox_2 +" "+ req.query.checkbox_3)
-        pythonProcess = spawn('python',["C:\\Users\\david\\IdeaProjects\\CalculateOdds\\main.py",highschool,university,req.query.ACT,req.query.GPA,req.query.checkbox_1+" "+ req.query.checkbox_2+" "+req.query.checkbox_3]);
+        var dataString = '';
+
+        console.log("Spawning out SVM Python program"+" "+req.query.checkbox_1 +" "+ req.query.checkbox_2 +" "+ req.query.checkbox_3+" "+req.query.checkbox_4+" "+
+            req.query.checkbox_5+" "+req.query.checkbox_6+" "+req.query.checkbox_7)
+        pythonProcess = spawn('python',["C:\\Users\\david\\IdeaProjects\\CalculateOdds\\main.py",highschool,university,req.query.ACT,req.query.GPA,req.query.checkbox_1+" "+ req.query.checkbox_2+" "+
+                req.query.checkbox_3+" "+req.query.checkbox_4+" "+req.query.checkbox_5+" "+req.query.checkbox_6+" "+req.query.checkbox_7]);
+
         pythonProcess.stdout.on('data', function(data) {
             console.log("Returning from Python program"+" "+data.toString())
 
-
+            dataString += data.toString();
             //res.send(data.toString());
-        } )
+        })
+
         res.set('Content-Type', 'text/plain');
-        pythonProcess.stdout.pipe(res)
-        pythonProcess.stderr.pipe(res)
+
+
+        pythonProcess.stdout.on('end', function(){
+            //console.log("Final string its sending"+" "+dataString)
+            dataString=dataString+'\n'+'-------------------------->-------------------->---------------->Seperation'+'\n'
+            fs.appendFile('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\past_searches.txt',  dataString, (err) => {
+                // throws an error, you could also catch it here
+                if (err) throw err;
+
+                // success case, the file was saved
+
+            });
+            res.send(dataString.toString())
+        });
+        //pythonProcess.stdout.pipe(res)
+        //pythonProcess.stderr.pipe(res)
+
+
         //res.render('Calculate_Odds', {title:"Pick School and University",university:university, highschool:highschool,universityInput:masteruniversitylist})
 
     }

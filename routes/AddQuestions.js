@@ -2,9 +2,10 @@
 const express = require('express')
 var mongoose = require( 'mongoose' )
 
-var Database=require('../Models/Database.js');
+var Database=require('../Objects/Database.js');
 const router = express.Router()
-const Question_Schema = mongoose.model('Question');
+const Question_Schema = mongoose.model('ReadingQuestion');
+
 let jsdom = require('jsdom').JSDOM
 
 
@@ -15,8 +16,6 @@ var Database_Object;
 router.get('/', (req, res, next) => {
    console.log("INside AaddQuestions")
 
-
-    Database_Object=new Database("MISC");
 
 
 
@@ -42,7 +41,7 @@ router.get('/EditDatabase',function (req, res, next) {
 })
 
 router.post('/', (req, res, next) => {
-
+    Database_Object=new Database("MISC");
     if( req.body.hasOwnProperty("Edit_Button")){
         console.log("Edit Button was pressed!")
         var title="Search/Edit a Question"
@@ -53,6 +52,7 @@ router.post('/', (req, res, next) => {
         console.log("Going in"+" "+req.body.QuestionText+req.body.AnswerA+ req.body.AnswerB+
             req.body.AnswerC+req.body.AnswerD+" "+req.body.Tag+" "+req.body.RightAnswer+" "+"THIS IS THE PASSAGE"+" "+req.body.Passage,
             "THIS IS THE QUESTION NUMBER"+" " +req.body.Question_Number+" "+req.body.Test_Type+" "+req.body.Test)
+
         Body_List=ParseText([req.body.QuestionText,req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE,
             req.body.Tag,req.body.Test.toString(),req.body.Test_Type.toString(),req.body.RightAnswer,req.body.Passage,req.body.Question_Number])
 

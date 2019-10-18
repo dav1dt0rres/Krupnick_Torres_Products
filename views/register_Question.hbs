@@ -10,9 +10,16 @@
 <p class="right"  > {{storyboxID}}</p>
 <div class="Time" id="time_x" name="time_x"><span >01:00</span> minutes!</div>
 
-
+<input type="hidden" id="Passage_Holder" name="Pasage_Holder" value="{{Passage_Holder}}"  />
+<div >
+    <textarea id ="Passage_Box" name="Passage_Box" style="width:800px; height: 800px;" ></textarea>
+</div>
 </body>
-<form action="/dashboard/Question_Loop"   method="get">
+<form action="/dashboard/Question_Loop"  method="get">
+    <button id="Exit" name="Exit" type="Exit" style = "top:0;right:0;position:absolute;z-index: 9999" >Exit </button>
+    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
+    <input type="hidden" id="Tag" name="Tag" value="{{Tag}}"  />
+
 
     <label for="Answer_A">
         A.)
@@ -47,13 +54,12 @@
         <option value="D">D</option>
         <option disabled selected value> -- select an option -- </option>
     </select>
-    <button type="submit">Submit</button>
+    <button id="next_question" name="next_question" type="submit">Submit(Next Question)</button>
+    <button  id="tag_question" name="tag_question" type="submit">Next Question w/ same Tag</button>
+    <button  id="difficulty_question" name="difficulty_question" type="submit">Next Question w/ same Difficulty</button>
 
 </form>
 
-<form action="/dashboard" method = "/MethodQuestion">
-    <button>Similar Problem</button>
-</form>
 
 
 
@@ -79,5 +85,13 @@
         var fiveMinutes = 60 * 1,
                 display = document.querySelector('#time_x');
         startTimer(fiveMinutes, display);
+
+        console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
+        var y=document.getElementById("Passage_Holder").value
+        console.log("Print First"+" "+y)
+        document.getElementById("Passage_Box").value=y;
+        //console.log("after"+" "+document.getElementById("Passage_Box").value)
+        var x = document.getElementById("Passage_Box").value;
+
     };
 </script>

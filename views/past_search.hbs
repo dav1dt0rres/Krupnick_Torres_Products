@@ -1,0 +1,349 @@
+<h1>{{user.profile.firstName}}Past Searches</h1>
+
+
+
+<form action="/ModelPredictor" method="get">
+
+
+    <select type="submit" id="Summary" name="Summary" onchange="selection_change(this.value)" multiple>
+        {{#each Summary.options}}
+            <option value={{this.value}}>{{this.text}}</option>
+        {{/each}}
+
+    </select>
+
+
+    <p>Logistic Coefficients</p>
+    <table id="Table3" name="Table3">
+        <tr  bgcolor= "#FF0000" >
+            <th>ACT</th>
+            <th >GPA</th>
+            <th >ucls</th>
+            <th >ignatius</th>
+            <th >payton</th>
+            <th >latin</th>
+            <th >lincoln_park </th>
+            <th >lyons</th>
+            <th >kenwood</th>
+            <th >R^2</th>
+        </tr>
+        <tr bgcolor= "#FF0000" >
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+
+    <p >Main Results</p>
+    <table id="Table1" name="Table1">
+        <tr  bgcolor="#FF0000" >
+            <th>Logistic</th>
+            <th >SVM</th>
+            <th >Naive Bayes</th>
+        </tr>
+        <tr bgcolor="#FF0000">
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr bgcolor="#FF0000">
+            <td> <textarea name="" id="Logistic_Matrix" cols="45" rows="10"></textarea></td>
+            <td>
+                <textarea name="" id="SVM_Matrix" cols="45" rows="10"></textarea>
+            </td>
+            <td>
+                <textarea name="" id="Naive_Matrix" cols="45" rows="10"></textarea>
+            </td>
+        </tr>
+        <tr bgcolor="#FF0000">
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <p>Undersampling Results</p>
+    <p>Logistic Coefficients</p>
+    <table id="Table5" name="Table5">
+        <tr  bgcolor=  "#C0C0C0">
+            <th>ACT</th>
+            <th >GPA</th>
+            <th >ucls</th>
+            <th >ignatius</th>
+            <th >payton</th>
+            <th >latin</th>
+            <th >lincoln_park </th>
+            <th > lyons</th>
+            <th >kenwood</th>
+            <th >R^2</th>
+        </tr>
+        <tr bgcolor=  "#C0C0C0">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table id="Table2" name="Table2">
+        <tr  bgcolor= "#C0C0C0" >
+            <th>Logistic</th>
+            <th >SVM</th>
+            <th >Naive Bayes</th>
+        </tr>
+        <tr bgcolor= "#C0C0C0">
+            <td></td>
+            <td></td>
+            <td></td>
+
+        </tr>
+        <tr bgcolor= "#C0C0C0">
+            <td> <textarea name="" id="Logistic_Matrix_1" cols="45" rows="10"></textarea></td>
+            <td>
+                <textarea name="" id="SVM_Matrix_1" cols="45" rows="10"></textarea>
+            </td>
+            <td>
+                <textarea name="" id="Naive_Matrix_1" cols="45" rows="10"></textarea>
+            </td>
+
+        </tr>
+    </table>
+
+    <div id="Details" name="Details" data-stuff="[]" value="{{Details}}"></div>
+    <div>
+        <script type="text/javascript">
+            function selection_change(selected_value) {
+                console.log("Selected Index "+selected_value)
+                clearUndersample();
+                var Object=document.getElementById("Details")
+
+                var lines=Object.getAttribute("value").split(";")
+                var global_undersample=false;
+                var MasterList=seperate_searches(lines)
+                console.log("Masterlist size"+" "+MasterList.length)
+                for (var i=0;i<MasterList[selected_value].length;++i ){
+                    if(global_undersample==false){
+                        if('pool_highschools'){
+
+                            var t = document.createTextNode("POOLED");
+
+                        }
+
+                        if (MasterList[selected_value][i].indexOf("Sample Size")>=0){
+                            var x = document.getElementById("Table1").rows[3].cells;
+                            x[0].innerHTML = MasterList[selected_value][i];
+                            x[1].innerHTML = MasterList[selected_value][i];
+                            x[2].innerHTML = MasterList[selected_value][i];
+                        }
+                        if(MasterList[selected_value][i].indexOf("Logistic Score/R^2")>=0){
+                            var x = document.getElementById("Table1").rows[3].cells;
+                        }
+                        if (MasterList[selected_value][i].indexOf("Prediction for Logistic")>=0){
+
+                            var x = document.getElementById("Table1").rows[1].cells;
+                            x[0].innerHTML = MasterList[selected_value][i];
+
+
+                        }
+                        if(MasterList[selected_value][i].indexOf("SVM Probability")>=0){
+
+                            var x = document.getElementById("Table1").rows[1].cells;
+                            x[1].innerHTML = MasterList[selected_value][i];
+                        }
+
+                        if(MasterList[selected_value][i].indexOf("Gaussian Naive Bayes Prediction")>=0){
+                            var x = document.getElementById("Table1").rows[1].cells;
+                            x[2].innerHTML = MasterList[selected_value][i];
+
+                        }
+
+                        if(MasterList[selected_value][i].indexOf("Accuracy for SVM")>=0){
+
+                            var x = document.getElementById("SVM_Matrix")
+                            x.value = MasterList[selected_value][i+1]+"\n"+MasterList[selected_value][i+2]+"\n"+MasterList[selected_value][i+3];
+
+                        }
+                        if(MasterList[selected_value][i].indexOf("Logisitic Confusion Matrix")>=0){
+
+                            var x = document.getElementById("Logistic_Matrix")
+                            x.value = MasterList[selected_value][i+1]+"\n"+MasterList[selected_value][i+2]+"\n"+MasterList[selected_value][i+3];
+
+                        }
+                        if(MasterList[selected_value][i].indexOf("Naive Bayes Confusion Matrix")>=0){
+
+                            var x = document.getElementById("Naive_Matrix")
+                            x.value = MasterList[selected_value][i+1]+"\n"+MasterList[selected_value][i+2]+"\n"+MasterList[selected_value][i+3];
+
+
+                        }
+                        if(MasterList[selected_value][i].indexOf("Logistic-->Coefficients")>=0){
+                            var x = document.getElementById("Table3").rows[1].cells;
+
+
+                            MasterList[selected_value][i]=MasterList[selected_value][i].replace("[","")
+                            MasterList[selected_value][i]=MasterList[selected_value][i].replace("[","")
+                            MasterList[selected_value][i]=MasterList[selected_value][i].replace("Logistic-->Coefficients","")
+
+                            MasterList[selected_value][i+1]=MasterList[selected_value][i+1].replace("]","")
+                            MasterList[selected_value][i+1]=MasterList[selected_value][i+1].replace("]","")
+                            var float_list= MasterList[selected_value][i].split(" ")
+
+                            float_list=float_list.concat(MasterList[selected_value][i+1].split(" "))
+
+
+                            console.log("final list_final"+" "+float_list)
+                            var digit=0;
+                            for (var j=0;j<float_list.length;++j){
+
+                                if(isFloat(float_list[j].replace(/\s/g,''))){
+
+                                    x[digit].innerHTML = float_list[j].replace(/\s/g,'')
+                                    ++digit;
+
+                                }
+                                x[digit].innerHTML=MasterList[selected_value][i-3]
+                            }
+
+
+                        }
+                    }
+
+                    if(MasterList[selected_value][i].indexOf("UNDERSAMPLE RESULTS")>=0){
+                        global_undersample=true;
+                        undersample(MasterList[selected_value],i)
+                    }
+                }
+
+
+                //window.location.href = '/ModelPredictor/getOutput'
+            }
+            function clearUndersample(){
+                console.log("inside clear undersample")
+                var table=document.getElementById("Table5")
+                var x=table.rows[1].cells
+                for(var i =0 ; i<x.length;++i){
+                    x[i].innerHTML=""
+                }
+                document.getElementById("Logistic_Matrix_1").value=""
+                document.getElementById("SVM_Matrix_1").value = ""
+                document.getElementById("Naive_Matrix_1").value=""
+
+                for(var i =0 ; i<x.length;++i){
+                    x[i].innerHTML=""
+                }
+            }
+            function seperate_searches(lines){
+
+                var offset=0;
+                var masterlist=[]
+                for (var i=0;i<lines.length;++i ){
+                    if (lines[i].indexOf("Seperation")>=0){
+
+                        masterlist.push(lines.slice(offset, i))
+                        offset=i+1;
+                    }
+
+                }
+
+                return masterlist;
+            }
+            function undersample(lines,offset){
+
+                for (var i=offset;i<lines.length;++i ) {
+                    if (lines[i].indexOf("Sample Size")>=0){
+                        var x = document.getElementById("Table2").rows[3].cells;
+                        x[0].innerHTML = lines[i];
+                        x[1].innerHTML = lines[i];
+                        x[2].innerHTML = lines[i];
+                    }
+                    if (lines[i].indexOf("Prediction for Logistic")>=0){
+
+                        var x = document.getElementById("Table2").rows[1].cells;
+                        x[0].innerHTML = lines[i];
+
+
+                    }
+                    if(lines[i].indexOf("SVM Probability")>=0){
+
+                        var x = document.getElementById("Table2").rows[1].cells;
+                        x[1].innerHTML = lines[i];
+                    }
+
+                    if(lines[i].indexOf("Gaussian Naive Bayes Prediction")>=0){
+                        var x = document.getElementById("Table2").rows[1].cells;
+                        x[2].innerHTML = lines[i];
+
+                    }
+
+                    if(lines[i].indexOf("Accuracy for SVM")>=0){
+
+                        var x = document.getElementById("SVM_Matrix_1")
+                        x.value = lines[i+1]+"\n"+lines[i+2]+"\n"+lines[i+3];
+
+                    }
+                    if(lines[i].indexOf("Logisitic Confusion Matrix")>=0){
+
+                        var x = document.getElementById("Logistic_Matrix_1")
+                        x.value = lines[i+1]+"\n"+lines[i+2]+"\n"+lines[i+3];
+
+                    }
+                    if(lines[i].indexOf("Naive Bayes Confusion Matrix")>=0){
+                        console.log("Found naive bayes confusion")
+                        var x = document.getElementById("Naive_Matrix_1")
+                        x.value = lines[i+1]+"\n"+lines[i+2]+"\n"+lines[i+3];
+
+
+                    }
+                    if(lines[i].indexOf("Logistic-->Coefficients")>=0){
+                        var x = document.getElementById("Table5").rows[1].cells;
+
+                        lines[i]=lines[i].replace("[","")
+                        lines[i]=lines[i].replace("[","")
+                        lines[i]=lines[i].replace("Logistic-->Coefficients","")
+
+                        lines[i+1]=lines[i+1].replace("]","")
+                        lines[i+1]=lines[i+1].replace("]","")
+                        var float_list= lines[i].split(" ")
+
+                        float_list=float_list.concat(lines[i+1].split(" "))
+
+                        var digit=0;
+                        for (var j=0;j<float_list.length;++j){
+
+                            if(isFloat(float_list[j].replace(/\s/g,''))){
+
+                                x[digit].innerHTML = float_list[j].replace(/\s/g,'')
+                                ++digit;
+                            }
+                            x[digit].innerHTML= lines[i-3]
+                        }
+
+
+                    }
+
+                }
+            }
+            function isFloat(n){
+
+                if (n.toString()=='0.'){
+                    return true;
+                }
+                return n % 1 !== 0;
+            }
+        </script>
+    </div>
+</form>
+

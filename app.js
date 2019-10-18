@@ -3,8 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-require('./Models/QuestionSchema');
+require('./Models/ResponseSchema')
+require('./Models/PassageSchema')
+require('./Models/ReadingSchema');
 require('./Models/Student_Schema');
+require('./Models/MathSchema');
+require('./Models/EnglishSchema');
+
 var logger = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');

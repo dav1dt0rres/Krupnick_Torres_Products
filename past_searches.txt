@@ -1,0 +1,1079 @@
+highschool(Input)   ignatius
+university(Input)   Duke University
+ACT(Input)   34
+GPA(Input)   4.4
+pool-option(Input) undefined undefined undefined undefined undefined undefined undefined
+inside Google API
+found Duke University
+
+pool list ['undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined']
+Not pooling highschools
+removing row due to unknown   57
+<Cell R57C5 '0'>   <Cell R57C6 '33.1943044'>   <Cell R57C7 '4.48'>
+removing row due to unknown   60
+<Cell R60C5 '0'>   <Cell R60C6 '23.01528477'>   <Cell R60C7 '4.51'>
+removing row due to unknown   85
+<Cell R85C5 '0'>   <Cell R85C6 '35'>   <Cell R85C7 '4.48'>
+removing row due to unknown   89
+<Cell R89C5 '0'>   <Cell R89C6 '30'>   <Cell R89C7 '4.21'>
+removing row due to unknown   110
+<Cell R110C5 '0'>   <Cell R110C6 '35'>   <Cell R110C7 '4.35'>
+removing row due to unknown   118
+<Cell R118C5 '0'>   <Cell R118C6 '35'>   <Cell R118C7 '4.49'>
+removing row due to unknown   119
+<Cell R119C5 '0'>   <Cell R119C6 '35'>   <Cell R119C7 '4.33'>
+
+
+Sample Size : 62
+
+
+
+ ['0' '1']
+
+
+                       ucls  ignatius  payton  latin lin_park lyons 
+dummy_list [34.0, 4.4]   0.0   1.0     0.0    0.0    0.0    0.0
+SVM Probability: Second number is prob to get in: [[0.74384531 0.25615469]]
+
+Accuracy for SVM: 0.7857142857142857
+              1     0 
+        1   4.0  11.0 
+        0   1.0  40.0 
+
+
+Logistic Score/R^2 0.7540983606557377
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[-0.03620486  1.54975685]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-6.38161973]
+
+Prediction for Logistic [[0.68861552 0.31138448]]
+Prediction(Logistic)+  -3 :  [[0.66486267 0.33513733]]
+Prediction(Logistic)+  -2 :  [[0.67288111 0.32711889]]
+Prediction(Logistic)+  -1 :  [[0.68079981 0.31920019]]
+Prediction(Logistic)+  1 :  [[0.69632523 0.30367477]]
+Prediction(Logistic)+  2 :  [[0.70392612 0.29607388]]
+Prediction(Logistic)+  3 :  [[0.71141561 0.28858439]]
+Prediction(Logistic)+  4 :  [[0.71879133 0.28120867]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1   0.0  15.0 
+        0   0.0  41.0 
+Accuracy for Logistic: 0.72
+inside bayes
+
+Gaussian Naive Bayes Prediction   [[0.7185285 0.2814715]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1   1.0  14.0 
+        0   0.0  41.0 
+
+Accuracy for Naive Bayes: 0.72
+
+-------------------------->-------------------->---------------->Seperation
+highschool(Input)   ignatius
+university(Input)   Duke University
+ACT(Input)   34
+GPA(Input)   4.4
+pool-option(Input) pool_highschools undefined undefined undefined undefined undefined undefined
+inside Google API
+found Duke University
+
+pool list ['pool_highschools', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined']
+pooling highschools
+removing unkown or decision   1   Decision
+<Cell R1C5 'Clean_Decision'>   <Cell R1C6 'Clean_Test'>   <Cell R1C7 'Clean_GPA'>
+removing unkown or decision   2   WAITLISTED/UNKNOWN (RD)
+<Cell R2C5 '0'>   <Cell R2C6 '34.49199601'>   <Cell R2C7 '4'>
+removing unkown or decision   17   WAITLISTED/UNKNOWN (RD)
+<Cell R17C5 '0'>   <Cell R17C6 '35.32423897'>   <Cell R17C7 '3.93'>
+removing unkown or decision   19   WAITLISTED/UNKNOWN (RD)
+<Cell R19C5 '0'>   <Cell R19C6 '33.38233873'>   <Cell R19C7 '3.96'>
+removing unkown or decision   23   UNKNOWN
+<Cell R23C5 '0'>   <Cell R23C6 '32.54801744'>   <Cell R23C7 '3.96'>
+removing unkown or decision   37   UNKNOWN
+<Cell R37C5 '0'>   <Cell R37C6 '34'>   <Cell R37C7 '3.96'>
+removing unkown or decision   50   Decision
+<Cell R50C5 'Clean_Decision'>   <Cell R50C6 'Clean_Test'>   <Cell R50C7 'Clean_GPA'>
+removing unkown or decision   57   WAITLISTED/UNKNOWN (RD)
+<Cell R57C5 '0'>   <Cell R57C6 '33.1943044'>   <Cell R57C7 '4.48'>
+removing unkown or decision   60   WAITLISTED/UNKNOWN (RD)
+<Cell R60C5 '0'>   <Cell R60C6 '23.01528477'>   <Cell R60C7 '4.51'>
+removing unkown or decision   85   WAITLISTED/UNKNOWN (RD)
+<Cell R85C5 '0'>   <Cell R85C6 '35'>   <Cell R85C7 '4.48'>
+removing unkown or decision   89   WAITLISTED/UNKNOWN (RD)
+<Cell R89C5 '0'>   <Cell R89C6 '30'>   <Cell R89C7 '4.21'>
+removing unkown or decision   110   WAITLISTED/UNKNOWN (RD)
+<Cell R110C5 '0'>   <Cell R110C6 '35'>   <Cell R110C7 '4.35'>
+removing unkown or decision   118   WAITLISTED/UNKNOWN (RD)
+<Cell R118C5 '0'>   <Cell R118C6 '35'>   <Cell R118C7 '4.49'>
+removing unkown or decision   119   WAITLISTED/UNKNOWN (RD)
+<Cell R119C5 '0'>   <Cell R119C6 '35'>   <Cell R119C7 '4.33'>
+removing unkown or decision   120   Decision
+<Cell R120C5 'Clean_Decision'>   <Cell R120C6 'Clean_Test'>   <Cell R120C7 'Clean_GPA'>
+removing unkown or decision   204   Decision
+<Cell R204C5 'Clean_Decision'>   <Cell R204C6 'Clean_Test'>   <Cell R204C7 'Clean_GPA'>
+removing unkown or decision   251   Decision
+<Cell R251C5 'Clean_Decision'>   <Cell R251C6 'Clean_Test'>   <Cell R251C7 'Clean_GPA'>
+removing unkown or decision   346   Decision
+<Cell R346C5 'Clean_Decision'>   <Cell R346C6 'Clean_Test'>   <Cell R346C7 'Clean_GPA'>
+removing unkown or decision   380   Decision
+<Cell R380C5 'Clean_Decision'>   <Cell R380C6 'Clean_Test'>   <Cell R380C7 'Clean_GPA'>
+removing unkown or decision   392   WAITLISTED/UNKNOWN
+<Cell R392C5 '0'>   <Cell R392C6 '30.88560985'>   <Cell R392C7 '5.06'>
+
+
+Sample Size : 375
+
+
+
+ ['0' '1']
+
+
+                       ucls  ignatius  payton  latin lin_park lyons 
+dummy_list [34.0, 4.4]   0.0   1.0     0.0    0.0    0.0    0.0
+Pooled/New GPA 3.8260869565217397
+SVM Probability: Second number is prob to get in: [[0.86309035 0.13690965]]
+
+Accuracy for SVM: 0.8520710059171598
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+
+
+Logistic Score/R^2 0.8652291105121294
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[-2.32859573e-03  2.35941309e+00  9.21659578e-01  5.24643842e-01
+  -1.80592497e+00  6.52709356e-01 -2.69921697e+00 -2.47915427e+00
+  -5.22503053e+00]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-10.11031395]
+
+New/Pooled GPA 3.8260869565217397
+
+Prediction for Logistic [[0.65419326 0.34580674]]
+Prediction(Logistic)+  -3 :  [[0.6526112 0.3473888]]
+Prediction(Logistic)+  -2 :  [[0.65313893 0.34686107]]
+Prediction(Logistic)+  -1 :  [[0.65366628 0.34633372]]
+Prediction(Logistic)+  1 :  [[0.65471985 0.34528015]]
+Prediction(Logistic)+  2 :  [[0.65524607 0.34475393]]
+Prediction(Logistic)+  3 :  [[0.6557719 0.3442281]]
+Prediction(Logistic)+  4 :  [[0.65629736 0.34370264]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+Accuracy for Logistic: 0.8533333333333334
+inside bayes
+
+New/Pooled GPA 3.8260869565217397
+
+Gaussian Naive Bayes Prediction   [[3.25040848e-04 9.99674959e-01]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[3.24565298e-04 9.99675435e-01]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[2.76330911e-04 9.99723669e-01]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[2.67651911e-04 9.99732348e-01]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[3.69736436e-04 9.99630264e-01]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[5.27294128e-04 9.99472706e-01]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[8.55401801e-04 9.99144598e-01]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[0.00157814 0.99842186]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1  45.0   2.0 
+        0 239.0  52.0 
+
+Accuracy for Naive Bayes: 0.29333333333333333
+
+-------------------------->-------------------->---------------->Seperation
+highschool(Input)   ignatius
+university(Input)   Duke University
+ACT(Input)   34
+GPA(Input)   4.4
+pool-option(Input) pool_highschools undefined undefined 1 undefined undefined undefined
+inside Google API
+found Duke University
+
+pool list ['pool_highschools', 'undefined', 'undefined', '1', 'undefined', 'undefined', 'undefined']
+pooling highschools
+removing unkown or decision   1   Decision
+<Cell R1C5 'Clean_Decision'>   <Cell R1C6 'Clean_Test'>   <Cell R1C7 'Clean_GPA'>
+removing unkown or decision   2   WAITLISTED/UNKNOWN (RD)
+<Cell R2C5 '0'>   <Cell R2C6 '34.49199601'>   <Cell R2C7 '4'>
+removing unkown or decision   17   WAITLISTED/UNKNOWN (RD)
+<Cell R17C5 '0'>   <Cell R17C6 '35.32423897'>   <Cell R17C7 '3.93'>
+removing unkown or decision   19   WAITLISTED/UNKNOWN (RD)
+<Cell R19C5 '0'>   <Cell R19C6 '33.38233873'>   <Cell R19C7 '3.96'>
+removing unkown or decision   23   UNKNOWN
+<Cell R23C5 '0'>   <Cell R23C6 '32.54801744'>   <Cell R23C7 '3.96'>
+removing unkown or decision   37   UNKNOWN
+<Cell R37C5 '0'>   <Cell R37C6 '34'>   <Cell R37C7 '3.96'>
+removing unkown or decision   50   Decision
+<Cell R50C5 'Clean_Decision'>   <Cell R50C6 'Clean_Test'>   <Cell R50C7 'Clean_GPA'>
+removing unkown or decision   57   WAITLISTED/UNKNOWN (RD)
+<Cell R57C5 '0'>   <Cell R57C6 '33.1943044'>   <Cell R57C7 '4.48'>
+removing unkown or decision   60   WAITLISTED/UNKNOWN (RD)
+<Cell R60C5 '0'>   <Cell R60C6 '23.01528477'>   <Cell R60C7 '4.51'>
+removing unkown or decision   85   WAITLISTED/UNKNOWN (RD)
+<Cell R85C5 '0'>   <Cell R85C6 '35'>   <Cell R85C7 '4.48'>
+removing unkown or decision   89   WAITLISTED/UNKNOWN (RD)
+<Cell R89C5 '0'>   <Cell R89C6 '30'>   <Cell R89C7 '4.21'>
+removing unkown or decision   110   WAITLISTED/UNKNOWN (RD)
+<Cell R110C5 '0'>   <Cell R110C6 '35'>   <Cell R110C7 '4.35'>
+removing unkown or decision   118   WAITLISTED/UNKNOWN (RD)
+<Cell R118C5 '0'>   <Cell R118C6 '35'>   <Cell R118C7 '4.49'>
+removing unkown or decision   119   WAITLISTED/UNKNOWN (RD)
+<Cell R119C5 '0'>   <Cell R119C6 '35'>   <Cell R119C7 '4.33'>
+removing unkown or decision   120   Decision
+<Cell R120C5 'Clean_Decision'>   <Cell R120C6 'Clean_Test'>   <Cell R120C7 'Clean_GPA'>
+removing unkown or decision   204   Decision
+<Cell R204C5 'Clean_Decision'>   <Cell R204C6 'Clean_Test'>   <Cell R204C7 'Clean_GPA'>
+removing unkown or decision   251   Decision
+<Cell R251C5 'Clean_Decision'>   <Cell R251C6 'Clean_Test'>   <Cell R251C7 'Clean_GPA'>
+removing unkown or decision   346   Decision
+<Cell R346C5 'Clean_Decision'>   <Cell R346C6 'Clean_Test'>   <Cell R346C7 'Clean_GPA'>
+removing unkown or decision   380   Decision
+<Cell R380C5 'Clean_Decision'>   <Cell R380C6 'Clean_Test'>   <Cell R380C7 'Clean_GPA'>
+removing unkown or decision   392   WAITLISTED/UNKNOWN
+<Cell R392C5 '0'>   <Cell R392C6 '30.88560985'>   <Cell R392C7 '5.06'>
+
+
+Sample Size : 375
+
+
+
+ ['0' '1']
+
+
+                       ucls  ignatius  payton  latin lin_park lyons 
+dummy_list [34.0, 4.4]   0.0   1.0     0.0    0.0    0.0    0.0
+Pooled/New GPA 3.8260869565217397
+SVM Probability: Second number is prob to get in: [[0.86209697 0.13790303]]
+
+Accuracy for SVM: 0.8520710059171598
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+
+
+Logistic Score/R^2 0.8679245283018868
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[-1.93594361e-03  2.81877046e+00  1.10564508e+00  5.45680206e-01
+  -2.42645909e+00  7.97773673e-01 -2.95012585e+00 -2.85568571e+00
+  -6.02944323e+00]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-11.81261492]
+
+New/Pooled GPA 3.8260869565217397
+
+Prediction for Logistic [[0.63364728 0.36635272]]
+Prediction(Logistic)+  -3 :  [[0.63229802 0.36770198]]
+Prediction(Logistic)+  -2 :  [[0.63274801 0.36725199]]
+Prediction(Logistic)+  -1 :  [[0.63319776 0.36680224]]
+Prediction(Logistic)+  1 :  [[0.63409657 0.36590343]]
+Prediction(Logistic)+  2 :  [[0.63454563 0.36545437]]
+Prediction(Logistic)+  3 :  [[0.63499446 0.36500554]]
+Prediction(Logistic)+  4 :  [[0.63544304 0.36455696]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+Accuracy for Logistic: 0.8533333333333334
+inside bayes
+
+New/Pooled GPA 3.8260869565217397
+
+Gaussian Naive Bayes Prediction   [[3.25040848e-04 9.99674959e-01]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[3.24565298e-04 9.99675435e-01]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[2.76330911e-04 9.99723669e-01]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[2.67651911e-04 9.99732348e-01]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[3.69736436e-04 9.99630264e-01]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[5.27294128e-04 9.99472706e-01]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[8.55401801e-04 9.99144598e-01]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[0.00157814 0.99842186]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1  45.0   2.0 
+        0 239.0  52.0 
+
+Accuracy for Naive Bayes: 0.29333333333333333
+UNDERSAMPLE RESULTS: ....
+......................................
+......................................
+
+
+
+Logistic Score/R^2 0.7175572519083969
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[-0.30151339  1.26885469  0.15463789 -0.78667874  5.15248173 -0.65822395
+   4.54351863 -2.56044109  0.        ]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [5.84529447]
+
+New/Pooled GPA 3.8260869565217397
+
+Prediction for Logistic [[0.58372678 0.41627322]]
+Prediction(Logistic)+  -3 :  [[0.36205661 0.63794339]]
+Prediction(Logistic)+  -2 :  [[0.43415083 0.56584917]]
+Prediction(Logistic)+  -1 :  [[0.50914344 0.49085656]]
+Prediction(Logistic)+  1 :  [[0.65466408 0.34533592]]
+Prediction(Logistic)+  2 :  [[0.71932543 0.28067457]]
+Prediction(Logistic)+  3 :  [[0.77602172 0.22397828]]
+Prediction(Logistic)+  4 :  [[0.82406645 0.17593355]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1  13.0  30.0 
+        0   2.0  75.0 
+Accuracy for Logistic: 0.6666666666666666
+inside bayes
+
+New/Pooled GPA 3.8260869565217397
+
+Gaussian Naive Bayes Prediction   [[9.99999981e-01 1.93368973e-08]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[9.99999299e-01 7.01143165e-07]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[9.99999891e-01 1.09158483e-07]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[9.99999965e-01 3.49654915e-08]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[9.99999969e-01 3.12463026e-08]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[9.99999913e-01 8.71716948e-08]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[9.99999500e-01 5.00361376e-07]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[9.99994091e-01 5.90910197e-06]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1   7.0  36.0 
+        0   0.0  77.0 
+
+Accuracy for Naive Bayes: 0.6296296296296297
+
+-------------------------->-------------------->---------------->Seperation
+highschool(Input)   ignatius
+university(Input)   Duke University
+ACT(Input)   34
+GPA(Input)   4.4
+pool-option(Input) pool_highschools undefined undefined undefined 2 undefined undefined
+inside Google API
+found Duke University
+
+pool list ['pool_highschools', 'undefined', 'undefined', 'undefined', '2', 'undefined', 'undefined']
+pooling highschools
+removing unkown or decision   1   Decision
+<Cell R1C5 'Clean_Decision'>   <Cell R1C6 'Clean_Test'>   <Cell R1C7 'Clean_GPA'>
+removing unkown or decision   2   WAITLISTED/UNKNOWN (RD)
+<Cell R2C5 '0'>   <Cell R2C6 '34.49199601'>   <Cell R2C7 '4'>
+removing unkown or decision   17   WAITLISTED/UNKNOWN (RD)
+<Cell R17C5 '0'>   <Cell R17C6 '35.32423897'>   <Cell R17C7 '3.93'>
+removing unkown or decision   19   WAITLISTED/UNKNOWN (RD)
+<Cell R19C5 '0'>   <Cell R19C6 '33.38233873'>   <Cell R19C7 '3.96'>
+removing unkown or decision   23   UNKNOWN
+<Cell R23C5 '0'>   <Cell R23C6 '32.54801744'>   <Cell R23C7 '3.96'>
+removing unkown or decision   37   UNKNOWN
+<Cell R37C5 '0'>   <Cell R37C6 '34'>   <Cell R37C7 '3.96'>
+removing unkown or decision   50   Decision
+<Cell R50C5 'Clean_Decision'>   <Cell R50C6 'Clean_Test'>   <Cell R50C7 'Clean_GPA'>
+removing unkown or decision   57   WAITLISTED/UNKNOWN (RD)
+<Cell R57C5 '0'>   <Cell R57C6 '33.1943044'>   <Cell R57C7 '4.48'>
+removing unkown or decision   60   WAITLISTED/UNKNOWN (RD)
+<Cell R60C5 '0'>   <Cell R60C6 '23.01528477'>   <Cell R60C7 '4.51'>
+removing unkown or decision   85   WAITLISTED/UNKNOWN (RD)
+<Cell R85C5 '0'>   <Cell R85C6 '35'>   <Cell R85C7 '4.48'>
+removing unkown or decision   89   WAITLISTED/UNKNOWN (RD)
+<Cell R89C5 '0'>   <Cell R89C6 '30'>   <Cell R89C7 '4.21'>
+removing unkown or decision   110   WAITLISTED/UNKNOWN (RD)
+<Cell R110C5 '0'>   <Cell R110C6 '35'>   <Cell R110C7 '4.35'>
+removing unkown or decision   118   WAITLISTED/UNKNOWN (RD)
+<Cell R118C5 '0'>   <Cell R118C6 '35'>   <Cell R118C7 '4.49'>
+removing unkown or decision   119   WAITLISTED/UNKNOWN (RD)
+<Cell R119C5 '0'>   <Cell R119C6 '35'>   <Cell R119C7 '4.33'>
+removing unkown or decision   120   Decision
+<Cell R120C5 'Clean_Decision'>   <Cell R120C6 'Clean_Test'>   <Cell R120C7 'Clean_GPA'>
+removing unkown or decision   204   Decision
+<Cell R204C5 'Clean_Decision'>   <Cell R204C6 'Clean_Test'>   <Cell R204C7 'Clean_GPA'>
+removing unkown or decision   251   Decision
+<Cell R251C5 'Clean_Decision'>   <Cell R251C6 'Clean_Test'>   <Cell R251C7 'Clean_GPA'>
+removing unkown or decision   346   Decision
+<Cell R346C5 'Clean_Decision'>   <Cell R346C6 'Clean_Test'>   <Cell R346C7 'Clean_GPA'>
+removing unkown or decision   380   Decision
+<Cell R380C5 'Clean_Decision'>   <Cell R380C6 'Clean_Test'>   <Cell R380C7 'Clean_GPA'>
+removing unkown or decision   392   WAITLISTED/UNKNOWN
+<Cell R392C5 '0'>   <Cell R392C6 '30.88560985'>   <Cell R392C7 '5.06'>
+
+
+Sample Size : 375
+
+
+
+ ['0' '1']
+
+
+                       ucls  ignatius  payton  latin lin_park lyons 
+dummy_list [34.0, 4.4]   0.0   1.0     0.0    0.0    0.0    0.0
+Pooled/New GPA 3.8260869565217397
+SVM Probability: Second number is prob to get in: [[0.87142871 0.12857129]]
+
+Accuracy for SVM: 0.8520710059171598
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+
+
+Logistic Score/R^2 0.8652291105121294
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[-2.40234342e-03  2.37858466e+00  9.56344359e-01  5.54202832e-01
+  -1.83885701e+00  7.23852765e-01 -2.69098967e+00 -2.46483789e+00
+  -5.44407036e+00]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-10.20435498]
+
+New/Pooled GPA 3.8260869565217397
+
+Prediction for Logistic [[0.65275246 0.34724754]]
+Prediction(Logistic)+  -3 :  [[0.65111707 0.34888293]]
+Prediction(Logistic)+  -2 :  [[0.6516626 0.3483374]]
+Prediction(Logistic)+  -1 :  [[0.65220773 0.34779227]]
+Prediction(Logistic)+  1 :  [[0.65329679 0.34670321]]
+Prediction(Logistic)+  2 :  [[0.65384072 0.34615928]]
+Prediction(Logistic)+  3 :  [[0.65438425 0.34561575]]
+Prediction(Logistic)+  4 :  [[0.65492737 0.34507263]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+Accuracy for Logistic: 0.8533333333333334
+inside bayes
+
+New/Pooled GPA 3.8260869565217397
+
+Gaussian Naive Bayes Prediction   [[3.25040848e-04 9.99674959e-01]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[3.24565298e-04 9.99675435e-01]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[2.76330911e-04 9.99723669e-01]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[2.67651911e-04 9.99732348e-01]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[3.69736436e-04 9.99630264e-01]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[5.27294128e-04 9.99472706e-01]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[8.55401801e-04 9.99144598e-01]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[0.00157814 0.99842186]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1  45.0   2.0 
+        0 239.0  52.0 
+
+Accuracy for Naive Bayes: 0.29333333333333333
+UNDERSAMPLE RESULTS: ....
+......................................
+......................................
+
+
+
+Logistic Score/R^2 0.7938931297709924
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[ 0.44781869  1.31383996 -0.79907011 -0.75590533 -2.65964401 -1.42468968
+  -3.33500317 -3.2659032  -5.49808823]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-17.73830373]
+
+New/Pooled GPA 3.8260869565217397
+
+Prediction for Logistic [[0.14697928 0.85302072]]
+Prediction(Logistic)+  -3 :  [[0.39770517 0.60229483]]
+Prediction(Logistic)+  -2 :  [[0.29674324 0.70325676]]
+Prediction(Logistic)+  -1 :  [[0.21237417 0.78762583]]
+Prediction(Logistic)+  1 :  [[0.0991852 0.9008148]]
+Prediction(Logistic)+  2 :  [[0.06573494 0.93426506]]
+Prediction(Logistic)+  3 :  [[0.04302696 0.95697304]]
+Prediction(Logistic)+  4 :  [[0.0279289 0.9720711]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1  27.0  16.0 
+        0   6.0  71.0 
+Accuracy for Logistic: 0.8148148148148148
+inside bayes
+
+New/Pooled GPA 3.8260869565217397
+
+Gaussian Naive Bayes Prediction   [[9.51242469e-07 9.99999049e-01]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[1.19255509e-04 9.99880744e-01]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[5.02572097e-05 9.99949743e-01]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[9.85890828e-06 9.99990141e-01]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[3.82672949e-08 9.99999962e-01]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[7.57198149e-10 9.99999999e-01]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[6.97451897e-12 1.00000000e+00]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[2.99048706e-14 1.00000000e+00]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1  42.0   1.0 
+        0  66.0  11.0 
+
+Accuracy for Naive Bayes: 0.5
+
+-------------------------->-------------------->---------------->Seperation
+highschool(Input)   ignatius
+university(Input)   Duke University
+ACT(Input)   34
+GPA(Input)   4.4
+pool-option(Input) pool_highschools undefined undefined undefined undefined 3 undefined
+inside Google API
+found Duke University
+
+pool list ['pool_highschools', 'undefined', 'undefined', 'undefined', 'undefined', '3', 'undefined']
+pooling highschools
+removing unkown or decision   1   Decision
+<Cell R1C5 'Clean_Decision'>   <Cell R1C6 'Clean_Test'>   <Cell R1C7 'Clean_GPA'>
+removing unkown or decision   2   WAITLISTED/UNKNOWN (RD)
+<Cell R2C5 '0'>   <Cell R2C6 '34.49199601'>   <Cell R2C7 '4'>
+removing unkown or decision   17   WAITLISTED/UNKNOWN (RD)
+<Cell R17C5 '0'>   <Cell R17C6 '35.32423897'>   <Cell R17C7 '3.93'>
+removing unkown or decision   19   WAITLISTED/UNKNOWN (RD)
+<Cell R19C5 '0'>   <Cell R19C6 '33.38233873'>   <Cell R19C7 '3.96'>
+removing unkown or decision   23   UNKNOWN
+<Cell R23C5 '0'>   <Cell R23C6 '32.54801744'>   <Cell R23C7 '3.96'>
+removing unkown or decision   37   UNKNOWN
+<Cell R37C5 '0'>   <Cell R37C6 '34'>   <Cell R37C7 '3.96'>
+removing unkown or decision   50   Decision
+<Cell R50C5 'Clean_Decision'>   <Cell R50C6 'Clean_Test'>   <Cell R50C7 'Clean_GPA'>
+removing unkown or decision   57   WAITLISTED/UNKNOWN (RD)
+<Cell R57C5 '0'>   <Cell R57C6 '33.1943044'>   <Cell R57C7 '4.48'>
+removing unkown or decision   60   WAITLISTED/UNKNOWN (RD)
+<Cell R60C5 '0'>   <Cell R60C6 '23.01528477'>   <Cell R60C7 '4.51'>
+removing unkown or decision   85   WAITLISTED/UNKNOWN (RD)
+<Cell R85C5 '0'>   <Cell R85C6 '35'>   <Cell R85C7 '4.48'>
+removing unkown or decision   89   WAITLISTED/UNKNOWN (RD)
+<Cell R89C5 '0'>   <Cell R89C6 '30'>   <Cell R89C7 '4.21'>
+removing unkown or decision   110   WAITLISTED/UNKNOWN (RD)
+<Cell R110C5 '0'>   <Cell R110C6 '35'>   <Cell R110C7 '4.35'>
+removing unkown or decision   118   WAITLISTED/UNKNOWN (RD)
+<Cell R118C5 '0'>   <Cell R118C6 '35'>   <Cell R118C7 '4.49'>
+removing unkown or decision   119   WAITLISTED/UNKNOWN (RD)
+<Cell R119C5 '0'>   <Cell R119C6 '35'>   <Cell R119C7 '4.33'>
+removing unkown or decision   120   Decision
+<Cell R120C5 'Clean_Decision'>   <Cell R120C6 'Clean_Test'>   <Cell R120C7 'Clean_GPA'>
+removing unkown or decision   204   Decision
+<Cell R204C5 'Clean_Decision'>   <Cell R204C6 'Clean_Test'>   <Cell R204C7 'Clean_GPA'>
+removing unkown or decision   251   Decision
+<Cell R251C5 'Clean_Decision'>   <Cell R251C6 'Clean_Test'>   <Cell R251C7 'Clean_GPA'>
+removing unkown or decision   346   Decision
+<Cell R346C5 'Clean_Decision'>   <Cell R346C6 'Clean_Test'>   <Cell R346C7 'Clean_GPA'>
+removing unkown or decision   380   Decision
+<Cell R380C5 'Clean_Decision'>   <Cell R380C6 'Clean_Test'>   <Cell R380C7 'Clean_GPA'>
+removing unkown or decision   392   WAITLISTED/UNKNOWN
+<Cell R392C5 '0'>   <Cell R392C6 '30.88560985'>   <Cell R392C7 '5.06'>
+
+
+Sample Size : 375
+
+
+
+ ['0' '1']
+
+
+                       ucls  ignatius  payton  latin lin_park lyons 
+dummy_list [34.0, 4.4]   0.0   1.0     0.0    0.0    0.0    0.0
+Pooled/New GPA 3.8260869565217397
+SVM Probability: Second number is prob to get in: [[0.86039246 0.13960754]]
+
+Accuracy for SVM: 0.8520710059171598
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+
+
+Logistic Score/R^2 0.8652291105121294
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[-2.39480694e-03  2.25270946e+00  7.97778883e-01  4.56813566e-01
+  -1.86324244e+00  5.44818249e-01 -2.61674593e+00 -2.47322547e+00
+  -4.48975572e+00]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-9.64355886]
+
+New/Pooled GPA 3.8260869565217397
+
+Prediction for Logistic [[0.65680908 0.34319092]]
+Prediction(Logistic)+  -3 :  [[0.65518781 0.34481219]]
+Prediction(Logistic)+  -2 :  [[0.65572864 0.34427136]]
+Prediction(Logistic)+  -1 :  [[0.65626906 0.34373094]]
+Prediction(Logistic)+  1 :  [[0.65734869 0.34265131]]
+Prediction(Logistic)+  2 :  [[0.65788789 0.34211211]]
+Prediction(Logistic)+  3 :  [[0.65842669 0.34157331]]
+Prediction(Logistic)+  4 :  [[0.65896508 0.34103492]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1   0.0  47.0 
+        0   0.0 291.0 
+Accuracy for Logistic: 0.8533333333333334
+inside bayes
+
+New/Pooled GPA 3.8260869565217397
+
+Gaussian Naive Bayes Prediction   [[3.25040848e-04 9.99674959e-01]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[3.24565298e-04 9.99675435e-01]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[2.76330911e-04 9.99723669e-01]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[2.67651911e-04 9.99732348e-01]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[3.69736436e-04 9.99630264e-01]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[5.27294128e-04 9.99472706e-01]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[8.55401801e-04 9.99144598e-01]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[0.00157814 0.99842186]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1  45.0   2.0 
+        0 239.0  52.0 
+
+Accuracy for Naive Bayes: 0.29333333333333333
+UNDERSAMPLE RESULTS: ....
+......................................
+......................................
+
+
+
+Logistic Score/R^2 0.648854961832061
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[ 0.08582066  1.38526382 -0.00970167  0.57031003 -1.15497629  0.47987256
+  -1.81619616 -1.61302993 -4.66332771]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-8.20704918]
+
+New/Pooled GPA 3.8260869565217397
+
+Prediction for Logistic [[0.3586328 0.6413672]]
+Prediction(Logistic)+  -3 :  [[0.41973991 0.58026009]]
+Prediction(Logistic)+  -2 :  [[0.39899321 0.60100679]]
+Prediction(Logistic)+  -1 :  [[0.37860289 0.62139711]]
+Prediction(Logistic)+  1 :  [[0.33914117 0.66085883]]
+Prediction(Logistic)+  2 :  [[0.32018006 0.67981994]]
+Prediction(Logistic)+  3 :  [[0.30179493 0.69820507]]
+Prediction(Logistic)+  4 :  [[0.28402443 0.71597557]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1  12.0  31.0 
+        0  11.0  66.0 
+Accuracy for Logistic: 0.7407407407407407
+inside bayes
+
+New/Pooled GPA 3.8260869565217397
+
+Gaussian Naive Bayes Prediction   [[1.51822032e-04 9.99848178e-01]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[2.13961691e-04 9.99786038e-01]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[1.85433790e-04 9.99814566e-01]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[1.64967859e-04 9.99835032e-01]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[1.41219976e-04 9.99858780e-01]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[1.35888703e-04 9.99864111e-01]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[1.34223975e-04 9.99865776e-01]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[1.36093196e-04 9.99863907e-01]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1  43.0   0.0 
+        0  76.0   1.0 
+
+Accuracy for Naive Bayes: 0.4074074074074074
+
+-------------------------->-------------------->---------------->Seperationhighschool(Input)   ignatius
+university(Input)   University of Wisconsin
+ACT(Input)   30
+GPA(Input)   3.94
+pool-option(Input) undefined undefined undefined undefined undefined undefined undefined
+inside Google API
+found University of Wisconsin
+pool list ['undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined']
+Not pooling highschools
+removing row due to unknown   4
+<Cell R4C5 '0'>   <Cell R4C6 '26.44698073'>   <Cell R4C7 '3.5'>
+removing row due to unknown   6
+<Cell R6C5 '0'>   <Cell R6C6 '31.16302417'>   <Cell R6C7 '3.59'>
+removing row due to unknown   9
+<Cell R9C5 '0'>   <Cell R9C6 '27.00180937'>   <Cell R9C7 '3.35'>
+removing row due to unknown   12
+<Cell R12C5 '0'>   <Cell R12C6 '24.50508049'>   <Cell R12C7 '3.68'>
+removing row due to unknown   27
+<Cell R27C5 '0'>   <Cell R27C6 '27.55663801'>   <Cell R27C7 '3.82'>
+removing row due to unknown   32
+<Cell R32C5 '0'>   <Cell R32C6 '29.77595257'>   <Cell R32C7 '3.32'>
+removing row due to unknown   40
+<Cell R40C5 '0'>   <Cell R40C6 '28.11146665'>   <Cell R40C7 '3.59'>
+removing row due to unknown   42
+<Cell R42C5 '0'>   <Cell R42C6 '25.33732345'>   <Cell R42C7 '3.33'>
+removing row due to unknown   48
+<Cell R48C5 '0'>   <Cell R48C6 '30.88560985'>   <Cell R48C7 '3.97'>
+removing row due to unknown   52
+<Cell R52C5 '0'>   <Cell R52C6 '26.72439505'>   <Cell R52C7 '3.39'>
+removing row due to unknown   66
+<Cell R66C5 '0'>   <Cell R66C6 '23.67283753'>   <Cell R66C7 '3.56'>
+removing row due to unknown   77
+<Cell R77C5 '0'>   <Cell R77C6 '29.80129786'>   <Cell R77C7 '3.97'>
+removing row due to unknown   102
+<Cell R102C5 '0'>   <Cell R102C6 '25'>   <Cell R102C7 '3.32'>
+removing row due to unknown   107
+<Cell R107C5 '0'>   <Cell R107C6 '27'>   <Cell R107C7 '3.41'>
+removing row due to unknown   122
+<Cell R122C5 '0'>   <Cell R122C6 '31'>   <Cell R122C7 '3.97'>
+removing row due to unknown   124
+<Cell R124C5 '0'>   <Cell R124C6 '33'>   <Cell R124C7 '3.67'>
+removing row due to unknown   125
+<Cell R125C5 '0'>   <Cell R125C6 '30'>   <Cell R125C7 '3.98'>
+removing row due to unknown   128
+<Cell R128C5 '0'>   <Cell R128C6 '31'>   <Cell R128C7 '3.5'>
+removing row due to unknown   132
+<Cell R132C5 '0'>   <Cell R132C6 '31'>   <Cell R132C7 '3.82'>
+removing row due to unknown   134
+<Cell R134C5 '0'>   <Cell R134C6 '31'>   <Cell R134C7 '3.78'>
+removing row due to unknown   142
+<Cell R142C5 '0'>   <Cell R142C6 '29'>   <Cell R142C7 '3.62'>
+removing row due to unknown   143
+<Cell R143C5 '0'>   <Cell R143C6 '28'>   <Cell R143C7 '3.65'>
+removing row due to unknown   145
+<Cell R145C5 '0'>   <Cell R145C6 '30'>   <Cell R145C7 '3.37'>
+removing row due to unknown   147
+<Cell R147C5 '0'>   <Cell R147C6 '30'>   <Cell R147C7 '3.59'>
+removing row due to unknown   154
+<Cell R154C5 '0'>   <Cell R154C6 '27'>   <Cell R154C7 '3.35'>
+removing row due to unknown   159
+<Cell R159C5 '0'>   <Cell R159C6 '30'>   <Cell R159C7 '3.45'>
+removing row due to unknown   162
+<Cell R162C5 '0'>   <Cell R162C6 '25'>   <Cell R162C7 '3.56'>
+removing row due to unknown   167
+<Cell R167C5 '0'>   <Cell R167C6 '30'>   <Cell R167C7 '3.88'>
+removing row due to unknown   171
+<Cell R171C5 '0'>   <Cell R171C6 '30'>   <Cell R171C7 '3.39'>
+removing row due to unknown   216
+<Cell R216C5 '0'>   <Cell R216C6 '20'>   <Cell R216C7 '3.69'>
+removing row due to unknown   228
+<Cell R228C5 '0'>   <Cell R228C6 '31'>   <Cell R228C7 '3.6'>
+removing row due to unknown   230
+<Cell R230C5 '0'>   <Cell R230C6 '27'>   <Cell R230C7 '3.55'>
+removing row due to unknown   232
+<Cell R232C5 '0'>   <Cell R232C6 '29'>   <Cell R232C7 '3.34'>
+removing row due to unknown   237
+<Cell R237C5 '0'>   <Cell R237C6 '31'>   <Cell R237C7 '3.67'>
+removing row due to unknown   243
+<Cell R243C5 '0'>   <Cell R243C6 '32'>   <Cell R243C7 '3.51'>
+removing row due to unknown   253
+<Cell R253C5 '0'>   <Cell R253C6 '29'>   <Cell R253C7 '3.5'>
+removing row due to unknown   259
+<Cell R259C5 '0'>   <Cell R259C6 '28'>   <Cell R259C7 '3.2'>
+removing row due to unknown   271
+<Cell R271C5 '0'>   <Cell R271C6 '29'>   <Cell R271C7 '3.25'>
+removing row due to unknown   277
+<Cell R277C5 '0'>   <Cell R277C6 '27'>   <Cell R277C7 '3.32'>
+removing row due to unknown   285
+<Cell R285C5 '0'>   <Cell R285C6 '26'>   <Cell R285C7 '3.78'>
+
+
+Sample Size : 247
+
+
+
+ ['0' '1']
+
+
+                       ucls  ignatius  payton  latin lin_park lyons 
+dummy_list [30.0, 3.94]   0.0   1.0     0.0    0.0    0.0    0.0
+SVM Probability: Second number is prob to get in: [[0.13453347 0.86546653]]
+
+Accuracy for SVM: 0.8839285714285714
+              1     0 
+        1 132.0   8.0 
+        0  15.0  68.0 
+
+
+Logistic Score/R^2 0.8442622950819673
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[0.09833504 8.78855875]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-34.58475119]
+
+Prediction for Logistic [[0.04777851 0.95222149]]
+Prediction(Logistic)+  -3 :  [[0.06313781 0.93686219]]
+Prediction(Logistic)+  -2 :  [[0.05756504 0.94243496]]
+Prediction(Logistic)+  -1 :  [[0.0524566 0.9475434]]
+Prediction(Logistic)+  1 :  [[0.04349847 0.95650153]]
+Prediction(Logistic)+  2 :  [[0.03958589 0.96041411]]
+Prediction(Logistic)+  3 :  [[0.036012 0.963988]]
+Prediction(Logistic)+  4 :  [[0.03274975 0.96725025]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1 125.0  15.0 
+        0  21.0  62.0 
+Accuracy for Logistic: 0.8686868686868687
+inside bayes
+
+Gaussian Naive Bayes Prediction   [[0.03333618 0.96666382]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[0.06641884 0.93358116]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[0.05117143 0.94882857]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[0.04064312 0.95935688]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[0.02826749 0.97173251]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[0.02479716 0.97520284]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[0.02251389 0.97748611]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[0.0211617 0.9788383]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1 121.0  19.0 
+        0  17.0  66.0 
+
+Accuracy for Naive Bayes: 0.8787878787878788
+
+-------------------------->-------------------->---------------->Seperation
+highschool(Input)   ignatius
+university(Input)   University of Wisconsin
+ACT(Input)   30
+GPA(Input)   3.94
+pool-option(Input) pool_highschools undefined undefined undefined undefined undefined undefined
+inside Google API
+found University of Wisconsin
+pool list ['pool_highschools', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined']
+pooling highschools
+removing unkown or decision   1   Decision
+<Cell R1C5 'Clean_Decision'>   <Cell R1C6 'Clean_Test'>   <Cell R1C7 'Clean_GPA'>
+removing unkown or decision   4   WAITLISTED/UNKNOWN (RD)
+<Cell R4C5 '0'>   <Cell R4C6 '26.44698073'>   <Cell R4C7 '3.5'>
+removing unkown or decision   6   WAITLISTED/UNKNOWN (EA)
+<Cell R6C5 '0'>   <Cell R6C6 '31.16302417'>   <Cell R6C7 '3.59'>
+removing unkown or decision   9   WAITLISTED/UNKNOWN (RD)
+<Cell R9C5 '0'>   <Cell R9C6 '27.00180937'>   <Cell R9C7 '3.35'>
+removing unkown or decision   12   WAITLISTED/UNKNOWN (RD)
+<Cell R12C5 '0'>   <Cell R12C6 '24.50508049'>   <Cell R12C7 '3.68'>
+removing unkown or decision   27   WAITLISTED/UNKNOWN (EA)
+<Cell R27C5 '0'>   <Cell R27C6 '27.55663801'>   <Cell R27C7 '3.82'>
+removing unkown or decision   32   WAITLISTED/UNKNOWN (EA)
+<Cell R32C5 '0'>   <Cell R32C6 '29.77595257'>   <Cell R32C7 '3.32'>
+removing unkown or decision   40   WAITLISTED/UNKNOWN (EA)
+<Cell R40C5 '0'>   <Cell R40C6 '28.11146665'>   <Cell R40C7 '3.59'>
+removing unkown or decision   42   WAITLISTED/UNKNOWN (EA)
+<Cell R42C5 '0'>   <Cell R42C6 '25.33732345'>   <Cell R42C7 '3.33'>
+removing unkown or decision   48   WAITLISTED/UNKNOWN (RD)
+<Cell R48C5 '0'>   <Cell R48C6 '30.88560985'>   <Cell R48C7 '3.97'>
+removing unkown or decision   52   WAITLISTED/UNKNOWN (RD)
+<Cell R52C5 '0'>   <Cell R52C6 '26.72439505'>   <Cell R52C7 '3.39'>
+removing unkown or decision   66   WAITLISTED/UNKNOWN (EA)
+<Cell R66C5 '0'>   <Cell R66C6 '23.67283753'>   <Cell R66C7 '3.56'>
+removing unkown or decision   77   WAITLISTED/UNKNOWN (RD)
+<Cell R77C5 '0'>   <Cell R77C6 '29.80129786'>   <Cell R77C7 '3.97'>
+removing unkown or decision   102   WAITLISTED/UNKNOWN (EA)
+<Cell R102C5 '0'>   <Cell R102C6 '25'>   <Cell R102C7 '3.32'>
+removing unkown or decision   107   WAITLISTED/UNKNOWN (RD)
+<Cell R107C5 '0'>   <Cell R107C6 '27'>   <Cell R107C7 '3.41'>
+removing unkown or decision   122   WAITLISTED/UNKNOWN (RD)
+<Cell R122C5 '0'>   <Cell R122C6 '31'>   <Cell R122C7 '3.97'>
+removing unkown or decision   124   WAITLISTED/UNKNOWN (EA)
+<Cell R124C5 '0'>   <Cell R124C6 '33'>   <Cell R124C7 '3.67'>
+removing unkown or decision   125   WAITLISTED/UNKNOWN (EA)
+<Cell R125C5 '0'>   <Cell R125C6 '30'>   <Cell R125C7 '3.98'>
+removing unkown or decision   128   WAITLISTED/UNKNOWN (EA)
+<Cell R128C5 '0'>   <Cell R128C6 '31'>   <Cell R128C7 '3.5'>
+removing unkown or decision   132   WAITLISTED/UNKNOWN (EA)
+<Cell R132C5 '0'>   <Cell R132C6 '31'>   <Cell R132C7 '3.82'>
+removing unkown or decision   134   WAITLISTED/UNKNOWN (RD)
+<Cell R134C5 '0'>   <Cell R134C6 '31'>   <Cell R134C7 '3.78'>
+removing unkown or decision   142   WAITLISTED/UNKNOWN (RD)
+<Cell R142C5 '0'>   <Cell R142C6 '29'>   <Cell R142C7 '3.62'>
+removing unkown or decision   143   WAITLISTED/UNKNOWN (EA)
+<Cell R143C5 '0'>   <Cell R143C6 '28'>   <Cell R143C7 '3.65'>
+removing unkown or decision   145   WAITLISTED/UNKNOWN (RD)
+<Cell R145C5 '0'>   <Cell R145C6 '30'>   <Cell R145C7 '3.37'>
+removing unkown or decision   147   WAITLISTED/UNKNOWN (EA)
+<Cell R147C5 '0'>   <Cell R147C6 '30'>   <Cell R147C7 '3.59'>
+removing unkown or decision   154   WAITLISTED/UNKNOWN (RD)
+<Cell R154C5 '0'>   <Cell R154C6 '27'>   <Cell R154C7 '3.35'>
+removing unkown or decision   159   WAITLISTED/UNKNOWN (RD)
+<Cell R159C5 '0'>   <Cell R159C6 '30'>   <Cell R159C7 '3.45'>
+removing unkown or decision   162   WAITLISTED/UNKNOWN (EA)
+<Cell R162C5 '0'>   <Cell R162C6 '25'>   <Cell R162C7 '3.56'>
+removing unkown or decision   167   WAITLISTED/UNKNOWN (ROLL)
+<Cell R167C5 '0'>   <Cell R167C6 '30'>   <Cell R167C7 '3.88'>
+removing unkown or decision   171   WAITLISTED/UNKNOWN (RD)
+<Cell R171C5 '0'>   <Cell R171C6 '30'>   <Cell R171C7 '3.39'>
+removing unkown or decision   216   WAITLISTED/UNKNOWN (RD)
+<Cell R216C5 '0'>   <Cell R216C6 '20'>   <Cell R216C7 '3.69'>
+removing unkown or decision   228   WAITLISTED/UNKNOWN (EA)
+<Cell R228C5 '0'>   <Cell R228C6 '31'>   <Cell R228C7 '3.6'>
+removing unkown or decision   230   WAITLISTED/UNKNOWN (RD)
+<Cell R230C5 '0'>   <Cell R230C6 '27'>   <Cell R230C7 '3.55'>
+removing unkown or decision   232   WAITLISTED/UNKNOWN (EA)
+<Cell R232C5 '0'>   <Cell R232C6 '29'>   <Cell R232C7 '3.34'>
+removing unkown or decision   237   WAITLISTED/UNKNOWN (EA)
+<Cell R237C5 '0'>   <Cell R237C6 '31'>   <Cell R237C7 '3.67'>
+removing unkown or decision   243   WAITLISTED/UNKNOWN (RD)
+<Cell R243C5 '0'>   <Cell R243C6 '32'>   <Cell R243C7 '3.51'>
+removing unkown or decision   253   WAITLISTED/UNKNOWN (RD)
+<Cell R253C5 '0'>   <Cell R253C6 '29'>   <Cell R253C7 '3.5'>
+removing unkown or decision   259   WAITLISTED/UNKNOWN (RD)
+<Cell R259C5 '0'>   <Cell R259C6 '28'>   <Cell R259C7 '3.2'>
+removing unkown or decision   271   WAITLISTED/UNKNOWN (RD)
+<Cell R271C5 '0'>   <Cell R271C6 '29'>   <Cell R271C7 '3.25'>
+removing unkown or decision   277   WAITLISTED/UNKNOWN (RD)
+<Cell R277C5 '0'>   <Cell R277C6 '27'>   <Cell R277C7 '3.32'>
+removing unkown or decision   285   WAITLISTED/UNKNOWN (EA)
+<Cell R285C5 '0'>   <Cell R285C6 '26'>   <Cell R285C7 '3.78'>
+removing unkown or decision   289   Decision
+<Cell R289C5 'Clean_Decision'>   <Cell R289C6 'Clean_Test'>   <Cell R289C7 'Clean_GPA'>
+removing unkown or decision   290   Decision
+<Cell R290C5 'Clean_Decision'>   <Cell R290C6 'Clean_Test'>   <Cell R290C7 'Clean_GPA'>
+removing unkown or decision   291   WAITLISTED/UNKNOWN
+<Cell R291C5 '0'>   <Cell R291C6 '30.44758482'>   <Cell R291C7 '4.45'>
+removing unkown or decision   333   WAITLISTED/UNKNOWN
+<Cell R333C5 '0'>   <Cell R333C6 '33'>   <Cell R333C7 '4.45'>
+removing unkown or decision   348   WAITLISTED/UNKNOWN
+<Cell R348C5 '0'>   <Cell R348C6 '34'>   <Cell R348C7 '4.46'>
+removing unkown or decision   365   WAITLISTED/UNKNOWN
+<Cell R365C5 '0'>   <Cell R365C6 '32'>   <Cell R365C7 '4.2'>
+removing unkown or decision   393   WAITLISTED/UNKNOWN
+<Cell R393C5 '0'>   <Cell R393C6 '32'>   <Cell R393C7 '4.27'>
+removing unkown or decision   430   WAITLISTED/UNKNOWN
+<Cell R430C5 '0'>   <Cell R430C6 '30'>   <Cell R430C7 '4.62'>
+
+
+Sample Size : 391
+
+
+
+ ['0' '1']
+
+
+                       ucls  ignatius  payton  latin lin_park lyons 
+dummy_list [30.0, 3.94]   0.0   1.0     0.0    0.0    0.0    0.0
+Pooled/New GPA 3.4260869565217393
+SVM Probability: Second number is prob to get in: [[1.23302149e-05 9.99987670e-01]]
+
+Accuracy for SVM: 0.875
+              1     0 
+        1 221.0  21.0 
+        0  30.0  80.0 
+
+
+Logistic Score/R^2 0.8449612403100775
+
+                                  ACT       GPA          ucls       ignatius     payton      latin
+Logistic-->Coefficients   [[  0.07562847   7.57807109   0.          -7.33139335 -11.25110551
+    0.           0.           0.           0.        ]]
+lincoln_park   lyons
+
+Logistic-->Intercept   [-18.58249886]
+
+New/Pooled GPA 3.4260869565217393
+
+Prediction for Logistic [[0.0896356 0.9103644]]
+Prediction(Logistic)+  -3 :  [[0.1099544 0.8900456]]
+Prediction(Logistic)+  -2 :  [[0.10276846 0.89723154]]
+Prediction(Logistic)+  -1 :  [[0.0960015 0.9039985]]
+Prediction(Logistic)+  1 :  [[0.08365277 0.91634723]]
+Prediction(Logistic)+  2 :  [[0.07803504 0.92196496]]
+Prediction(Logistic)+  3 :  [[0.07276461 0.92723539]]
+Prediction(Logistic)+  4 :  [[0.06782396 0.93217604]]
+
+Logisitic Confusion Matrix
+              1     0 
+        1 219.0  23.0 
+        0  31.0  79.0 
+Accuracy for Logistic: 0.8853503184713376
+inside bayes
+
+New/Pooled GPA 3.4260869565217393
+
+Gaussian Naive Bayes Prediction   [[0.06405688 0.93594312]]
+
+Prediction(Gaussian Bayesian)+  -3 :  [[0.55757607 0.44242393]]
+
+Prediction(Gaussian Bayesian)+  -2 :  [[0.49051863 0.50948137]]
+
+Prediction(Gaussian Bayesian)+  -1 :  [[0.4318322 0.5681678]]
+
+Prediction(Gaussian Bayesian)+  1 :  [[0.34324944 0.65675056]]
+
+Prediction(Gaussian Bayesian)+  2 :  [[0.31284236 0.68715764]]
+
+Prediction(Gaussian Bayesian)+  3 :  [[0.29068262 0.70931738]]
+
+Prediction(Gaussian Bayesian)+  4 :  [[0.2759847 0.7240153]]
+
+Naive Bayes Confusion Matrix
+              1     0 
+        1 191.0  51.0 
+        0  34.0  76.0 
+
+Accuracy for Naive Bayes: 0.7388535031847133
+
+-------------------------->-------------------->---------------->Seperation

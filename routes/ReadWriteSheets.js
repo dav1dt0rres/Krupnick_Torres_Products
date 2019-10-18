@@ -9,7 +9,7 @@ var fs              = require('fs'),
 var creds             = require("C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Razvan-579c7c6068ea.json");
 var GoogleSpreadsheet = require('google-spreadsheet');
 var MainList_HighSchool=['University of Chicago Lab Schools','St. Ignatius','Latin','New Trier',"Other"];
-var ReadWrite=require('../Models/Excelworkbook.js');
+var ReadWrite=require('../Objects/Excelworkbook.js');
 var Workbook=new ReadWrite();
 
 router.get('/',function (req, res, next) {
@@ -28,7 +28,7 @@ router.get('/',function (req, res, next) {
         console.log("pressed naviance_button")
         console.log("GOing in"+ " "+ req.query.HighSchool_Input+" "+req.query.University_Input+" "+req.query.N_user_name)
         Workbook.Write_To_Excel(res,req.query.HighSchool_Input,req.query.University_Input,req.query.N_user_name,req.query.N_password)
-       //Write_To_Excel(res,req.query.High_School,req.query.University,req.query.username,req.query.password); //Write_TO_Excel function probably needs command line arguments to be to python
+       //Write_To_Excel(res,req.query.High_School,req.query.Univpast_searches.txtersity,req.query.username,req.query.password); //Write_TO_Excel function probably needs command line arguments to be to python
 
     }
     else if (req.query.hasOwnProperty("tutor_button")){
@@ -61,6 +61,11 @@ router.get('/',function (req, res, next) {
         console.log("Calculating Odds...")
         Workbook.Calculate_Odds(req.query.University,req.query.High_School,res,req)
     }
+
+})
+router.get('/loadSearches',function(req,res,next){
+    console.log("Inside loading searches")
+
 
 })
 router.get('/Calculate_Odds',function(req,res,next){
