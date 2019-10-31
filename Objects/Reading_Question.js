@@ -3,7 +3,7 @@ var Question = require('./Question.js'),util = require('util');
 
 function Reading_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID) {
 
-    this.Passage=passage;
+    this.Passage=passage; //its already a string by now.
     this._id=ID;
     this.Test_Type="ACT-Reading";
 
@@ -21,6 +21,10 @@ function Reading_Question(question_text, optionList,right_answer,tag,number,pass
     this.Right_Answer=right_answer;
     this.StudentAnswer=null;
 
+    this.First_Hint=[];
+    this.deleted_Answer=[]
+
+    this.Second_Hint_Text=[];
 
 
 }
@@ -28,7 +32,7 @@ function Reading_Question(question_text, optionList,right_answer,tag,number,pass
 util.inherits(Reading_Question, Question);
 
 Reading_Question.prototype.getPassage=function(){
-    return this.Passage
+    return this.Passage //returns a string
     //return this.Passage.replace(',', '');
 
 }

@@ -16,10 +16,10 @@ var Student_Object;
 var title;
 
 router.get('/', function (req, res, next) {
-    console.log("Inside get Test Optoins"+req.query.FirstName+req.query.LastName)
+    console.log("Inside get Test Optoins"+req.query.FirstName+req.query.LastName,+" "+req.query.Email)
     if( req.query.hasOwnProperty("ACT_Button")){
         title="Are you ready?"+req.query.FirstName+"to take the ACT?"
-        res.render('Test_Options',{title, Test_Type:"ACT"})
+        res.render('Test_Options',{title, Test_Type:"ACT",FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email})
     }
     if( req.query.hasOwnProperty("SAT_Button")){
         console.log("SAT Button clicked");

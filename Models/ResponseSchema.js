@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 var ResponseSchema = new Schema( {
     Response:String,
+    Time:String,
     Student_ID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student'
@@ -10,7 +11,7 @@ var ResponseSchema = new Schema( {
     modelId:{
         type:Schema.Types.ObjectId,
         required:true,
-        refPath:'modelName_1'
+        refPath: 'modelName_1'
 
 },
     modelName_1:{

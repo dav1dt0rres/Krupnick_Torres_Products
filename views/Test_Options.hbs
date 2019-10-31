@@ -9,9 +9,9 @@
     <label for="Time_Limit">
         Time Limit for each question
         <input  id="Time_Limit" name="Time_Limit" value="{{Time_Limit}}"  />
-
-
-
+    </label>
+    <label>
+       Test
         <select id="Test"  name="Test" value="{{Test}}" >
             <option value="0">Select Test</option>
             <option value="B04">B04</option>
@@ -24,22 +24,51 @@
             <option value="71H">71H</option>
             <option value="71H">71H</option>
         </select>
+    </label>
 
+    <label>
+        Test Type
+    <select id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
 
-
-
-        <select id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
             <option value="0">Select Test Type</option>
             <option value="ACT-English">ACT-English</option>
             <option value="ACT-Math">ACT-Math</option>
             <option value="ACT-Reading">ACT-Reading</option>
             <option value="ACT-Science">ACT-Science</option>
 
-
-        </select>
-
+    </select>
     </label>
 
+
+
+    <label>
+        Display Tagged Questions
+        <input type="checkbox" name="checkbox_1" id="checkbox_1" value="Tag"> <br>
+    </label>
+    <label>
+        Include Clues
+        <input type="checkbox" name="checkbox_2" id="checkbox_2" value="Clues"><br>
+
+    </label>
+    <label>
+        Display Statistics for Each Problem
+        <input type="checkbox" name="checkbox_3" id="checkbox_3" value="Stats"><br>  </label>
+
+    <label for="FirstName">
+        FirstName
+        <input id="FirstName" name="FirstName" value="{{FirstName}}" />
+
+    </label>
+    <label for="LastName">
+        LastName
+        <input id="LastName" name="LastName" value="{{LastName}}" />
+
+    </label>
+    <label for="Email">
+        Email
+        <input id="Email" name="Email" value="{{Email}}" />
+
+    </label>
     <button  id="submit_button" name="submit_button" type="submit">Start Exam</button>
 
 

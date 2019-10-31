@@ -21,5 +21,8 @@ module.exports= class Student {
     recordAnswer(){
         return this.Tag;
     }
+    setID(id){
+        this.ID=id;
+    }
 
 }

@@ -1,29 +1,43 @@
 
 
-<h4>Please select an Answer.</h4>
 
 
-
-
+<head>
+    <h4>Please select an Answer.</h4>
+    <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  ></h4>
+</head>
 <body>
+<button id="Exit" name="Exit" type="Exit" style = "top:0;right:0;position:absolute;z-index: 9999" >Exit </button>
 
-<p class="right"  > {{storyboxID}}</p>
-<div class="Time" id="time_x" name="time_x"><span >01:00</span> minutes!</div>
+<div class="new-year" id="time_x" name="time_x"><span ></span> </div>
+
+<div class="Tag_Display" id="Tag_Display" name="Tag_Display"><span ></span> </div>
+<input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
+
+
+
+<div class="popup" onclick="giveFirstHint()">Click me for first Hint!
+    <span class="popuptext" id="myPopup">Popup text...</span>
+</div>
+
+<div class="Correct_Answer" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
 
 <input type="hidden" id="Passage_Holder" name="Pasage_Holder" value="{{Passage_Holder}}"  />
 <div >
     <textarea id ="Passage_Box" name="Passage_Box" style="width:800px; height: 800px;" ></textarea>
 </div>
+
 </body>
-<form action="/dashboard/Question_Loop"  method="get">
-    <button id="Exit" name="Exit" type="Exit" style = "top:0;right:0;position:absolute;z-index: 9999" >Exit </button>
+<form id ="form" action="/dashboard/Question_Loop"  method="get">
+
+
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <input type="hidden" id="Tag" name="Tag" value="{{Tag}}"  />
+    <input type="hidden" id="Right_Answer" name="Right_Answer" value="{{Right_Answer}}"  />
 
-
-    <label for="Answer_A">
+    <label for="Answer_A" id="Answer_A" name="Answer_A" value="{{Answer_A}}">
         A.)
-        <p id="para1" >{{Answer_A}} </p>
+        <p id="Answer_A" >{{Answer_A}} </p>
 
     </label>
     <label for="Answer B">
@@ -55,43 +69,222 @@
         <option disabled selected value> -- select an option -- </option>
     </select>
     <button id="next_question" name="next_question" type="submit">Submit(Next Question)</button>
-    <button  id="tag_question" name="tag_question" type="submit">Next Question w/ same Tag</button>
-    <button  id="difficulty_question" name="difficulty_question" type="submit">Next Question w/ same Difficulty</button>
 
+    <button type="hidden" id="difficulty_question" name="difficulty_question" type="submit">Next Question w/ same Difficulty</button>
+
+
+
+    <input type="hidden" id="Question_Body_Holder" name="Question_Body_Holder" value="{{Question_Body_Holder}}"  />
+    <input type="hidden" id="time" name="time" value="{{time}}"  />
+    <input type="hidden" id="normal_Question_Index" name="normal_Question_Index" value="{{normal_Question_Index}}"  />
+
+    <input type="hidden" id="tagged_Questions_holder" name="tagged_Questions_holder" value="{{tagged_Questions_holder}}"  />
 </form>
 
+<button onclick="checkCorrectAnswer()" id="tag_question" name="tag_question" >Check if Correct</button>
+<label class="" for="Tagged_Questions">
+    List of Questions with the Same Tag
+        (Select One if Needed)
+<ul type="submit" class= "circle" name="Tagged_Questions" id ="Tagged_Questions" name="Tagged_Questions" >
 
 
+</ul>
+</label>
 
 <script type="text/javascript">
-    function startTimer(duration, display) {
+    function startTimer(duration, display,time) {
         var timer = duration, minutes, seconds;
-        setInterval(function () {
+        var interval=setInterval(function () {
             minutes = parseInt(timer / 60, 10)
             seconds = parseInt(timer % 60, 10);
 
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
-            display.textContent = minutes + ":" + seconds;
 
+            display.textContent = minutes + ":" + seconds;
+            time.value=minutes + ":" + seconds;
+            console.log("time value "+time.value)
             if (--timer < 0) {
-                timer = duration;
+                console.log("inside a minute")
+                display.style.fontSize = "4em";
+                display.style.color="red"
+                //time.css({ 'color': 'red', 'font-size': '150%'})
+                //clearInterval(interval);
+                return true;
+
             }
         }, 1000);
     }
+    function loadbuttons(){
 
+        var index=document.getElementById("normal_Question_Index").value
+        console.log("loading buttons "+index)
+
+        //console.log("header " +header.value + ' '+header.innerText)
+        var buttonGroup=document.getElementById("btn-group")
+
+        buttonGroup.name="button-group"
+
+        if(parseInt(index)<8){
+            for (var i=1;i<9;++i){
+                new_button = document.createElement('button');
+                if(i==parseInt(index)){
+                    new_button.className="current_index"
+                }
+                new_button.innerHTML=i.toString();
+                new_button.value=i.toString();
+                new_button.onclick=async function(event) {
+
+                    document.getElementById("normal_Question_Index").value=this.value
+
+                    document.getElementById("form").submit()
+
+                }
+
+                buttonGroup.appendChild(new_button)
+                console.log("Length of children"+" "+document.getElementById("header").children.length)
+                console.log("Length of children"+" "+buttonGroup.children.length)
+            }
+            return;
+        }
+
+        for (var i=4;i>0;--i){
+            new_button = document.createElement('button');
+           var less= (parseInt(index))-i
+            string=less.toString();
+            new_button.innerHTML=string;
+            new_button.value=string
+            new_button.onclick=async function(event) {
+
+                document.getElementById("normal_Question_Index").value=this.value
+                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+                document.getElementById("form").submit()
+
+            }
+
+            buttonGroup.appendChild(new_button)
+
+        }
+        var center= (parseInt(index))
+        var string="button_"+center.toString();
+        var new_button = document.createElement('button')
+        new_button.innerHTML=string;
+        new_button.value=string
+        new_button.onclick=async function(event) {
+
+            document.getElementById("normal_Question_Index").value=this.value
+            console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+            document.getElementById("form").submit()
+
+        }
+        buttonGroup.appendChild(new_button)
+
+        for(var i=1;i<4;++i){
+            new_button = document.createElement('button');
+            var more=(parseInt(index))+i
+            string=more.toString();
+            new_button.innerHTML=string;
+            new_button.value=string
+            new_button.onclick=async function(event) {
+
+                document.getElementById("normal_Question_Index").value=this.value
+                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+                document.getElementById("form").submit()
+
+            }
+
+            buttonGroup.appendChild(new_button)
+        }
+
+        //document.getElementById("header").appendChild(buttonGroup)
+        console.log("button chidlren "+document.getElementById("header").children.length)
+    }
+    function loadQuestionBody(){
+        var question=document.getElementById("Question_Body_Holder");
+
+        var display=document.getElementById("Question_Body_Display");
+        display.innerHTML=question.value
+    }
+   function loadTaggedQuestions(){
+        console.log("Inside loadTaggedQuestions"+"" +document.getElementById("tagged_Questions_holder").value.split(","))
+        var TaggedList=document.getElementById("tagged_Questions_holder").value.split(",")
+
+        var ul=document.getElementById("Tagged_Questions");
+
+        for (var i=0;i<TaggedList.length;++i){
+            var li=document.createElement("LI");
+
+            li.innerText=TaggedList[i]
+            li.value=i
+            li.onclick=async function(event) {
+
+                document.getElementById("tagged_Questions_holder").value=this.value
+                console.log('clicked!!!! '+document.getElementById("form").submit());
+
+            }
+
+            ul.appendChild(li);
+        }
+
+    }
+
+    function loadWeaknessQuestions(){
+
+    }
+    function checkCorrectAnswer(){
+        var e = document.getElementById("combo");
+        var answer = e.options[e.selectedIndex].value;
+
+        if (answer ==document.getElementById("Right_Answer").value){
+            console.log("Inside "+ answer+" "+document.getElementById("Right_Answer").value)
+            document.getElementById("Correct_Answer").style.color="blue";
+            document.getElementById("Correct_Answer").style.fontSize="xx-large";
+            document.getElementById("Correct_Answer").innerHTML="Correct!";
+            //await sleep(2000);
+            //document.getElementById("tagged_Questions_holder").value=this.value
+            //console.log('clicked!!!! '+document.getElementById("form").submit());
+
+        }
+        else{
+
+            document.getElementById("Correct_Answer").innerHTML="InCorrect!";
+            document.getElementById("Correct_Answer").style.fontSize="xx-large";
+            //await sleep(2000);
+            //document.getElementById("tagged_Questions_holder").value=this.value
+            //console.log('clicked!!!! '+document.getElementById("form").submit());
+
+        }
+    }
+    function giveFirstHint(){
+        console.log("inside give firstHint")
+        var popup = document.getElementById("myPopup");
+        popup.innerText="This should be a description of Method/Tag. Also display the way to do it in a sentence."
+        popup.classList.toggle("show");
+        var Tag_Holder = document.getElementById("Tag_Holder");
+        document.getElementById("Tag_Display").innerHTML=Tag_Holder.value
+
+
+    }
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
     window.onload = function () {
-        var fiveMinutes = 60 * 1,
+        var duration = 60 * (1/4),
                 display = document.querySelector('#time_x');
-        startTimer(fiveMinutes, display);
+        var time_value=document.querySelector('#time')
+        startTimer(duration, display,time_value);
+        loadTaggedQuestions();
+        loadWeaknessQuestions();
+        loadQuestionBody();
+        loadbuttons();
 
-        console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
-        var y=document.getElementById("Passage_Holder").value
-        console.log("Print First"+" "+y)
-        document.getElementById("Passage_Box").value=y;
+       // console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
+        //console.log("Print First"+" "+y)
+        document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
+        //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)
-        var x = document.getElementById("Passage_Box").value;
+
 
     };
 </script>

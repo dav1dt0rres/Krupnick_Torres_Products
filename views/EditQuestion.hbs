@@ -1,8 +1,8 @@
 
 <body>
 
-<form action="/EditQuestion"  method="post">
-
+<form action="/AddQuestions"  method="post">
+    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <label for="Enter_Text">
         Enter Question Text
         <input id="Enter_Text" name="Enter_Text" value="{{Enter_Text}}" />
@@ -39,7 +39,7 @@
         <input id="Number"  name="Number" value="{{Number}}"  />
 
     </label>
-    <button type="submit">Search Question</button>
+    <button id="Search" name="Search" type="submit">Search Question</button>
 
 
 </form>

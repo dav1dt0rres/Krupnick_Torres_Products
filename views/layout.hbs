@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{title}}</title>
+    <title id="header" name="header" >{{title}}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <header>
-      <h1>{{title}}</h1>
+    <header  id="header" name="header" >
+
       {{#if user}}
+          <h1  >{{title}}</h1>
         <a href="/profile">
           Signed in as {{user.profile.firstName}} {{user.profile.lastName}}
+            <div  id="btn-group" class="btn-group">
+            </div>
         </a>
       {{/if}}
       {{#if user}}
+          <h1  >{{title}}</h1>
         <a href="/logout">Sign out</a>
+          <div id="btn-group" class="btn-group">
+          </div>
       {{else}}
-
-        <a href="/Begin">Sign in</a>
+          <div  id="btn-group" class="btn-group">
+          </div>
+          <h1  id="title" name="title">{{title}}</h1>
       {{/if}}
     </header>
     <main>

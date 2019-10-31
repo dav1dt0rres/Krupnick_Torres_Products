@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 var PassageSchema = new Schema( {
-    Passage:String,
+    Passage:[String],
   Picture_Path:String
 
 });

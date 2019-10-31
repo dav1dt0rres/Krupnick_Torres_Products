@@ -1,12 +1,18 @@
 
 <h4>Please Enter the details of the Question</h4>
 <form action="/AddQuestions"  method="post">
+    <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
+    <input type="hidden" id="Test_Holder" name="Test_Holder" value="{{Test_Holder}}"  />
+    <input type="hidden" id="Test_Type_Holder" name="Test_Type_Holder" value="{{Test_Type_Holder}}"  />
+    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
+    <input type="hidden" id="Right_Answer_Holder" name="Right_Answer_Holder" value="{{Right_Answer_Holder}}"  />
+
     <div class="container">
 
     <div class="column" id="firstColumn">
         <div>
 
-            <label for="Passage">
+            <label class="highlighted" for="Passage">
                 Passage
                 <textarea id="Passage" name="Passage" rows="4" cols="5" value="{{Passage}}" >
                 </textarea>
@@ -23,7 +29,7 @@
 
             </label>
 
-            <button onclick="move()">Delete Database </button>
+            <button onclick="Highlight()">Highlight The Above Passage </button>
 
         </div>
     </div>
@@ -99,22 +105,125 @@
 
 
         </select>
-        <button type="submit">Save Question</button>
+        <button name=Save_Button id="Save_Button" type="submit">Save Question</button>
 
     </div>
 
 
     </div> <!-- class="container" -->
     <button  id="Edit_Button" name="Edit_Button" type="submit">Edit a Question</button>
+    <button  id="ReadIn_Button" name="ReadIn_Button" type="submit">ReadIn_Button</button>
 
     <button onclick="goBack()">Go Back</button>
 
 </form>
 
 <script type="text/javascript">
-    function move() {
-        window.location.href = '/AddQuestions/DeleteDatabase'
+    function Highlight(){
+        console.log("Inside hihglight")
+        document.getElementById("title").innerHTML="Please highlight the Words/Word you want highlighted for this Question's Hint"
     }
+    function loadbuttons(){
+
+        var index=document.getElementById("normal_Question_Index").value
+        console.log("loading buttons "+index)
+
+        //console.log("header " +header.value + ' '+header.innerText)
+        var buttonGroup=document.getElementById("btn-group")
+
+        buttonGroup.name="button-group"
+
+        if(parseInt(index)<8){
+            for (var i=1;i<9;++i){
+                new_button = document.createElement('button');
+                if(i==parseInt(index)){
+                    new_button.className="current_index"
+                }
+                new_button.innerHTML=i.toString();
+                new_button.value=i.toString();
+                new_button.onclick=async function(event) {
+
+                    document.getElementById("normal_Question_Index").value=this.value
+
+                    document.getElementById("form").submit()
+
+                }
+
+                buttonGroup.appendChild(new_button)
+                console.log("Length of children"+" "+document.getElementById("header").children.length)
+                console.log("Length of children"+" "+buttonGroup.children.length)
+            }
+            return;
+        }
+
+        for (var i=4;i>0;--i){
+            new_button = document.createElement('button');
+            var less= (parseInt(index))-i
+            string=less.toString();
+            new_button.innerHTML=string;
+            new_button.value=string
+            new_button.onclick=async function(event) {
+
+                document.getElementById("normal_Question_Index").value=this.value
+                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+                document.getElementById("form").submit()
+
+            }
+
+            buttonGroup.appendChild(new_button)
+
+        }
+        var center= (parseInt(index))
+        var string="button_"+center.toString();
+        var new_button = document.createElement('button')
+        new_button.innerHTML=string;
+        new_button.value=string
+        new_button.onclick=async function(event) {
+
+            document.getElementById("normal_Question_Index").value=this.value
+            console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+            document.getElementById("form").submit()
+
+        }
+        buttonGroup.appendChild(new_button)
+
+        for(var i=1;i<4;++i){
+            new_button = document.createElement('button');
+            var more=(parseInt(index))+i
+            string=more.toString();
+            new_button.innerHTML=string;
+            new_button.value=string
+            new_button.onclick=async function(event) {
+
+                document.getElementById("normal_Question_Index").value=this.value
+                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+                document.getElementById("form").submit()
+
+            }
+
+            buttonGroup.appendChild(new_button)
+        }
+
+        //document.getElementById("header").appendChild(buttonGroup)
+        console.log("button chidlren "+document.getElementById("header").children.length)
+    }
+    window.onload = function () {
+
+       // let element = document.getElementById("Test");
+        //element.value = valueToSelect;
+        //loadbuttons();
+
+        console.log("setting all holders"+document.getElementById("Right_Answer_Holder").value)
+        console.log("Print First"+" "+document.getElementById("Passage_Holder").value)
+        document.getElementById("Test").value=document.getElementById("Test_Holder").value;
+        document.getElementById("Test_Type").value=document.getElementById("Test_Type_Holder").value
+        document.getElementById("RightAnswer").value=document.getElementById("Right_Answer_Holder").value
+        document.getElementById("Passage").value=document.getElementById("Passage_Holder").value
+        //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
+        //console.log("after"+" "+document.getElementById("Passage_Box").value)
+
+
+    };
 
 </script>
 
