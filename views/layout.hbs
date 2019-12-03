@@ -11,8 +11,7 @@
           <h1  >{{title}}</h1>
         <a href="/profile">
           Signed in as {{user.profile.firstName}} {{user.profile.lastName}}
-            <div  id="btn-group" class="btn-group">
-            </div>
+
         </a>
       {{/if}}
       {{#if user}}
@@ -21,13 +20,32 @@
           <div id="btn-group" class="btn-group">
           </div>
       {{else}}
-          <div  id="btn-group" class="btn-group">
-          </div>
+
           <h1  id="title" name="title">{{title}}</h1>
+          <h1  id="Test_Both" name="Test_Both">{{Test_Both}}</h1>
+          <h1  id="Total_Time" name="Total_Time">{{Total_Time}}</h1>
+
+          <h1 class="menu_1">
+              <div id ="menu" name="menu" style="display: none;"  class="menu">
+                  <div  class="label">Menu</div>
+                  <div   class="spacer"></div>
+                  <div   class="item"><span>Eliminate Answers</span></div>
+                  <div   class="item"><span>Highlighter</span></div>
+                  <div   class="item"><span>Pause</span></div>
+                  <div   class="item"><span>Exit</span></div>
+
+              </div>
+          </h1>
+          <button id="Exit" name="Exit" type="submit" >Exit </button>
+
       {{/if}}
     </header>
     <main>
       {{{body}}}
+
     </main>
+
+
+
   </body>
 </html>

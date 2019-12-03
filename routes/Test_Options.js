@@ -1,3 +1,5 @@
+
+var fs              = require('fs')
 const express = require('express')
 const Question = require('../Objects/Question.js');
 var Database=require('../Objects/Database.js');
@@ -7,23 +9,22 @@ const router = express.Router()
 var counter=0;
 var timer;
 
-var descriptionList=[];
-var Responses=[];
-var mySet;
-var Database_Object;
-var Question_object;
-var Student_Object;
 var title;
-
-router.get('/', function (req, res, next) {
+var {JSDOM} = require("jsdom");
+var jsdom=require("jsdom")
+var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\Test_Options.hbs','utf-8');
+var document = new JSDOM(data).window.document;
+router.get('/', async function (req, res, next) {
     console.log("Inside get Test Optoins"+req.query.FirstName+req.query.LastName,+" "+req.query.Email)
+
+
+
     if( req.query.hasOwnProperty("ACT_Button")){
-        title="Are you ready?"+req.query.FirstName+"to take the ACT?"
+        title="Are you ready?"+req.query.FirstName+", to take the ACT? Because I am"
+
         res.render('Test_Options',{title, Test_Type:"ACT",FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email})
     }
-    if( req.query.hasOwnProperty("SAT_Button")){
-        console.log("SAT Button clicked");
-    }
+
 
 
 

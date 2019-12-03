@@ -22,34 +22,143 @@ const Math_Question = require('./Math_Question.js')
 module.exports= class Database {
 
     constructor(Test_Type,Test,index,option_list) {//This is Reproducible
-        this.database_index=index  ;
-        console.log('inside Database COnstructor')
-        this.List_Questions=[];
-        this.Normal_Index=null;
-        this.List_TaggedQuestions=[];
-        this.List_Tagged_History=[];
-        this.Normal_History=[]
-        this.List_DifficultyQuestions=[]
-        this.List_WeaknessQuestions=[];
-        this.Count=0;
-        this.Last_Question;
-        this.Student=null;
-        this.Test_Type=Test_Type;
-        this.Test=Test
-        this.DisplayTag=option_list[0];
-        this.DisplayClues=option_list[1];
-        this.DisplayStats=option_list[2];
+        console.log("checkbox list "+option_list[0]+" "+option_list[1]+" "+option_list[2])
+        if( Test==null){
+            console.log('inside Database COnstructor-->Consturcting Weakness Database'+Test_Type)
+            this.List_Questions=[];
+            this.Normal_Index=null;
+            this.List_TaggedQuestions=[];
+            this.List_Tagged_History=[];
+            this.List_of_Responses=[];
+            this.Time_Limit;
+            this.Normal_History=[]
+            this.List_DifficultyQuestions=[]
+
+            this.List_WeaknessQuestions=[];
+            this.List_Weakness_History=[];
+            this.Count=0;
+            this.Last_Question;
+            this.Last_Tagged_Question;
+            this.Student=null;
+            this.Test_Type=Test_Type
+            this.Test;
+            this.Question_Time_Limit;
+            this.Test_Time_Limit;
+            this.Test_Time_Current;
+            this.CheckBox_List=option_list.join(" ")
+        }
+        else if(Test!=null){
+            this.database_index=index  ;
+            console.log('inside Database COnstructor')
+            this.List_Questions=[];
+            this.Normal_Index=null;
+            this.List_TaggedQuestions=[];
+            this.List_Tagged_History=[];
+            this.Time_Limit;
+            this.Normal_History=[]
+            this.List_DifficultyQuestions=[]
+
+            this.List_WeaknessQuestions=[];
+            this.List_Weakness_History=[];
+            this.Count=0;
+            this.Last_Question;
+            this.Last_Tagged_Question;
+            this.Student=null;
+            this.Test_Type=Test_Type;
+            this.Test=Test;
+            this.Question_Time_Limit;
+            this.Test_Time_Limit;
+            this.Test_Time_Current;
+            this.CheckBox_List=option_list.join(" ")
 
 
-        ////below are just temp for reading it reading questi  ons
-        this.Answer="";
-        this.Tag="";
-        this.Question_Body=""
+
+            ////below are just temp for reading it reading questi  ons
+            this.Answer="";
+            this.Tag="";
+            this.Question_Body=""
+        } //If the Constructor that carries a lot is to be called
+        else{
+            this.database_index ;
+           // console.log('inside Database COnstructor-->Consturcting Weakness Database')
+            this.List_Questions=[];
+            this.Normal_Index=null;
+            this.List_TaggedQuestions=[];
+            this.List_Tagged_History=[];
+
+            this.Time_Limit;
+            this.Normal_History=[]
+            this.List_DifficultyQuestions=[]
+
+            this.List_WeaknessQuestions=[];
+            this.List_Weakness_History=[];
+            this.Count=0;
+            this.Last_Question;
+            this.Last_Tagged_Question;
+            this.Student=null;
+            this.Test_Type;
+            this.Test;
+            this.Question_Time_Limit;
+            this.Test_Time_Limit;
+            this.Test_Time_Current=0;
+            this.CheckBox_List=option_list.join(" ")
+        }//The constructor to form Weakness Questions
 
 
     }
+    setTimeLimit(question_time_limit,test_time_limit ){
+        this.Question_Time_Limit=question_time_limit;
+        if (test_time_limit.length==0){
+            this.Test_Time_Limit=0;
+        }
 
+        console.log("Setting time"+question_time_limit+" "+test_time_limit)
+    }
+    updateCurrentTime(timer){
+        this.Test_Time_Current=timer;
+    }
+    startTime(){
+
+        var timer2=this.Test_Time_Limit+":00"
+        this.Test_Time_Current=timer2;
+        var _this=this;
+        var interval=setInterval(function () {
+            _this.updateCurrentTime(timer2)
+
+            //console.log("Setting time "+_this.Test_Time_Current)
+            //by parsing integer, I avoid all extra string processing
+            var minutes = parseInt(timer2.split(":")[0], 10);
+            var seconds = parseInt(timer2.split(":")[1], 10);
+            --seconds;
+
+            if(seconds < 0) {
+                --minutes ;
+                seconds=59;
+            }
+            if (minutes < 0){
+                console.log("inside negative")
+                this.Test_Time_Current=0;
+                clearInterval(interval);
+
+            }
+
+
+            //minutes = (minutes < 10) ?  minutes : minutes;
+
+            timer2 = minutes.toString() + ':' + seconds.toString();
+            //console.log("timer2 "+timer2)
+        }, 1000);
+
+
+    }
     // Adding a method to the constructor
+    getTest_Time_Current(){
+        if (this.Test_Time_Current==0){
+            console.log("Test Time is nullified")
+            return ""
+        }
+        return this.Test_Time_Current
+    }
    async InitializeQuestions(){
         await this.initializeNormal_List()
         this.orderNormal_List()
@@ -57,11 +166,12 @@ module.exports= class Database {
 
     }
     orderTagged_List(){
-        this.List_TaggedQuestions.sort((a, b) => (a.Number > b.Number) ? 1 : -1)
+        //this.List_TaggedQuestions.sort((a, b) => (a.Number > b.Number) ? 1 : -1)
     }
     orderNormal_List(){
-        this.List_Questions.sort((a, b) => (a.Number > b.Number) ? 1 : -1)
+        this.List_Questions.sort((a, b) => (parseInt(a.Number) > parseInt(b.Number)) ? 1 : -1)
         this.Last_Question=this.List_Questions[0]
+
         this.Normal_Index=this.Last_Question.Number
     }
     async initialize_Tag_history(){
@@ -87,18 +197,75 @@ module.exports= class Database {
                     ++counter;
                 }
 
-
             }
-
 
         });
         this.List_Tagged_History=keywords;
         console.log("length of tagged->Historical questions"+" "+this.List_Tagged_History.length)
     }
+    async initializeWeakness_History(){
+        var dict_schema_1 = {
+            "ACT-Reading":"ReadingQuestion" ,
+            "ACT-Math": "MathQuestion",
+            "ACT-English": "EnglishQuestion"
+        }///associations between the response and the original questions on seperate tables
+        console.log("initialize Weakness History"+" "+this.Student.ID+" "+this.Test_Type)
+        var Question_object=null;
+        var keywords = [];
+        var id_holder=[];
+        var counter=0;
 
-    eliminate_Tag_history(){
+        //var temp_Object= Response_table.find({Student_ID:this.Student.ID, modelName_1:dict_schema_1[this.Test_Type]}).populate("modelId").lean()
+        //temp_Object.populate("Passage_ID").lean()
+        var temp_Object = Response_table.find({Student_ID:this.Student.ID, modelName_1:dict_schema_1[this.Test_Type]}).populate({
+            path    : 'modelId',
+            model:dict_schema_1[this.Test_Type],
+            populate: {
+                path: 'Passage_ID',
+                model: 'Passage'
+            }
+        });
+        await temp_Object.exec(function(err,Responses){
+            if (Response.length==0){
+                this.List_Weakness_History=[];
+                return;
+            }
+            for  (var i=0;i<Responses.length;++i){
 
+
+                //console.log("                                                             Question ID                  Student ID     Tag")
+
+                if (Responses[i].modelId.Right_Answer!=Responses[i].Response){
+                    //console.log("REsponses returned--Weakness History"+" "+" "+Responses[i].modelId._id+" "+" "+Responses[i].modelId.Tag)
+                    var index=id_holder.indexOf(Responses[i].modelId._id);
+                    if (index >= 0){
+                        ++keywords[index].Repititions;
+
+
+                    }
+                    else{
+                        Question_object=new Question(Responses[i].modelId.Question_body.join(" "),Responses[i].modelId.Choices,Responses[i].modelId.Right_Answer,Responses[i].modelId.Tag,Responses[i].modelId.Number,
+                            Responses[i].modelId.Passage_ID.Passage.join(' '),Responses[i].modelId.Test_Type,Responses[i].modelId.Test,Responses[i].modelId._id);
+                        Question_object.setPresentation_Highlight(Responses[i].modelId.Presentation_Highlight)
+                        Question_object.setFirstHint(Responses[i].modelId.Hint_1);
+                        Question_object.setResponse(Responses[i].Response);
+                        Question_object.setTime_Stamp(Responses[i].time_stamp)
+                        Question_object.setTime(Responses[i].Time);
+                        keywords[counter]=Question_object
+                        id_holder[counter]=Responses[i].modelId._id;
+                        ++counter;
+                    }
+
+                }
+
+            }
+
+        });
+        this.List_Weakness_History=keywords;
+        console.log("length of Weakness->Historical questions"+" "+this.List_Weakness_History.length)
+        return this.List_Weakness_History.length
     }
+
     async initializeNormal_List(){
         //This is important and other Normal_List functions are also important because they only refer to when
         //the user selects to do A SINGLE TYPE OF TEST e.g. (READING-74G), this shouldnt be called for any other mode.
@@ -119,7 +286,8 @@ module.exports= class Database {
                 }
 
                 Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
-
+                Question_object.setFirstHint(Questions[i].Hint_1);
+                Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
                 keywords[counter]=Question_object;
                 ++counter;
             }
@@ -152,9 +320,11 @@ module.exports= class Database {
                             Questions[i].Choices[j]=Questions[i].Choices[j].replace(/,/g, ' ');
                         }
                         Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                        Question_object.setFirstHint(Questions[i].Hint_1);
+                        Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
                         keywords[counter]=Question_object;
                         ++counter;
-                        console.log("counter"+" "+counter+" "+keywords.length);
+                        //console.log("counter"+" "+counter+" "+keywords.length);
                     }
 
                 }
@@ -165,25 +335,53 @@ module.exports= class Database {
         this.List_TaggedQuestions=keywords;
         console.log("Size of List Tagged Quesstion"+this.List_TaggedQuestions.length);
     }
-    initializeDifficulty_List(){
-        console.log("initialize Diffuclt list")
-        return};
+
+    async initializeWeakness_List(){
+        function compare(a,b){
+           // console.log("Time stamp comapriosn"+" "+a.Time_Stamp+" "+b.Time_Stamp)
+            if ( a.Time_Stamp < b.Time_Stamp ){
+                console.log("inside -1")
+                return -1;
+            }
+            if ( a.Time_Stamp > b.Time_Stamp ){
+                console.log("inside 1")
+                return 1;
+            }
+
+            return 0;
+        }
+        this.List_Weakness_History.sort( compare );
+        this.List_WeaknessQuestions= this.List_Weakness_History;
+        this.Last_Question=this.List_WeaknessQuestions[0]
+        this.Normal_Index=0;
+        //
+
+    }
 
 
+
+    async getNextWeakQuestion(current_index){
+        console.log("Length of Weakness List"+this.List_WeaknessQuestions.length);
+        console.log("current"+" "+current_index);
+        this.Last_Question=this.List_WeaknessQuestions[current_index];
+        this.Normal_Index=current_index;
+        return this.Last_Question
+    }
 
     async getSame_TagQuestion(index_argument){
         console.log("Inside getSame_TagQuestion() Database.js"+" "+this.List_TaggedQuestions.length)
         var Choice_List=[]
         ++this.Count
-        this.Last_Question=this.List_TaggedQuestions[index_argument];
+        this.Last_Tagged_Question=this.List_TaggedQuestions[index_argument];
+
         this.List_TaggedQuestions.splice(index_argument,1)
         if(this.List_TaggedQuestions.length<=2){
             var keywords = [];
-            console.log('Replenshing Tagged List'+" "+this.Last_Question.Tag)
+            console.log('Replenshing Tagged List'+" "+this.Last_Tagged_Question)
             var temp_History_List=this.List_Tagged_History;
 
-            var last_question_id=this.Last_Question._id.toString();
-            var temp_object=dict[this.Test_Type].find({Tag:this.Last_Question.Tag}).populate("Passage_ID").lean()
+            var last_question_id=this.Last_Tagged_Question._id.toString();
+            var temp_object=dict[this.Test_Type].find({Tag:this.Last_Tagged_Question.Tag}).populate("Passage_ID").lean()
             await temp_object.exec(function(err,Questions){
 
                 var counter=0;
@@ -199,6 +397,8 @@ module.exports= class Database {
                             }
 
                             Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                            Question_object.setFirstHint(Questions[i].Hint_1);
+                            Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
                             keywords[counter]=Question_object;
                             ++counter;
                             console.log("counter"+" "+counter+" "+keywords.length);
@@ -229,22 +429,23 @@ module.exports= class Database {
         this.initializeDifficulty_List();
         return;
     }
-    getWeaknessQuestions(){
 
-    }
    async getNextQuestion(current_index){
         console.log("Inside Get ORdered Question_Test TYpe(), Database.js",this.Test," ",this.Test_Type)
+       if (current_index>=this.List_Questions.length){
+           console.log("Youve reached the end of the line!");
+            return false;
+       }
         ++this.Count;
         var Choice_List=[]
         //populate difficulty list (if any change in difficulty occured)
         var keywords=[];
 
-
-
-        console.log("Length of Normal History"+" "+this.Normal_History.length);
+        //console.log("Length of Normal History"+" "+this.Normal_History.length);
+        console.log("current"+" "+current_index);
         this.Last_Question=this.List_Questions[current_index];
-        this.Normal_Index=this.Last_Question.Number
-        return this.Last_Question
+        this.Normal_Index=current_index
+        return true;
 
     }///Give me all the questions of a test in order 1-10,11-20 etc
 
@@ -253,78 +454,36 @@ module.exports= class Database {
     setStudent(Student_Object){
         this.Student=Student_Object
     }
-    async SearchQuestion(text,Number,Test_Type,Test){
+    async SearchQuestion(text,number,Test_Type,Test){
+        var temp_Object;
+        var Question_object;
+        var keywords=[]
+        var counter=0;
 
-
-        //////Requesting the Database///////
-        var keywords=[];
-       await dict[Test_Type].find({"Question_body":{"$regex":text}}).populate("Passage_ID").lean().exec(function(err,Questions) {
-            var counter=0;
-
-            var Question_object;
-            for  (var i=0;i<Questions.length;++i){
-                console.log("Returning questions "+Questions[i].Question_body.join(" "))
-                for(var j=0;j<Questions[i].Choices.length;++j){
-                    Questions[i].Choices[j]=Questions[i].Choices[j].replace(/,/g, ' ');
+       temp_Object= dict[Test_Type].findOne({Test:Test,Number:number}).populate("Passage_ID").lean()
+        await temp_Object.exec(function(err,Question_re) {
+                console.log("INside find One()"+Question_re)
+                if (Question_re==null){
+                    return 0;
+                }
+                for(var j=0;j<Question_re.Choices.length;++j){
+                    Question_re.Choices[j]=Question_re.Choices[j].replace(/,/g, ' ');
                 }
 
-                Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                Question_object=new Question(Question_re.Question_body.join(" "),Question_re.Choices,Question_re.Right_Answer,Question_re.Tag,Question_re.Number,Question_re.Passage_ID.Passage.join(' '),Question_re.Test_Type,Question_re.Test,Question_re._id)
+                               // new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                Question_object.setFirstHint(Question_re.Hint_1);
 
+                Question_object.setPresentation_Highlight(Question_re.Presentation_Highlight)
                 keywords[counter]=Question_object;
-                ++counter;
-            }
-
+                //++counter;
 
 
         });
-        this.List_Questions=keywords;
-        ///Basically Shuldnt never enter the below if statement!
-        if ( this.List_Questions.length==0){
-            var List = [];
-            var counter=0;
-            var Question_object=null;
-            console.log("Inside Searching for other options")
-            await dict[Test_Type].find({"Number":Number,"Test_Type":Test_Type, "Test":Test },'Question_body Choices Tag Test Number ' +
-                'Test_Type Right_Answer Passage').then( (artworks) => {
+        console.log("How many questions were returned?"+" "+keywords.length);
 
-                // console.log("Table"+artworks)
-                console.log("INside the Database Search")
-                artworks.forEach( (artwork) => {
-
-                    console.log("Returning Question"+artwork.Question_body.join(" "))
-
-                    for(var i=0;i<artwork.Choices.length;++i){
-                        artwork.Choices[i]=artwork.Choices[i].replace(/,/g, ' ');
-                    }
-                    //console.log("Returning Choices"+artwork.Choices)
-                    console.log(" ")
-
-                    Question_object=new Question(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag)
-
-                    Question_object.setEditQuestion(artwork.Question_body.join(" "),artwork.Choices,artwork.Tag,
-                        artwork.Number,artwork.Test,artwork.Test_Type,artwork.Right_Answer,artwork.Passage)
-                    List[counter]=Question_object;
-
-                    ++counter;
-
-                });
-
-                console.log("Size"+ " "+List[0].Question_text+" "+List[0].Passage)
-                if (List.length==0){
-                    console.log("Empty List");
-                    var title="No Question Found"
-                    res.render('AddQuestions',{ title})
-                }
-                else{
-                    var title="This is the Recalled Question"
-                    res.render('AddQuestions',{ title,QuestionText:List[0].Question_text,Passage:List[0].Passage,Test:List[0].Test})
-                }
-
-
-
-            });
-        }
-        return this.List_Questions;
+        this.Last_Question=keywords[0];
+        return keywords.length
     }
     getSame_MethodQuestion(Question_Object){
         var Choice_List=[]
@@ -405,9 +564,10 @@ module.exports= class Database {
 
         var temp_objects=await Passage_table.find({});
         console.log("length of passages being returned"+" "+temp_objects.length)
+        //Checks to see if the new Passage exists already in the database
         for(var i=0;i<temp_objects.length;++i){
             //console.log("Passage being returned" + " " + temp_objects[i].Passage
-            //console.log("Passage BEING COMPARED" + " " + BodyList[10])
+            console.log("Passage BEING COMPARED" + " " + BodyList[10])
             if(this.comparePassages(temp_objects[i].Passage,BodyList[10])){
                 console.log("Passage already in database" + " " +temp_objects[i].id);
                 Object_ID=temp_objects[i].id
@@ -432,8 +592,15 @@ module.exports= class Database {
             });
         }
 
+        if(await this.SearchQuestion("",BodyList[11][0],BodyList[8][0],BodyList[7][0])==1){
+            console.log("Question Already exists in database so only editing")
+            await this.EditQuestion(BodyList)
+            return;
+        }
 
-        console.log("inside inside"+" "+Object_ID)
+        console.log("inside inside"+" "+BodyList[12])
+        console.log("inside inside"+" "+BodyList[13])
+
         newQuestion = new dict[BodyList[8][0]]({
             Question_body: BodyList[0],
             Passage_ID:Object_ID,
@@ -442,8 +609,9 @@ module.exports= class Database {
             Test:BodyList[7][0],
             Test_Type: BodyList[8][0],
             Right_Answer: BodyList[9][0],
-            Number: BodyList[11][0]
-
+            Number: BodyList[11][0],
+            Hint_1:BodyList[12],
+            Presentation_Highlight:BodyList[13]
         });
         newQuestion.save(function (err,object) {
             if (err) {
@@ -456,7 +624,17 @@ module.exports= class Database {
         });
 
     }
-    async saveResponse(response,time){
+    async EditQuestion(BodyList){
+
+        console.log("inside Edit Question"+" "+ BodyList[BodyList.length-1])
+        await dict[BodyList[8][0]].update(
+            { "Test" : BodyList[7][0],"Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString() },
+            { $set: { "Hint_1" : BodyList[BodyList.length-1],"Presentation_Highlight": BodyList[13]}
+            }
+        )
+    }
+    async saveResponse(response,time,First_Hint_holder,check_answer){
+        console.log("saving response "+response+" "+time+" "+check_answer)
         var dict_schema = {
             "ACT-Reading":"ReadingQuestion" ,
             "ACT-Math": "MathQuestion",
@@ -468,16 +646,42 @@ module.exports= class Database {
             return;
         }
         this.List_Tagged_History.push(this.Last_Question._id.toString());
-        this.Normal_History.push(this.Last_Question);
+        this.Last_Question.setResponse(response)
 
-        console.log("Going in saving"+" "+response+" "+this.Student.ID+" "+this.Last_Question._id)
+        var hint;
+        if(First_Hint_holder=="true"){
+            hint=true;
+            this.Last_Question.setHintSelections(true);
+        }
+        else{
+            hint=false;
+            this.Last_Question.setHintSelections(false);
+        }
+        this.Last_Question.setCheckAnswer(check_answer);
+
+        this.Normal_History.push(this.Last_Question);
+        if(time.split(":")[1]!=undefined){
+            if (time.split(":")[1].length>2){
+                console.log("saving because its negative "+parseInt(time.split(":")[1].split("-")[1]));
+                this.Last_Question.setTime((parseInt(time.split(":")[1].split("-")[1]))+parseInt(this.Question_Time_Limit));
+            }
+            else{
+
+                this.Last_Question.setTime(parseInt(this.Question_Time_Limit)-parseInt(time.split(":")[1]));
+            }
+        }
+
+
+
+        console.log("Going in saving"+" "+response+" "+this.Student.ID+" "+this.Last_Question._id+" "+"CheckAnswers"+this.Last_Question.Check_Answer+" "+"Hint Selected?");
         var newReponse = new Response_table({
             Response:response,
             Student_ID:this.Student.ID,
             modelId:this.Last_Question._id,
             modelName_1:dict_schema[this.Test_Type],
-            Time:time
-
+            Time:this.Last_Question.getTime(),
+            Hint_Selection:hint,
+            Check_Answer:this.Last_Question.Check_Answer
         });
         await newReponse.save(function(err,object){
             if (err) {
@@ -491,8 +695,18 @@ module.exports= class Database {
         //also add the question to the Historical questions list maitained at this object
 
     }
-    getHarderQuestion(){
+    async getTests(){ //Seaerches for the tests given the subject
+        var set = new Set();
+        var temp_Object= dict[this.Test_Type].find({}).lean()
+        await temp_Object.exec(function(err,Objects) {
+            for (var i=0;i<Objects.length ;++i){
 
+                set.add(Objects[i].Test)
+            }
+
+            //Object.Questions[i].Test
+        });
+        return Array.from(set)
     }
     async saveNewStudent(first,last,email){
         var Student_ID;
@@ -605,7 +819,6 @@ module.exports= class Database {
         var temp_Question_body
         var line_passage=""
         while (line=liner.next()) {
-            //console.log(line.toString('ascii'));
 
             if (line.includes("Going in")){
                 var question_index=this.extractQuestion(line)
@@ -640,7 +853,7 @@ module.exports= class Database {
                 }
 
                 var Body_List=this.ParseText(body_list)
-                await this.addNewQuestion(Body_List)
+                //await this.addNewQuestion(Body_List)
                 line_passage=""
                 body_list=[]
 
@@ -707,36 +920,75 @@ module.exports= class Database {
 
         }
 
-}
+    }
     extractTag_Answer(line){
-    //console.log("inside extractTag Answer"+" "+line)
-    var index=line.indexOf("THIS IS")
-    if (index>0){
-        var x=0;
-        var period=-1
-        while(period<0){
-            period=line.indexOf('.', index-x);
-            ++x
-        }
-        var temp_string=String(line).substr(index-x+1,index);
-        var temp_index=temp_string.indexOf("THIS IS THE PASSAGE")
+        //console.log("inside extractTag Answer"+" "+line)
+        var index=line.indexOf("THIS IS")
+        if (index>0){
+            var x=0;
+            var period=-1
+            while(period<0){
+                period=line.indexOf('.', index-x);
+                ++x
+            }
+            var temp_string=String(line).substr(index-x+1,index);
+            var temp_index=temp_string.indexOf("THIS IS THE PASSAGE")
 
-        temp_string=String(line).substr(index-x+1,temp_index);
-        var temp_list=temp_string.split(" ")
+            temp_string=String(line).substr(index-x+1,temp_index);
+            var temp_list=temp_string.split(" ")
 
-        temp_list.pop()
-        this.Answer=temp_list.pop()
-        this.Tag=temp_list.join(" ")
-        console.log("THIS IS ANSWER: "+this.Answer);
-        console.log("THIS IS TAG"+" "+this.Tag)
+            temp_list.pop()
+            this.Answer=temp_list.pop()
+            this.Tag=temp_list.join(" ")
+            console.log("THIS IS ANSWER: "+this.Answer);
+            console.log("THIS IS TAG"+" "+this.Tag)
 
-        //console.log("This is the Tag and others: "+String(line).substr(index-x+1,index))
-        return index-x+1 //first period detected so this index should signify the end of Question Choices.
+            //console.log("This is the Tag and others: "+String(line).substr(index-x+1,index))
+            return index-x+1 //first period detected so this index should signify the end of Question Choices.
     }
 
 
-}
+    }
+    async DisplayResultList(){
 
+        var temp_list=[]
+        temp_list.push("Number"+" "+"Test_Type"+" "+"Test"+" "+"Response"+" "+"Right Answer")
+
+        for  (var i=0;i<this.Normal_History.length;++i){
+
+            console.log("REsponses returned"+" "+" "+this.Normal_History[i].Number+" "+this.Normal_History[i].Test_Type+"   "+this.Normal_History[i].Response+" "+this.Normal_History[i].Right_Answer)
+            if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
+                var temp=this.Normal_History[i].Number+" "+this.Normal_History[i].Test_Type+"         "+this.Normal_History[i].Test+"         "  +this.Normal_History[i].Response+"         "+this.Normal_History[i].Right_Answer
+                temp_list.push(temp);
+            }
+        }
+
+
+        return temp_list;
+
+    }
+    DisplayQuestionsList(){
+        var temp=""
+        for (var i=0; i<this.List_Questions.length;++i){
+            temp=temp+"Test: "+this.List_Questions[i].getTest().toString()+" "+ "number: "+" " +this.List_Questions[i].getNumber()+"\n"
+
+
+            //console.log("list display "+ this.List_Questions[i].getNumber())
+        }
+
+        return temp
+    }
+    DisplayWeaknessList(){
+        var temp=""
+        for (var i=0; i<this.List_WeaknessQuestions.length;++i){
+            temp=temp+"Test: "+this.List_WeaknessQuestions[i].getTest().toString()+" "+ "number: "+" " +this.List_WeaknessQuestions[i].getNumber()+"\n";
+
+
+            //console.log("tagged list display "+ temp_list[i])
+        }
+
+        return temp
+    }
     DisplayTaggedList(){
         var temp_list=[];
         for (var i=0; i<this.List_TaggedQuestions.length;++i){

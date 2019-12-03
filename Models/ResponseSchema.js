@@ -13,14 +13,16 @@ var ResponseSchema = new Schema( {
         required:true,
         refPath: 'modelName_1'
 
-},
+    },
     modelName_1:{
         type: String,
         required:true,
-        enum:['ReadingQuestion',"MathQuestion","EnglishQuestion"]
+        enum:["ReadingQuestion","MathQuestion","EnglishQuestion"]
 
-    }
-
+    },
+    time_stamp : { type : Date, default: Date.now },
+    Hint_Selection: Boolean,
+    Check_Answer:Number
 });
 
 

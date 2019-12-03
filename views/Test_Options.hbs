@@ -1,34 +1,18 @@
+<h1> Mirza 1.0  </h1>
 <body>
 
 
 
-<form action="/dashboard"  method="get">
+<form id ="form" action="/dashboard"  method="get">
+    <input type="hidden" id="Tests_holder" name="Tests_holder" value="{{Tests_holder}}"  />
+    <input type="hidden" id="Test_Type_Holder" name="Test_Type_Holder" value="{{Test_Type_Holder}}"  />
+    <input type="hidden" id="Type_Holder" name="Type_Holder" value="{{Type_Holder}}"  />
+    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
 
 
-
-    <label for="Time_Limit">
-        Time Limit for each question
-        <input  id="Time_Limit" name="Time_Limit" value="{{Time_Limit}}"  />
-    </label>
-    <label>
-       Test
-        <select id="Test"  name="Test" value="{{Test}}" >
-            <option value="0">Select Test</option>
-            <option value="B04">B04</option>
-            <option value="A11">A11</option>
-            <option value="A10">A10</option>
-            <option value="A09">A09</option>
-            <option value="74C">74C</option>
-            <option value="74G">74G</option>
-            <option value="73E">73E</option>
-            <option value="71H">71H</option>
-            <option value="71H">71H</option>
-        </select>
-    </label>
-
-    <label>
-        Test Type
-    <select id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
+    <label id="test_type_label" name="test_type_label">
+        Test Type  <------    Pick me First    <--------
+        <select onchange="loadTests()" id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
 
             <option value="0">Select Test Type</option>
             <option value="ACT-English">ACT-English</option>
@@ -36,23 +20,37 @@
             <option value="ACT-Reading">ACT-Reading</option>
             <option value="ACT-Science">ACT-Science</option>
 
-    </select>
+        </select>
+    </label>
+
+    <label id="test_label" name="test_label">
+       Test
+        <select id = "Test" name="Test" for="Test" value="{{Test}}">
+            {{#each Test.options}}
+                <option >{{this.text}}</option>
+            {{/each}}
+        </select>
     </label>
 
 
 
-    <label>
-        Display Tagged Questions
-        <input type="checkbox" name="checkbox_1" id="checkbox_1" value="Tag"> <br>
+    <label for="Time_Limit_Question">
+        Time Limit for each question (secs)
+        <input onkeyup="showForce_Time()" placeholder="Leave Blank if None" id="Time_Limit_Question" name="Time_Limit_Question" value="{{Time_Limit_Question}}"  >
     </label>
-    <label>
-        Include Clues
-        <input type="checkbox" name="checkbox_2" id="checkbox_2" value="Clues"><br>
+    <label style="display: none;" id ="checkbox_time_label" for="checkbox_time">
+        Force to next Question after time?
+        <input style="display: none;" type="checkbox" name="checkbox_time" id="checkbox_time"  value="True">
 
     </label>
-    <label>
-        Display Statistics for Each Problem
-        <input type="checkbox" name="checkbox_3" id="checkbox_3" value="Stats"><br>  </label>
+
+    <label for="Time_Limit_Test">
+        Time Limit for the entire Test (mins)
+        <input placeholder="Leave Blank if None" id="Time_Limit_Test" name="Time_Limit_Test" value="{{Time_Limit_Test}}"  >
+    </label>
+
+
+    <input type="checkbox" name="checkbox_2" id="checkbox_2" value="Clues">Include Clues<br>
 
     <label for="FirstName">
         FirstName
@@ -69,8 +67,67 @@
         <input id="Email" name="Email" value="{{Email}}" />
 
     </label>
-    <button  id="submit_button" name="submit_button" type="submit">Start Exam</button>
 
+
+    <button  onclick ="WeaknessFunction()" id="submit_button" name="submit_button" type="submit">Start Addressing Weaknesses</button>
+    <button   id="exam_button" name="exam_button" type="submit">Start Exam</button>
 
 </form>
 </body>
+<script type="text/javascript">
+    function loadTests(){
+        if(document.getElementById("Type_Holder").value=="Weakness"){
+            return;
+        }
+        document.getElementById("Type_Holder").value="LoadTests"
+
+        document.getElementById("form").submit()
+    }
+    function showForce_Time(){
+        console.log("length "+document.getElementById("Time_Limit_Question").value.length)
+        if(document.getElementById("Time_Limit_Question").value.length==0){
+            console.log("input is empty here")
+            document.getElementById("checkbox_time_label").style.display="none";
+            document.getElementById("checkbox_time").style.display="none";
+        }
+        else{
+            console.log("Theres an input ")
+            document.getElementById("checkbox_time_label").style.display="block";
+            document.getElementById("checkbox_time").style.display="block";
+        }
+
+
+    }
+    function loadTestTypes(){
+        if (document.getElementById("Test_Type_Holder").value.length>0){
+            console.log("Inside because defualt value for test_type")
+            document.getElementById("Test_Type").value = document.getElementById("Test_Type_Holder").value
+        }
+
+    }
+    window.onload = function () {
+        console.log("On load windows")
+        //loadTests();
+        loadTestTypes();
+        if(document.getElementById("Type_Holder").value=="Weakness"){
+            console.log("Inside Weakness Branch, soo hiding buttons")
+            document.getElementById("Test").style.display="none"
+            document.getElementById("exam_button").style.display="none"
+
+            //document.getElementById("Test_Type").style.display="none"
+            //document.getElementById("test_type_label").style.display="none"
+            document.getElementById("test_label").style.display="none"
+            return;
+        }
+
+        document.getElementById("submit_button").style.display="none"
+
+        //console.log("Passage   being copied"+" "+document.getElementById("Passage_Box").value)
+        //console.log("after"+" "+document.getElementById("Passage_Box").value)
+
+
+    };
+    function WeaknessFunction(){
+
+    }
+</script>

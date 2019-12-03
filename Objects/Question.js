@@ -22,12 +22,25 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         var English_Question = require('./English_Question.js')
         return new English_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID)
     }
+    else{
+
+    }
 
 
 }
 
 
 
+    Question.prototype.setPresentation_Highlight=function(presentation_list){
+        if(presentation_list==null){
+
+            this.Presentation_Highlight=[]
+        }
+        else{
+            this.Presentation_Highlight=presentation_list
+        }
+
+    }
     Question.prototype.setEditQuestion=function(Number,Right_Answer,Passage){
 
         this.Number=Number;
@@ -35,11 +48,36 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         this.Right_Answer=Right_Answer;
         this.Passage=Passage;
     }
-
+    Question.prototype.setResponse=function (response){
+        //console.log("INside setting Response"+response)
+        this.Response=response;
+    }
+    Question.prototype.setTime=function (time){
+        console.log("INside Setting Time"+time)
+        this.Time=time;
+    }
+    Question.prototype.getTime=function(){
+        if(this.Time==null){
+            return "NaN"
+        }
+        return this.Time;
+    }
+    Question.prototype.setTime_Stamp=function(time_stamp){
+        this.Time_Stamp=time_stamp;
+    }
+    Question.prototype.setHintSelections=function(boolean){
+        this.Hint_Selection=boolean;
+    }
+    Question.prototype.setCheckAnswer=function(check_answer){
+        this.Check_Answer=check_answer;
+    }
     // Adding a method to the constructor
     Question.prototype.getOptions=function() {
 
         return this.OptionList;
+    }
+    Question.prototype.setFirstHint=function(hint_list) {
+        this.First_Hint=hint_list;
     }
     Question.prototype.recordResponse=function(Res,time){
 

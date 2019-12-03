@@ -15,13 +15,16 @@ function Reading_Question(question_text, optionList,right_answer,tag,number,pass
     this.Number=number;
 
     this.Tag=tag;
-
+    this.Repititions=0;
     this.Test=test;
-
+    this.Time_Stamp;
     this.Right_Answer=right_answer;
     this.StudentAnswer=null;
 
     this.First_Hint=[];
+    this.Presentation_Highlight=[];
+    this.Hint_Selection;
+    this.Check_Answer=0;
     this.deleted_Answer=[]
 
     this.Second_Hint_Text=[];

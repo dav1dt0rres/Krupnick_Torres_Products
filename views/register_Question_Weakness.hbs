@@ -1,7 +1,4 @@
 
-
-
-
 <head>
 
 </head>
@@ -9,27 +6,25 @@
 
 
 <div class="new-year" id="time_x" name="time_x"><span ></span> </div>
-
-
 <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
 <input type="hidden" id="pause_bool" name="pause_bool" value="{{pause_bool}}"  />
 
 
-<input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
+<input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
+
+<div class="Correct_Answer" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
+
+<input type="hidden" id="Passage_Holder" name="Pasage_Holder" value="{{Passage_Holder}}"  />
 <div class="container">
-    <div class="Correct_Answer" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
-<div id="backdrop" name="backdrop" class="backdrop">
-    <div id ="highlights" name="highlights" class="highlights"></div>
-</div>
+    <div id="backdrop" name="backdrop" class="backdrop">
+        <div id ="highlights" name="highlights" class="highlights"></div>
+    </div>
 
     <textarea onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
-
 </div>
-
 </body>
 
-<form id ="form" action="/dashboard/Question_Loop"  method="get">
-
+<form id ="form" action="/dashboard/Question_Loop_Weakness"  method="get">
     <input type="hidden" id="Final_Questions_holder" name="Final_Questions_holder" value="{{Final_Questions_holder}}"  />
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <input type="hidden" id="Tag" name="Tag" value="{{Tag}}"  />
@@ -42,39 +37,39 @@
 
 
         <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  ></h4>
-    <label for="Answer_A" id="paraA" name="Answer_A" >
-        A.)
-        <p id="paraA" >{{Answer_A}} </p>
+        <label for="Answer_A" id="paraA" name="Answer_A" >
+            A.)
+            <p id="paraA" >{{Answer_A}} </p>
 
-    </label>
-    <label for="Answer B" id="paraB" >
-        B.)
-        <p id="paraB" >{{Answer_B}} </p>
+        </label>
+        <label for="Answer B" id="paraB" >
+            B.)
+            <p id="paraB" >{{Answer_B}} </p>
 
-    </label>
-    <label for="Answer_C" id="paraC">
-        C.)
-        <p id="paraC" >{{Answer_C}} </p>
+        </label>
+        <label for="Answer_C" id="paraC">
+            C.)
+            <p id="paraC" >{{Answer_C}} </p>
 
-    </label>
-    <label for="Answer_D" id="paraD">
-        D.)
-        <p id="paraD" >{{Answer_D}} </p>
+        </label>
+        <label for="Answer_D" id="paraD">
+            D.)
+            <p id="paraD" >{{Answer_D}} </p>
 
-    </label>
-    <label for="Answer_E" id="paraE">
-        E.)
-        <p id="paraE" >{{Answer_E}} </p>
+        </label>
+        <label for="Answer_E" id="paraE">
+            E.)
+            <p id="paraE" >{{Answer_E}} </p>
 
-    </label>
+        </label>
 
-    <select id="combo" name="combo">
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-        <option value="D">D</option>
-        <option disabled selected value> -- select an option -- </option>
-    </select>
+        <select id="combo" name="combo">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option disabled selected value> -- select an option -- </option>
+        </select>
         <button type="button" onclick="checkCorrectAnswer()" >Check if Correct</button>
 
 
@@ -126,24 +121,9 @@
 </form>
 
 
+
+
 <script type="text/javascript">
-    function HomeFunction(){
-        document.getElementById("Exit_bool").value="true"
-        document.getElementById("form").submit()
-    }
-    function PauseFunction(){
-        if(document.getElementById("pause_bool").value="true"){
-            document.getElementById("pause_bool").value="false"
-            document.getElementById("pause").innerText="Pause"
-        }
-        if(document.getElementById("pause_bool").value="false"){
-            document.getElementById("pause_bool").value="true";
-            document.getElementById("pause").innerText="Continue"
-        }
-
-
-
-    }
     function startTimer(duration, display,time) {
         console.log("Duration "+duration)
         if (duration.length==0){
@@ -151,7 +131,7 @@
         }
         var timer = duration, minutes, seconds;
         var interval=setInterval(function () {
-            console.log("Repeating "+document.getElementById("pause_bool").value)
+            //console.log("Repeating "+document.getElementById("pause_bool").value)
             if(document.getElementById("pause_bool").value=="false"){
                 minutes = parseInt(timer / 60, 10)
                 seconds = parseInt(timer % 60, 10);
@@ -194,56 +174,22 @@
         }
         return false;
     }
-    function loadbuttonsV2(center){
-        var buttonGroup=document.getElementById("btn-group")
-
-        buttonGroup.name="button-group"
-        for (var i=4;i>0;--i){
-            var new_button = document.createElement('button');
-            var less= (center)-i
-            var string=less.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
-
-                document.getElementById("normal_Question_Index").value=this.value
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
-
-            }
-
-            buttonGroup.appendChild(new_button)
-
+    function HomeFunction(){
+        document.getElementById("Exit_bool").value="true"
+        document.getElementById("form").submit()
+    }
+    function PauseFunction(){
+        if(document.getElementById("pause_bool").value=="true"){
+            document.getElementById("pause_bool").value="false"
+            document.getElementById("pause").innerText="Pause"
         }
-        var center= (center)
-        var string="(Currently)"+center.toString();
-        var new_button = document.createElement('button')
-        new_button.innerHTML=string;
-        new_button.value=string
-        new_button.onclick=async function(event) {
-
-            document.getElementById("normal_Question_Index").value=this.value
-            console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-            document.getElementById("form").submit()
-
+        if(document.getElementById("pause_bool").value=="false"){
+            document.getElementById("pause_bool").value="true";
+            document.getElementById("pause").innerText="Continue"
         }
-        buttonGroup.appendChild(new_button)
-        for(var i=1;i<4;++i){
-            var new_button = document.createElement('button');
-            var more=(center)+i
-            string=more.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
 
-                document.getElementById("normal_Question_Index").value=this.value
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
 
-            }
 
-            buttonGroup.appendChild(new_button)
-        }
     }
     function loadButtonsBottom(){
 
@@ -276,11 +222,12 @@
             e.style.backgroundColor="#CB5C56";
             var correct=document.getElementById("para"+document.getElementById("Right_Answer").value);
             correct.style.backgroundColor="#75E17A"
-          //this actually contains the response the User submitted
+            //this actually contains the response the User submitted
 
             return;
         }
         for (var i=0;i<parseInt(document.getElementById("Question_Length").value);++i){
+            console.log("Normal Weakness QUestions")
             if(i==parseInt(document.getElementById("normal_Question_Index").value)){
                 console.log("changing this button's COLOR "+i)
                 var li=document.createElement("LI");
@@ -312,122 +259,6 @@
 
             ul.appendChild(li);
         }
-
-
-
-    }
-    function loadbuttons(){
-
-        var buttonGroup=document.getElementById("btn-group")
-
-        buttonGroup.name="button-group"
-
-        var temp_list=document.getElementById("Final_Questions_holder").value.split(",")
-        if(temp_list.length>1){
-
-            for (var i=1;i<temp_list.length;++i){
-                console.log("Button Numbesr that are Incorrect"+" "+temp_list[i])
-                new_button = document.createElement('button');
-
-                new_button.innerHTML=temp_list[i].toString();
-                new_button.value=temp_list[i].toString();
-                new_button.onclick=async function(event) {
-
-                    document.getElementById("Final_Questions_holder").value=this.value
-
-                    document.getElementById("form").submit()
-
-                }
-
-                buttonGroup.appendChild(new_button)
-            }
-
-            return;
-        }
-        //var index=document.getElementById("Question_Number").value
-        var index=document.getElementById("normal_Question_Index").value
-        console.log("loading buttons "+index)
-
-        //console.log("header " +header.value + ' '+header.innerText)
-        if(parseInt(index)==6){
-            console.log("Inside of 7 button")
-            loadbuttonsV2(7);
-            return;
-        }
-        if(parseInt(index)<7){
-            console.log("inside less than 7")
-            for (var i=1;i<8;++i){
-                new_button = document.createElement('button');
-                if(i==parseInt(index)){
-                    new_button.className="current_index"
-                }
-                new_button.innerHTML=i.toString();
-                new_button.value=i.toString();
-                new_button.onclick=async function(event) {
-
-                    document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-
-                    document.getElementById("form").submit()
-
-                }
-
-                buttonGroup.appendChild(new_button)
-                console.log("Length of children"+" "+document.getElementById("header").children.length)
-                console.log("Length of children"+" "+buttonGroup.children.length)
-            }
-            return;
-        }
-
-        for (var i=4;i>0;--i){
-            new_button = document.createElement('button');
-            var less= (parseInt(index)+1)-i
-            string=less.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
-
-                document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
-
-            }
-
-            buttonGroup.appendChild(new_button)
-
-        }
-        var center= (parseInt(index)+1)
-        var string="(Currently)"+center.toString();
-        var new_button = document.createElement('button')
-        new_button.innerHTML=string;
-        new_button.value=string
-        new_button.onclick=async function(event) {
-
-            document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-            console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-            document.getElementById("form").submit()
-
-        }
-        buttonGroup.appendChild(new_button)
-
-        for(var i=1;i<4;++i){
-            new_button = document.createElement('button');
-            var more=(parseInt(index)+1)+i
-            string=more.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
-
-                document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
-
-            }
-
-            buttonGroup.appendChild(new_button)
-        }
-
-        //document.getElementById("header").appendChild(buttonGroup)
-        console.log("button chidlren "+document.getElementById("header").children.length)
     }
     function loadQuestionBody(){
         var question=document.getElementById("Question_Body_Holder");
@@ -435,15 +266,16 @@
         var display=document.getElementById("Question_Body_Display");
         display.innerHTML=question.value
     }
-   function loadTaggedQuestions(){
 
+
+    function loadTaggedQuestions(){
         var TaggedList=document.getElementById("tagged_Questions_holder").value.split(",")
 
         var ul=document.getElementById("tagged_question_list");
 
         for (var i=0;i<TaggedList.length;++i){
             var li=document.createElement("LI");
-           // li.className="tagged_icon"
+            // li.className="tagged_icon"
             li.innerText=TaggedList[i]
             li.value=i
             li.onclick=async function(event) {
@@ -456,17 +288,15 @@
             ul.appendChild(li);
         }
 
-    }
-
-    function loadWeaknessQuestions(){
 
     }
+
     function checkCorrectAnswer(){
         var e = document.getElementById("combo");
         var answer = e.options[e.selectedIndex].value;
 
         if (answer ==document.getElementById("Right_Answer").value){
-            console.log("Right Answer "+ answer+" "+document.getElementById("Right_Answer").value)
+            console.log("Inside "+ answer+" "+document.getElementById("Right_Answer").value)
             document.getElementById("Correct_Answer").style.color="blue";
             document.getElementById("Correct_Answer").style.fontSize="xx-large";
             document.getElementById("Correct_Answer").innerHTML="Correct!";
@@ -476,17 +306,69 @@
 
         }
         else{
-            console.log("Incorrect Answer! "+ "para"+answer+" "+document.getElementById("Right_Answer").value)
-            document.getElementById("Correct_Answer").innerHTML="Incorrect...";
+
+            document.getElementById("Correct_Answer").innerHTML="InCorrect!";
             document.getElementById("Correct_Answer").style.fontSize="xx-large";
-            document.getElementById("number_checks").value=(parseInt(document.getElementById("number_checks").value)+1).toString()
-            document.getElementById("para"+answer).style.display="none";
-            console.log("number of checks"+" "+ document.getElementById("number_checks").value)
             //await sleep(2000);
             //document.getElementById("tagged_Questions_holder").value=this.value
             //console.log('clicked!!!! '+document.getElementById("form").submit());
 
         }
+    }
+    function giveFirstHint(){
+        console.log("inside give firstHint")
+
+        var Tag_Holder = document.getElementById("Tag_Holder");
+        document.getElementById("Tag_Display").innerHTML=Tag_Holder.value
+        //console.log("First Hint Text "+ document.getElementById("First_Hint_holder").value)
+        const set1 = new Set([]);
+        var Count=0;
+        var highlighted_text=document.getElementById("First_Hint_holder").value.split(" ")
+        console.log("First Hint Text as a list: "+highlighted_text)
+        var text_list=document.getElementById("Passage_Holder").value.split(" ")
+        for (var i=0;i<text_list.length;++i){
+            //console.log("comparing "+ text_list[i])
+            if (highlighted_text.includes(text_list[i])){
+                console.log("includes"+" "+text_list[i]+Count)
+                ++Count;
+                if(Count>2){
+                    set1.add(i-1)
+                    set1.add(i-2)
+                    set1.add(i)
+
+                }
+            }
+            else{
+                Count=0;
+            }
+
+        }
+        var myArr = Array.from(set1)
+        var highlighted_final=""
+
+        //console.log("SET"+" "+text_list[i]);
+        //applyHighlights(document.getElementById("Passage_Holder").value)
+
+
+
+        document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Box").value.split(" "),myArr)
+    }
+    function applyHighlights(text_list,myArr){
+        var temp_text=text_list.join(" ")
+        for (var i=0;i<myArr.length;++i){
+            console.log("Highlighting "+text_list[myArr[i]]);
+            temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<mark>$&</mark>')
+        }
+        //return text.replace(/\n$/g, '\n\n').replace(/[A-Z].*?\b/g, '<mark>$&</mark>')
+        return temp_text; //should always return a string
+    }
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    function scrollFunction(){
+
+        console.log("INside the scroll callback (Height) "+" "+document.getElementById("Passage_Box").scrollTop)
+        document.getElementById("backdrop").scrollTop=document.getElementById("Passage_Box").scrollTop;
     }
     function showPresentationHighlight(){
         console.log("Inside presentation highlight")
@@ -517,62 +399,7 @@
 
         document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Box").value.split(" "),myArr)
     }
-    function giveFirstHint(){
-        console.log("inside give firstHint")
-       // var popup = document.getElementById("myPopup");
-      //  popup.innerText="This should be a description of Method/Tag. Also display the way to do it in a sentence."
-       // popup.classList.toggle("show");
-        var Tag_Holder = document.getElementById("Tag_Holder");
-        document.getElementById("Tag_Display").innerHTML=Tag_Holder.value
-        //console.log("First Hint Text "+ document.getElementById("First_Hint_holder").value)
-        const set1 = new Set([]);
-        var Count=0;
-        var highlighted_text=document.getElementById("First_Hint_holder").value.split(" ")
-        console.log("First Hint Text as a list: "+highlighted_text)
-        var text_list=document.getElementById("Passage_Holder").value.split(" ")
-        for (var i=0;i<text_list.length;++i){
-            //console.log("comparing "+ text_list[i])
-            if (highlighted_text.includes(text_list[i])){
-                //console.log("includes"+" "+text_list[i]+Count)
-                ++Count;
-                if(Count>2){
-                    set1.add(i-1)
-                    set1.add(i-2)
-                    set1.add(i)
-
-                }
-            }
-            else{
-                Count=0;
-            }
-
-        }
-        var myArr = Array.from(set1)
-        var highlighted_final=""
-        document.getElementById("First_Hint_holder").value=["true"];
-        console.log("Hint now holding..."+" "+document.getElementById("First_Hint_holder").value)
-        document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Box").value.split(" "),myArr)
-    }
-    function applyHighlights(text_list,myArr){
-        var temp_text=text_list.join(" ")
-        for (var i=0;i<myArr.length;++i){
-            //console.log("Highlighting "+text_list[myArr[i]]);
-            temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<mark>$&</mark>')
-        }
-        //return text.replace(/\n$/g, '\n\n').replace(/[A-Z].*?\b/g, '<mark>$&</mark>')
-        return temp_text; //should always return a string
-    }
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    function scrollFunction(){
-
-        console.log("INside the scroll callback (Height) "+" "+document.getElementById("Passage_Box").scrollTop)
-        document.getElementById("backdrop").scrollTop=document.getElementById("Passage_Box").scrollTop;
-    }
-
     window.onload = function () {
-        console.log("Time Limit detected "+document.getElementById("Time_Limit_Holder").value)
         document.getElementById("Exit_bool").value="false"
         document.getElementById("pause_bool").value="false"
         var duration = document.getElementById("Time_Limit_Holder").value
@@ -580,29 +407,22 @@
         var display = document.querySelector('#time_x');
         var time_value=document.querySelector('#time')
         startTimer(duration, display,time_value);
-        document.getElementById("menu").style.display="block";
         loadTaggedQuestions();
-        //loadWeaknessQuestions();
         loadQuestionBody();
-        //loadbuttons();
         loadButtonsBottom();
-       // console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
-        //console.log("Print First"+" "+y)
+        document.getElementById("menu").style.display="block";
+
         document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
-        document.getElementById("number_checks").value=(0).toString()
         //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)
         showPresentationHighlight();
-
-
-
 
         var classname=document.getElementById("menu_1-button_home");
 
         classname.addEventListener("click",function(){
             console.log("inside toggle class")
             var element = document.getElementById("menu_1-bar");
-        element.classList.toggle("open") });
+            element.classList.toggle("open") });
         classname=document.getElementById("menu_1-button_tag");
         classname.addEventListener("click",function(){
             console.log("event lister for tagge questions")

@@ -20,42 +20,27 @@
     </label>
     <button  id="ACT_Button" name="ACT_Button" type="submit">ACT EXAM</button>
     <button  name="SAT_Button" id="SAT_Button">SAT EXAM</button>
-    <button  name="Skill_Button" id="Skill_Button">Skill Builders</button>
+
 
 </form>
 
-<button onclick="ACT()">ACT </button>
+
+<form id="weakness" action="/dashboard/Weakness" method="get">
+    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}" />
+    <input type="hidden" id="FirstName" name="FirstName" value="{{FirstName}}" />
+    <input  type="hidden"  id="LastName" name="LastName" value="{{LastName}}" />
+    <input  type="hidden"  id="Email" name="Email" value="{{Email}}" />
+<button name="Weakness_Button" id="Weakness_Button">Address Your Weaknesses</button>
+</form>
+
+<button onclick="Prediction()">Prediction Model </button>
 <script type="text/javascript">
-    function ACT() {
-        window.location.href = '/dashboard/ACT'
-    }
-
-</script>
-
-
-<button onclick="Razvan()">Prediction Model </button>
-<script type="text/javascript">
-    function Razvan() {
+    function Prediction() {
         window.location.href = '/dashboard/Razvan'
     }
-
-</script>
-
-
-
-
-<button onclick="SAT()">SAT </button>
-<script type="text/javascript">
-    function SAT() {
-        window.location.href = '/dashboard/SAT'
+    function Submit(){
+        document.getElementById("weakness").submit()
     }
-
 </script>
 
-<button onclick="Skill()">Skill Builders </button>
-<script type="text/javascript">
-    function Skill() {
-        window.location.href = '/dashboard/Skill'
-    }
 
-</script>
