@@ -593,7 +593,7 @@ module.exports= class Database {
         }
 
         if(await this.SearchQuestion("",BodyList[11][0],BodyList[8][0],BodyList[7][0])==1){
-            console.log("Question Already exists in database so only editing")
+            console.log("Question Already exists in database so only editing: "+BodyList.length)
             await this.EditQuestion(BodyList)
             return;
         }
@@ -626,10 +626,10 @@ module.exports= class Database {
     }
     async EditQuestion(BodyList){
 
-        console.log("inside Edit Question"+" "+ BodyList[BodyList.length-1])
-        await dict[BodyList[8][0]].update(
+        console.log("inside Edit Question"+" "+ BodyList[8])
+        await dict[BodyList[8]].update(
             { "Test" : BodyList[7][0],"Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString() },
-            { $set: { "Hint_1" : BodyList[BodyList.length-1],"Presentation_Highlight": BodyList[13]}
+            { $set: { "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13]}
             }
         )
     }
@@ -747,22 +747,25 @@ module.exports= class Database {
         var _ID=0;
         //First search if he's in there, if not, insert into Student SChema Tble and return newly ID
         await Student_table.findOne({email:email }).then((artwork) => {
-            console.log("Found Student in Table"+artwork.id)
-            _ID=artwork.id
-
-            if (_ID==0){//Than its a new student
+            if (artwork==null){
+                console.log("no student found")
                 var newStudent = new Student_table({
-                    firstName: firsName,
+                    firstName: firstName,
                     lastName: lastName,
                     email: email,
 
                 });
-               newStudent.save(function (err,id) {
+                newStudent.save(function (err,id) {
                     if (err) return handleError(err);
                     console.log("Successfully saved student")
                     _ID=id;
                 })
             }
+            else{
+                console.log("Found Student in Table"+artwork.id)
+                _ID=artwork.id
+            }
+
 
 
         })

@@ -493,16 +493,21 @@
         const set1 = new Set([]);
         var Count=0;
         var highlighted_text=document.getElementById("Presentation_Holder").value.split(" ")
+
+
         console.log("PResentation highlight: "+highlighted_text)
         var text_list=document.getElementById("Passage_Holder").value.split(" ")
         for (var i=0;i<text_list.length;++i){
-            //console.log("comparing "+ text_list[i])
-            if (highlighted_text.includes(text_list[i])){
-                //console.log("includes"+" "+text_list[i]+Count)
+           // console.log("Count  "+ Count+" "+text_list[i].replace(/\n/g, '')+" "+highlighted_text);
+            if (highlighted_text.includes(text_list[i].replace(/\n/g, '')) && text_list[i].length>0 ){
+               // console.log("counting.. "+text_list[i]+" "+Count+" index: "+i)
                 ++Count;
-                if(Count>2){
-                    set1.add(i-1)
+                if(Count>3){
+                    //console.log("includes"+" "+text_list[i]+" "+Count+" index: "+i)
+                    set1.add(i-4)
+                    set1.add(i-3)
                     set1.add(i-2)
+                    set1.add(i-1)
                     set1.add(i)
 
                 }
@@ -513,7 +518,7 @@
 
         }
         var myArr = Array.from(set1)
-        var highlighted_final=""
+
 
         document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Box").value.split(" "),myArr)
     }
@@ -532,12 +537,15 @@
         var text_list=document.getElementById("Passage_Holder").value.split(" ")
         for (var i=0;i<text_list.length;++i){
             //console.log("comparing "+ text_list[i])
-            if (highlighted_text.includes(text_list[i])){
+            if (highlighted_text.includes(text_list[i].replace(/\n/g, '')) && text_list[i].length>0 ){
+
                 //console.log("includes"+" "+text_list[i]+Count)
                 ++Count;
-                if(Count>2){
-                    set1.add(i-1)
+                if(Count>3){
+                    set1.add(i-4)
+                    set1.add(i-3)
                     set1.add(i-2)
+                    set1.add(i-1)
                     set1.add(i)
 
                 }
@@ -548,15 +556,19 @@
 
         }
         var myArr = Array.from(set1)
-        var highlighted_final=""
+
         document.getElementById("First_Hint_holder").value=["true"];
         console.log("Hint now holding..."+" "+document.getElementById("First_Hint_holder").value)
         document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Box").value.split(" "),myArr)
     }
     function applyHighlights(text_list,myArr){
+        for (var i=0; i<myArr.length;++i){
+            text_list[myArr[i]]=text_list[myArr[i]]+'*'
+        }
         var temp_text=text_list.join(" ")
         for (var i=0;i<myArr.length;++i){
-            //console.log("Highlighting "+text_list[myArr[i]]);
+            console.log("Highlighting "+text_list[myArr[i]]);
+
             temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<mark>$&</mark>')
         }
         //return text.replace(/\n$/g, '\n\n').replace(/[A-Z].*?\b/g, '<mark>$&</mark>')

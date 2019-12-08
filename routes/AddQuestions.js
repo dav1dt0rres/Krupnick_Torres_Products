@@ -51,7 +51,7 @@ router.post('/ScrollEditQuestions', async (req, res, next) => {
     else if( req.body.hasOwnProperty("Edit_Button")){
         console.log("Edit Button was pressed! "+Current_Sessions.length)
         var title="Search/Edit a Question"
-        res.render('EditQuestion',{title,Database_Index: Database_Object.database_index,normal_Question_Index: 0})
+        res.render('EditQuestion',{title,Database_Index: req.body.Database_Index,normal_Question_Index: 0})
 
 
     }
@@ -68,16 +68,18 @@ router.post('/ScrollEditQuestions', async (req, res, next) => {
 
         Question_object=Database_Object.Last_Question
 
-
+        console.log("Hints and PResentation "+Question_object.First_Hint.join(" "));
         res.render('AddQuestions',{ title,QuestionText:Question_object.Question_text,Passage_Holder:Question_object.Passage,Test_Holder:Question_object.Test,Test_Type_Holder:Question_object.Test_Type,Question_Number:Question_object.Number,
             AnswerA:Question_object.getOptions()[0],
             AnswerB:Question_object.getOptions()[1],AnswerC:Question_object.getOptions()[2],
             AnswerD: Question_object.getOptions()[3], AnswerE:Question_object.getOptions()[4],Right_Answer_Holder:Question_object.Right_Answer,Tag:Question_object.Tag,
-            Database_Index: req.body.Database_Index, normal_Question_Index:Question_object.Number})
+            Database_Index: req.body.Database_Index, normal_Question_Index:Question_object.Number,
+            First_Hint:Question_object.First_Hint.join(" "), Presentation:Question_object.Presentation_Highlight.join(" ")
+        })
     }
     else if ( req.body.hasOwnProperty("Save_Button")){//ADd Question was pressed
 
-        console.log("Going in"+" "+req.body.QuestionText+req.body.AnswerA+ req.body.AnswerB+
+        console.log("Going in-Save Button: "+" "+req.body.QuestionText+req.body.AnswerA+ req.body.AnswerB+
             req.body.AnswerC+req.body.AnswerD+" "+req.body.Tag+" "+req.body.RightAnswer+" "+"THIS IS THE PASSAGE"+" "+req.body.Passage,
             "THIS IS THE QUESTION NUMBER"+" " +req.body.Question_Number+" "+req.body.Test_Type+" "+req.body.Test)
 
@@ -89,8 +91,9 @@ router.post('/ScrollEditQuestions', async (req, res, next) => {
 
         const title='Successful Entry of Question, if you would like to Edit any more Questions you can..'
 
-        res.render('AddQuestions',{ title
+        res.render('AddQuestions',{ title,Database_Index:req.body.Database_Index
           })
+        return;
     }
     else if(parseInt(req.body.normal_Question_Index)!=parseInt(Database_Object.Last_Question.Number) ){
         console.log("Inside get next question at an index")
