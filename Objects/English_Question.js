@@ -1,6 +1,6 @@
 var Question = require('./Question.js'),util = require('util');
 
-function English_Question(question_text, optionList,right_answer,tag,number,test_type,test,ID) {
+function English_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID) {
 
     this.Passage=passage;
     this.Test_Type="ACT-English";
@@ -20,6 +20,22 @@ function English_Question(question_text, optionList,right_answer,tag,number,test
 
     this.Right_Answer=right_answer;
     this.StudentAnswer=null;
+    this.Repititions=0;
+
+    this.Time_Stamp;
+
+    this.First_Hint=[];
+    this.Presentation_Highlight=[];
+    this.Hint_Selection;
+    this.Check_Answer=0;
+    this.deleted_Answer=[]
+    this.Repeats=0;
+    this.Views=0;
+    this.Second_Hint_Text=[];
+    this.Total_Time;
+    this.Hover_History=[]
+    this.Confidence;
+
 }
 
 util.inherits(English_Question, Question);

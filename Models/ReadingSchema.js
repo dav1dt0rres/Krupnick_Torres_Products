@@ -13,7 +13,6 @@ var ReadingSchema = new Schema( {
     Number: String,
     Test_Type:String,
     Right_Answer:String,
-    Passage:String,
     Hint_1:[String],
     Deleted_Choices:[Number],
     Presentation_Highlight:[String]

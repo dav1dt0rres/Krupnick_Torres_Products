@@ -1,11 +1,12 @@
 
 module.exports= class Student {
 
-    constructor(firstname,lastname, email,id) {
+    constructor(firstname,lastname, email,id,session) {
         this.firstName = firstname;
         this.lastName=lastname;
         this.email=email;
         this.ID=id;
+        this.Session=session;
 
     }
 

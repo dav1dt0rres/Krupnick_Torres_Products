@@ -11,7 +11,7 @@
 
         <button id="Presentation_Highlight_Button" name="Presentation_Highlight_Button" type="button" onclick="Highlight_Presentation()">Presentation Highlight</button>
             <div class="col-3">
-                <input id="QuestionText" name="QuestionText" class="effect-11" type="text" placeholder="Question Text" rows="5" >
+                <input id="QuestionText" name="QuestionText" class="effect-11" type="text" placeholder="Question Text" rows="5" value="{{QuestionText}}" >
 
                 <span class="focus-border">
             	<i></i>
@@ -19,7 +19,7 @@
             </div>
 
             <div class="col-3">
-                <input id="Question_Number" name="Question_Number" class="effect-9"  type="text" placeholder="Question Number" >
+                <input id="Question_Number" name="Question_Number" class="effect-9"  type="text" placeholder="Question Number" value="{{Question_Number}}" >
 
                 <span class="focus-border">
             	<i></i>
@@ -30,35 +30,35 @@
 
     <div class="column" name="MiddleColumn" id="MiddleColumn">
         <div class="col-3">
-            <input id="AnswerA" name="AnswerA" class="effect-9" type="text" placeholder="Type Choice A">
+            <input id="AnswerA" name="AnswerA" class="effect-9" type="text" placeholder="Type Choice A" value="{{AnswerA}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerB" name="AnswerB" class="effect-9" type="text" placeholder="Type Choice B">
+            <input id="AnswerB" name="AnswerB" class="effect-9" type="text" placeholder="Type Choice B" value="{{AnswerB}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerC" name="AnswerC" class="effect-9" type="text" placeholder="Type Choice C">
+            <input id="AnswerC" name="AnswerC" class="effect-9" type="text" placeholder="Type Choice C" value="{{AnswerC}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerD" name="AnswerD" class="effect-9" type="text" placeholder="Type Choice D">
+            <input id="AnswerD" name="AnswerD" class="effect-9" type="text" placeholder="Type Choice D" value="{{AnswerD}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerE" name="AnswerE" class="effect-9" type="text" placeholder="Type Choice E">
+            <input id="AnswerE" name="AnswerE" class="effect-9" type="text" placeholder="Type Choice E" value="{{AnswerE}}">
             <span class="focus-border">
                 <i></i>
               </span>
@@ -84,7 +84,7 @@
 
     <div class="column" name="lastColumn" id="lastColumn">
         <div class="col-3">
-        <input id="Tag" name ="Tag" class="effect-9" type="text" placeholder="Type in Tag">
+        <input id="Tag" name ="Tag" class="effect-9" type="text" placeholder="Type in Tag" value="{{Tag}}">
         <span class="focus-border">
                 <i></i>
               </span>
@@ -109,7 +109,11 @@
             <option value="74G">74G</option>
             <option value="73E">73E</option>
             <option value="71H">71H</option>
-           >
+            <option value="70G">70G</option>
+            <option value="71E">71E</option>
+            <option value="72E">72E</option>
+            <option value="Z15">Z15</option>
+            <option value="71G">71G</option>
         </select>
 
 

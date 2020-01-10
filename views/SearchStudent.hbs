@@ -1,0 +1,56 @@
+
+<body>
+
+<form id ="form" action="/dashboard/SearchStudent"  method="get">
+    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
+    <input type="hidden" id="Tests_Returned" name="Tests_Returned" value="{{Tests_Returned}}"  />
+    <input type="hidden" id="LastName_Holder" name="LastName_Holder" value="{{LastName_Holder}}"  />
+    <input type="hidden" id="FirstName_Holder" name="FirstName_Holder" value="{{FirstName_Holder}}"  />
+    <input type="hidden" id="email_Holder" name="email_Holder" value="{{email_Holder}}"  />
+    <input type="hidden" id="get_test" name="get_test" value="{{get_test}}"  />
+
+    <div class="col-3">
+        <input id="lastName" name="lastName" class="effect-10" type="text" placeholder="Enter Student Last Name">
+        <span class="focus-bg"></span>
+
+        <input id="firstName" name="firstName" class="effect-10" type="text" placeholder="Enter Student First Name">
+        <span class="focus-bg"></span>
+
+        <input id="email" name="email" class="effect-10" type="text" placeholder="Enter Email">
+        <span class="focus-bg"></span>
+    </div>
+
+    <label id="test_label" name="test_label">
+        Test
+        <select  onchange="if (this.selectedIndex) select();" id = "Test" name="Test"  value="{{Test}}">
+            {{#each Test.options}}
+                <option >{{this.text}}</option>
+            {{/each}}
+        </select>
+    </label>
+
+
+
+    <button id="Search" name="Search" type="submit">Get all Past Tests</button>
+
+    <button id="student_test" name="student_test" type="submit">Send this Student a test</button>
+</form>
+</body>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+    if (document.getElementById("Tests_Returned").value=="true"){
+        document.getElementById("lastName").value=document.getElementById("LastName_Holder").value
+        document.getElementById("firstName").value=document.getElementById("FirstName_Holder").value
+        document.getElementById("email").value=document.getElementById("email_Holder").value
+
+    }
+
+
+    };
+    function select(){
+        document.getElementById("get_test").value="true";
+        document.getElementById("form").submit()
+    }
+</script>

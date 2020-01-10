@@ -20,12 +20,16 @@ router.get('/', async function (req, res, next) {
 
 
     if( req.query.hasOwnProperty("ACT_Button")){
-        title="Are you ready?"+req.query.FirstName+", to take the ACT? Because I am"
+        title=req.query.FirstName+", Are you ready? "
 
         res.render('Test_Options',{title, Test_Type:"ACT",FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email})
     }
 
+    if( req.query.hasOwnProperty("Search_Student")){
+        title= "Type in student last name"
 
+        res.render('SearchStudent',{title, Test_Type:"ACT",FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email})
+    }
 
 
 

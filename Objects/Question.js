@@ -29,8 +29,33 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
 
 }
 
-
-
+    Question.prototype.setHover_History=function (hover_history){
+        this.Hover_History=hover_history;
+    }
+    Question.prototype.setResponse=function(response){
+        this.Response=response;
+    }
+    Question.prototype.setRepeats=function(repeats){
+        this.Repeats=repeats;
+    }
+    Question.prototype.setHint_Selection=function(hint_selection){
+        this.Hint_Selection=hint_selection;
+    }
+    Question.prototype.setViews=function(views){
+        this.Views=views;
+    }
+    Question.prototype.setTotalTime=function(total_time){
+        this.Total_Time=total_time;
+    }
+    Question.prototype.setTime=function(time){
+        this.Time=time;
+    }
+    Question.prototype.setID=function(id){
+        this._id=id;
+    }
+    Question.prototype.setConfidence=function(confidence){
+        this.Confidence=confidence
+    }
     Question.prototype.setPresentation_Highlight=function(presentation_list){
         if(presentation_list==null){
 
@@ -48,22 +73,40 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         this.Right_Answer=Right_Answer;
         this.Passage=Passage;
     }
-    Question.prototype.setResponse=function (response){
-        //console.log("INside setting Response"+response)
+    Question.prototype.setResponse=function (response,confidence,old_answer){
+        //console.log("INside setting Response"+response+" "+old_answer)
+        if (response!=old_answer){
+            ++this.Repeats;
+        }
+        this.Confidence=parseInt(confidence)
         this.Response=response;
     }
     Question.prototype.setTime=function (time){
-        console.log("INside Setting Time"+time)
+        //console.log("INside Setting Time"+time)
         this.Time=time;
     }
     Question.prototype.getTime=function(){
-        if(this.Time==null){
-            return "NaN"
-        }
+
         return this.Time;
     }
     Question.prototype.setTime_Stamp=function(time_stamp){
-        this.Time_Stamp=time_stamp;
+
+        console.log("setting time stamp "+time_stamp.toString().split("-")[0])
+        //console.log("setting time stamp "+" "+time_stamp.getDay()+" "+time_stamp.getMonth()+" "+time_stamp.getDate()+" "+time_stamp.getFullYear())
+
+
+        //Date.prototype.getHours()
+
+        //Date.prototype.getMilliseconds()
+
+       // Date.prototype.getMinutes()
+
+
+        //Date.prototype.getSeconds()
+        this.Time_Stamp=time_stamp.toString().split("-")[0];
+    }
+    Question.prototype.setCheckAnswer=function(value){
+        this.Check_Answer=value;
     }
     Question.prototype.setHintSelections=function(boolean){
         this.Hint_Selection=boolean;
@@ -113,7 +156,7 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
 
     }
     Question.prototype.getPassage=function(){
-        console.log("getting passage inside of question object"+this.Passage)
+        //console.log("getting passage inside of question object"+this.Passage)
         return this.Passage
     }
     Question.prototype.getTest_Type=function(){

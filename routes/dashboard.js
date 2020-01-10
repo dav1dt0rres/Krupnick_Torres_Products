@@ -23,7 +23,7 @@ var counter=0;
 var Current_Sessions=[]; //MAINTAINS THE ENTIRE LIST OF THREADS OF STUDENTS, THIS IS AN ARRAY OF TYPE DATABASE.JS
 
 router.get('/', async function (req, res, next) {
-    console.log("inside get Dashboard TO Start the TEst "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test);
+    //console.log("inside get Dashboard TO Start the TEst "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test);
 
     if (req.query.Type_Holder=="Weakness"){
 
@@ -51,9 +51,9 @@ router.get('/', async function (req, res, next) {
         return;
 
     }
-    if (req.query.Type_Holder=="LoadTests"){
+    if (req.query.Type_Holder=="LoadTests"){//When student is about to take a test and he first choooces teh test type
         console.log("inside loadtests")
-        var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
+        var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
         //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
         var test_list=await Database_Object.getTests();
         var tests=document.createElement('select')
@@ -66,7 +66,7 @@ router.get('/', async function (req, res, next) {
             tests.add(option)
         }
         res.render('Test_Options',{title, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests})
-        Current_Sessions.push(Database_Object);
+        //Current_Sessions.push(Database_Object);
         return;
     }
 
@@ -77,11 +77,11 @@ router.get('/', async function (req, res, next) {
     Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
 
     var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also
-
+    Database_Object.send_email("started")
     await Database_Object.InitializeQuestions();
 
 
-    title="This is a Sample Question"
+    title="This is a Sample Question, please press Submit(Next Question)"
     res.render('register_Question', {Question_Body_Holder:title, Answer_A:"Sample A",
         Answer_B:"SampleB",Answer_C:"Sample C",
         Passage_Holder:Database_Object.DisplayQuestionsList(),
@@ -210,15 +210,16 @@ router.get('/Question_Loop',async function (req, res, next) {
         console.log("Entering Exit")
         console.log("Length before"+Current_Sessions.length)
         Current_Sessions.splice(req.query.Database_Index,1)
+        title="Welcome to your Dashboard, "+Database_Object.Student.firstName;
         console.log("Length after+Current_Sessions.length"+Current_Sessions.length)
         res.render('dashboard', {title,FirstName:Database_Object.Student.firstName,LastName:Database_Object.Student.lastName, Email:Database_Object.Student.email })
 
         return
     }
-    else if(parseInt(req.query.Final_Questions_holder)>=0){
-        console.log("INside Final Review question "+Question_object.Response)
+    else if(parseInt(req.query.Final_Questions_holder)>=0){//the question is begin rendered for review purposes
+        console.log("INside Final Review question ")
 
-        await Database_Object.getNextQuestion(parseInt(req.query.Final_Questions_holder)-1);
+        await Database_Object.getNextQuestion_Final_Review(parseInt(req.query.Final_Questions_holder)-1);
         Question_object=Database_Object.Last_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
 
         var element=document.createElement("textarea");
@@ -228,7 +229,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         res.render('register_Question', {Question_Body_Holder:title, Passage_Holder:element.value, Answer_A:Question_object.getOptions()[0],
             Answer_B:Question_object.getOptions()[1],Answer_C:Question_object.getOptions()[2],
             Answer_D: Question_object.getOptions()[3], Answer_E:Question_object.getOptions()[4],
-            Database_Index: req.query.Database_Index, tagged_Questions_holder:Database_Object.DisplayTaggedList(),
+            Database_Index: req.query.Database_Index,
             Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder,Tag_Holder:Question_object.Tag,
             Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
             First_Hint_holder:Question_object.First_Hint.join(" "),Final_Questions_holder: await Database_Object.DisplayResultList(),Time_Limit_Holder:Question_object.Response,
@@ -240,16 +241,19 @@ router.get('/Question_Loop',async function (req, res, next) {
         console.log("Inside get next question at an index")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
 
-        await Database_Object.saveResponse(req.query.combo,req.query.time,req.query.First_Hint_holder,req.query.number_checks)
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history)
         var end=await Database_Object.getNextQuestion(parseInt(req.query.normal_Question_Index));
         if(end==false){
-            title="You have reached the end, congratulations. Please review your answers below"
-            res.render('Ending', {Question_Body_Holder:title,
-                Database_Index: req.query.Database_Index,
-                Final_Questions_holder:Database_Object.DisplayResultList(),
-                normal_Question_Index:req.query.normal_Question_Index
+            var scaled=readScaledScore(Database_Object)
+            title="You have reached the end, congratulations. Please review your answers below           Scaled Score: "+scaled
+            res.render('Ending', {title:title,
+                Database_Index: req.query.Database_Index,scaled_score:scaled,
+                Final_Questions_holder:await Database_Object.DisplayResultList(),
+                normal_Question_Index:req.query.normal_Question_Index,Total_Time:Database_Object.getTest_Time_Current()
 
             })
+            Database_Object.send_email("finished,"+Database_Object.Student.Session)
+            return;
         };
         Question_object=Database_Object.Last_Question
         await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
@@ -259,16 +263,19 @@ router.get('/Question_Loop',async function (req, res, next) {
     }
     else if (req.query.hasOwnProperty("next_question")){
         console.log("Inside next Question")
-        console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
-        await Database_Object.saveResponse(req.query.combo,req.query.time,req.query.First_Hint_holder,req.query.number_checks)
+        console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks+" "+req.query.Combo_Holder)
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history)
         var end=await Database_Object.getNextQuestion(parseInt(req.query.normal_Question_Index)+1);
         if(end==false){
-            title="You have reached the end, congratulations. Please review your answers below"
-            res.render('Ending', {Question_Body_Holder:title,
-                Database_Index: req.query.Database_Index,
+            var scaled=readScaledScore(Database_Object)
+            title="You have reached the end, congratulations. Please review your answers below                       Scaled Score: "+ scaled
+            res.render('Ending', {title:title,
+                Database_Index: req.query.Database_Index,scaled_score:scaled,
                 Final_Questions_holder: await Database_Object.DisplayResultList(),
-                normal_Question_Index:req.query.normal_Question_Index,Time_Limit_Holder:Database_Object.Question_Time_Limit
+                normal_Question_Index:req.query.normal_Question_Index,Time_Limit_Holder:Database_Object.Question_Time_Limit,
+                Total_Time:Database_Object.getTest_Time_Current()
             })
+            Database_Object.send_email("finished,"+Database_Object.Student.Session)
             return;
         };
         Question_object=Database_Object.Last_Question
@@ -279,7 +286,7 @@ router.get('/Question_Loop',async function (req, res, next) {
     else if(parseInt(req.query.tagged_Questions_holder)>=0){
         console.log("INside tagged question"+" "+req.query.combo)
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
-        await Database_Object.saveResponse(req.query.combo,req.query.time,req.query.First_Hint_holder,req.query.number_checks) //its important you always save response BEFORE getSameTag because it updates history in this function
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.hover_history) //its important you always save response BEFORE getSameTag because it updates history in this function
         await Database_Object.getSame_TagQuestion(parseInt(req.query.tagged_Questions_holder));
         Question_object=Database_Object.Last_Tagged_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
 
@@ -309,6 +316,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
         First_Hint_holder:Question_object.First_Hint.join(" "),Final_Questions_holder:[],Time_Limit_Holder:Database_Object.Question_Time_Limit,
         Total_Time:Database_Object.getTest_Time_Current(),Question_Length:Database_Object.List_Questions.length,
+        Combo_Holder:Question_object.Response,
         CheckBox_List:Database_Object.CheckBox_List,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
     })
 
@@ -324,15 +332,185 @@ router.get('/Question_Loop',async function (req, res, next) {
     ++counter;
 })
 
+function readScaledScore_Tutor_Review(Database_Object){
+    const lineByLine = require('n-readlines');
+    const liner = new lineByLine('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
+    var line;
+    var raw_score=Database_Object.getRawScore();
+    console.log("raw_score "+raw_score)
+    while (line = liner.next()) {
+        var temp_line = line.toString('ascii').split(" ")
+        //console.log("comparing "+temp_line[0]+" "+raw_score)
 
+        if (parseInt(temp_line[0])==raw_score){
+            console.log("Found the scaled score!! "+temp_line[1])
+            return temp_line[1]
+        }
+        //console.log("Scaled Scores "+temp_line[0]+" "+temp_line[1]);
 
+    }
+}
+function  readScaledScore(Database_Object){
+        const lineByLine = require('n-readlines');
+        const liner = new lineByLine('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
+        var line;
+        var raw_score=Database_Object.getRawScore();
+        console.log("raw_score "+raw_score)
+        while (line = liner.next()) {
+            var temp_line = line.toString('ascii').split(" ")
+            //console.log("comparing "+temp_line[0]+" "+raw_score)
+
+            if (parseInt(temp_line[0])==raw_score){
+                console.log("Found the scaled score!! "+temp_line[1])
+                return temp_line[1]
+            }
+            //console.log("Scaled Scores "+temp_line[0]+" "+temp_line[1]);
+
+        }
+}
 router.get('/SAT',function (req, res, next) {
     console.log("inside SAT!!!!!!")
 
     res.redirect('/AddQuestions')
 
 })
+router.get('/automatedEmail',async function (req,res,next){
+    console.log("inside automated Email "+req.query.firstName+" "+req.query.lastName+" "+req.query.email+" "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Session+req.query.get_test)
+    if(req.query.get_test=="true"){
+        var title="Test: "+req.query.Test+"    ---->>    "+req.query.lastName+", "+req.query.firstName+", "+req.query.email
 
+        var Database_Object=new Database(0,0,Current_Sessions.length,['student',0,0]);
+        //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+        await Database_Object.SearchStudent_Tests(req.query.firstName,req.query.lastName,req.query.email);
+        await Database_Object.getFinishedTest(req.query.Test+" "+req.query.Test_Type+" "+req.query.Session);
+        res.render('Ending_1', {title:title,
+            Database_Index: Current_Sessions.length,
+            Test:req.query.Test,
+
+            tutor_boolean:"false",show_final:"true"
+        })
+        Current_Sessions.push(Database_Object);
+    }
+
+    else if(req.query.show_final=="true"){
+        var Database_Object=Current_Sessions[req.query.Database_Index]
+        var scaled=readScaledScore_Tutor_Review(Database_Object)
+        var display_list=await Database_Object.DisplayResultList_Tutor_View();
+        var title="All past questions from "+Database_Object.Test+" "+Database_Object.Test_Type+"   "+"        Total Time Display: "+Database_Object.Total_Time_Display+"        Scaled Score:     "+scaled
+
+        res.render('Ending', {title:title,
+            Database_Index:Current_Sessions.length ,
+            Final_Questions_holder:display_list,
+
+            tutor_boolean:"true",show_final:"false"
+        })
+    }
+
+})
+router.get('/automatedEmail_Student', async function(req,res,next){
+    console.log("inside automated Email for students "+req.query.firstName+" "+req.query.lastName+" "+req.query.email+" "+req.query.Test+" "+req.query.Test_Type);
+
+   // var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
+    //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+    var test_list=[req.query.Test]
+    var tests=document.createElement('select')
+    title="Are you ready? "+req.query.FirstName+", to take the ACT?"
+    for(var i =0; i<test_list.length;++i){
+
+        var option=document.createElement('option')
+        option.value=test_list[i]
+        option.text=test_list[i];
+        tests.add(option)
+    }
+    //pCurrent_Sessions.push(Database_Object);
+    res.render('Test_Options',{title, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.firstName,LastName:req.query.lastName,Email:req.query.email,Test:tests})
+    //Current_Sessions.push(Database_Object);
+})
+router.get('/automatedEmail_Student_Send',async function(req,res,next){
+    console.log("inside automatedEmail student send "+req.query.Test+" "+req.query.Test_Type+" "+req.query.LastName)
+    var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[0,0,0]);//keeping record of the index in Current_Session
+
+    //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+
+    var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also
+    if(id==false){
+        title="Please try again no Student Found with Name:"+req.query.LastName+","+" "+req.query.FirstName
+        res.render('Test_Options_send_email',{title, FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email})
+        return;
+    }
+    Database_Object.send_email("send_reminder")
+    title="Successfully send reminder to :"+req.query.FirstName+" "+req.query.LastName
+    res.render('Ending_1', {title:title
+    })
+
+})
+router.get('/SearchStudent',async function (req,res,next){
+    var title="     "
+    if(req.query.get_test=="true"){//this was done as a warmup to let the lists populate before they are shown
+        var Database_Object=Current_Sessions[req.query.Database_Index]
+        Database_Object.Student.firstName=req.query.firstName;
+        Database_Object.Student.lastName=req.query.lastName;
+        Database_Object.Student.email=req.query.email;
+
+        title="Test: "+req.query.Test+"    ---->>    "+req.query.lastName+", "+req.query.firstName+", "+req.query.email
+
+        await Database_Object.getFinishedTest(req.query.Test)
+
+        res.render('Ending_1', {title:title,
+            Database_Index: req.query.Database_Index,
+            Test:req.query.Test,
+            normal_Question_Index:req.query.normal_Question_Index,
+            tutor_boolean:"false",show_final:"true"
+        })
+
+        return
+    }
+    else if(req.query.show_final=="true"){//Actualy question lists shown just like the Ending for the student (with minor changes)
+        var Database_Object=Current_Sessions[req.query.Database_Index]
+
+        //res.render('SearchStudent',{title, Tests_Returned:"false",Test_Type_Holder:req.query.Test_Type,FirstName_Holder:req.query.firstName,LastName_Holder:req.query.lastName,email_Holder:req.query.email,Test_Holder:req.query.Test,get_test:"false", Database_Index:req.query.Database_Index})
+        var scaled=readScaledScore_Tutor_Review(Database_Object)
+        var display_list=await Database_Object.DisplayResultList_Tutor_View();
+        var title="All past questions from "+Database_Object.Test+" "+Database_Object.Test_Type+"   "+"        Total Time Display: "+Database_Object.Total_Time_Display+"        Scaled Score:     "+scaled
+
+        res.render('Ending', {title:title,
+            Database_Index: req.query.Database_Index,
+            Final_Questions_holder:display_list,
+            normal_Question_Index:req.query.normal_Question_Index,
+            tutor_boolean:"true",show_final:"false"
+        })
+        return;
+
+    }
+    else if (req.query.hasOwnProperty("student_test")){
+        console.log("inside student_test has own property "+req.query.FirstName)
+        title="Select the options you want to students to take the Test under...."
+        res.render('Test_Options_send_email',{title, FirstName:req.query.firstName,LastName:req.query.lastName,Email:req.query.email})
+        return;
+    }
+    console.log("looking for this studenets name: "+req.query.lastName);
+    var Database_Object=new Database(0,0,Current_Sessions.length,['student',0,0]);
+    //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+    var test_list=await Database_Object.SearchStudent_Tests(req.query.firstName,req.query.lastName,req.query.email);
+
+    var tests=document.createElement('select')
+    var option=document.createElement('option')
+    option.value="None"
+    option.text="Please Select a Test";
+    tests.add(option)
+    title="Now Select a Test the Student has done"
+    for(var i =0; i<test_list.length;++i){
+
+        var option=document.createElement('option')
+        option.value=test_list[i]
+        option.text=test_list[i];
+        tests.add(option)
+    }
+    res.render('SearchStudent',{title, Database_Index:Current_Sessions.length, Tests_Returned:"true",Test_Type_Holder:req.query.Test_Type,FirstName_Holder:req.query.firstName,LastName_Holder:req.query.lastName,email_Holder:req.query.email,Test:tests,get_test:"true"})
+    Current_Sessions.push(Database_Object);
+    return;
+
+})
 router.get('/Razvan',function (req, res, next){
     console.log("Inside Dashboard function Razvan")
     res.redirect(307,'/ModelPredictor');
@@ -347,27 +525,23 @@ router.get('/Skill',function (req, res, next) {
 
 router.post('/', async function (req, res, next) {
     console.log("inside get Dashboard!!!!!!"+req.body.firstName)
-    if(req.body.hasOwnProperty("new_student")){
+    title="Welcome to your Dashboard,"+req.body.firstName
 
-        var Student_ID;
-        var newStudent = new Student_table({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-        });
-        await newStudent.save(function(err,object){
-            if (err) {
-                console.log("Error caough"+err.toString())
-            }
-
-            Student_ID=object.id;
-        });
-        console.log("New Student ID "+Student_ID)
-
+    if (req.body.hasOwnProperty("new_student")){
+        console.log("inside new student")
+        var Database_Object=new Database(0,0,Current_Sessions.length,['student',0,0]);
+        var temp_boolean=await Database_Object.addNewStudent(req.body.firstName,req.body.lastName,req.body.email)==-1
+        if(temp_boolean==-1){
+            console.log("inside adding new student "+temp_boolean)
+            res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
+            return;
+        }
+        Database_Object.send_email("registered")
+        res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
     }
-
-    res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
-
+    else{
+        res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
+    }
 
 
 })

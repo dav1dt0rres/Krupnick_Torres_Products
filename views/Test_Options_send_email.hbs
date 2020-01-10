@@ -3,7 +3,7 @@
 
 
 
-<form id ="form" action="/dashboard"  method="get">
+<form id ="form" action="/dashboard/automatedEmail_Student_Send"  method="get">
     <input type="hidden" id="Tests_holder" name="Tests_holder" value="{{Tests_holder}}"  />
     <input type="hidden" id="Test_Type_Holder" name="Test_Type_Holder" value="{{Test_Type_Holder}}"  />
     <input type="hidden" id="Type_Holder" name="Type_Holder" value="{{Type_Holder}}"  />
@@ -12,7 +12,7 @@
 
     <label id="test_type_label" name="test_type_label">
         Test Type  <------    Pick me First    <--------
-        <select onchange="loadTests()" id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
+        <select id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
 
             <option value="0">Select Test Type</option>
             <option value="ACT-English">ACT-English</option>
@@ -24,11 +24,21 @@
     </label>
 
     <label id="test_label" name="test_label">
-       Test
-        <select id = "Test" name="Test" for="Test" value="{{Test}}">
-            {{#each Test.options}}
-                <option >{{this.text}}</option>
-            {{/each}}
+        Test
+        <select id="Test"  name="Test" value="{{Test}}" >
+            <option value="0">Select Test</option>
+            <option value="B04">B04</option>
+            <option value="A09">A09</option>
+            <option value="A10">A10</option>
+            <option value="74C">74C</option>
+            <option value="74G">74G</option>
+            <option value="73E">73E</option>
+            <option value="71H">71H</option>
+            <option value="70G">70G</option>
+            <option value="71E">71E</option>
+            <option value="72E">72E</option>
+            <option value="Z15">Z15</option>
+            <option value="71G">71G</option>
         </select>
     </label>
 
@@ -39,7 +49,7 @@
         <input onkeyup="showForce_Time()" placeholder="Leave Blank if None" id="Time_Limit_Question" name="Time_Limit_Question" value="{{Time_Limit_Question}}"  >
     </label>
     <label style="display: none;" id ="checkbox_time_label" for="checkbox_time">
-        Force to next Question after time is up?
+        Force to next Question after time?
         <input style="display: none;" type="checkbox" name="checkbox_time" id="checkbox_time"  value="True">
 
     </label>
@@ -70,19 +80,12 @@
 
 
     <button  onclick ="WeaknessFunction()" id="submit_button" name="submit_button" type="submit">Start Addressing Weaknesses</button>
-    <button   id="exam_button" name="exam_button" type="submit">Start Exam</button>
+    <button   id="exam_button" name="exam_button" type="submit">Send reminder to take this Exam</button>
 
 </form>
 </body>
 <script type="text/javascript">
-    function loadTests(){
-        if(document.getElementById("Type_Holder").value=="Weakness"){
-            return;
-        }
-        document.getElementById("Type_Holder").value="LoadTests"
 
-        document.getElementById("form").submit()
-    }
     function showForce_Time(){
         console.log("length "+document.getElementById("Time_Limit_Question").value.length)
         if(document.getElementById("Time_Limit_Question").value.length==0){

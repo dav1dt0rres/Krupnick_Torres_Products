@@ -18,23 +18,25 @@
 <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
 <div class="container">
     <div class="Correct_Answer" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
+
 <div id="backdrop" name="backdrop" class="backdrop">
     <div id ="highlights" name="highlights" class="highlights"></div>
 </div>
 
-    <textarea onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
+    <textarea onmouseenter="recordHover('passage_box_enter')" onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
 
 </div>
 
 </body>
 
 <form id ="form" action="/dashboard/Question_Loop"  method="get">
-
+    <input type="hidden" id="Combo_Holder" name="Combo_Holder" value="{{Combo_Holder}}"  />
     <input type="hidden" id="Final_Questions_holder" name="Final_Questions_holder" value="{{Final_Questions_holder}}"  />
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <input type="hidden" id="Tag" name="Tag" value="{{Tag}}"  />
     <input type="hidden" id="Right_Answer" name="Right_Answer" value="{{Right_Answer}}"  />
     <input type="hidden" id="number_checks" name="number_checks" value="{{number_checks}}"  />
+    <input type="hidden" id="hover_history" name="hover_history" value="{{hover_history}}"  />
 
     <input type="hidden" id="Question_Number" name="Question_Number" value="{{Question_Number}}"  />
     <div class="container_1">
@@ -42,52 +44,65 @@
 
 
         <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  ></h4>
-    <label for="Answer_A" id="paraA" name="Answer_A" >
+
+
+    <label  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA" name="Answer_A" >
         A.)
-        <p id="paraA" >{{Answer_A}} </p>
+        <p onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </p>
 
     </label>
-    <label for="Answer B" id="paraB" >
+    <label onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB" >
         B.)
-        <p id="paraB" >{{Answer_B}} </p>
+        <p onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </p>
 
     </label>
-    <label for="Answer_C" id="paraC">
+    <label onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC">
         C.)
-        <p id="paraC" >{{Answer_C}} </p>
+        <p onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </p>
 
     </label>
-    <label for="Answer_D" id="paraD">
+    <label onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD">
         D.)
-        <p id="paraD" >{{Answer_D}} </p>
+        <p onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </p>
 
     </label>
-    <label for="Answer_E" id="paraE">
+    <label onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE">
         E.)
-        <p id="paraE" >{{Answer_E}} </p>
+        <p onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE" >{{Answer_E}} </p>
 
     </label>
 
-    <select id="combo" name="combo">
+    <select onmouseenter="recordHover('sroll_down')" id="combo" name="combo" name="combo">
         <option value="A">A</option>
         <option value="B">B</option>
         <option value="C">C</option>
         <option value="D">D</option>
         <option disabled selected value> -- select an option -- </option>
     </select>
-        <button type="button" onclick="checkCorrectAnswer()" >Check if Correct</button>
+        <select  onchange="finalsubmit()" style="display: none;" id="confidence" name="confidence">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option disabled selected value> -- select a Confidence Score-- </option>
+        </select>
+        <button id="checkanswer" type="button" onclick="checkCorrectAnswer()" >Check if Correct</button>
 
 
-        <button id="next_question" name="next_question" type="submit" href="#" class="next">Submit(Next Question) &raquo;</button>
+        <button type="button" onmouseenter="recordHover('submit')" id="next_question" name="next_question" onclick="submit_1(1)" class="next">Submit(Next Question)</button>
+        <div id="confidence_tool" class="tooltip"  style="display: none;" >
+            <span id="confidence_input" class="tooltiptext">Please Select a Confidence Score</span>
+        </div>
+
 
         <input type="hidden" id="Time_Limit_Holder" name="Time_Limit_Holder" value="{{Time_Limit_Holder}}"  />
-        <ul type="submit" class= "btn-group-bottom" id ="btn-group-ul" name="btn-group-ul" >
+        <ul onmouseenter="recordHover('bottom_buttons')" class= "btn-group-bottom" id ="btn-group-ul" name="btn-group-ul" >
 
 
         </ul>
     </div>
 
-    <ul class="menu_1">
+    <ul id="main_menu" class="menu_1">
 
         <li title="home"><a href="#" id="menu_1-button_home" class="menu_1-button home">menu</a></li>
         <li title="Tagged Questions"><a href="#" id="menu_1-button_tag" class="search"></a></li>
@@ -98,7 +113,7 @@
 
     <ul id="menu_1-bar" class="menu_1-bar">
         <li ><a onclick="HomeFunction()" >Home</a></li>
-        <li id="pause" ><a onclick="PauseFunction()">Pause</a></li>
+        <li id="pause" onclick="PauseFunction()" ><a >Pause</a></li>
         <li><a onclick="Mark_the_Question()">Mark the Question</a></li>
 
 
@@ -127,21 +142,82 @@
 
 
 <script type="text/javascript">
+    function finalsubmit(){
+
+        document.getElementById("form").submit()
+    }
+    function submit_1(argument){
+        //console.log("Inside submit" + document.getElementById("CheckBox_List").value)
+        document.getElementById("normal_Question_Index").value=(parseInt(document.getElementById("normal_Question_Index").value)+argument).toString()
+        var x = document.getElementById("confidence_tool");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+
+        console.log("Inside submit!!!!!!!!!!!!!!!" + document.getElementById("CheckBox_List").value.includes('Clues'));
+        if(document.getElementById("CheckBox_List").value.includes('Clues')){
+            x=document.getElementById("confidence");
+            x.style.display = "block";
+            x=document.getElementById("checkanswer");
+            x.style.display = "none";
+
+        }
+        else{
+            document.getElementById("form").submit()
+        }
+    }
+    function recordHover(argument){
+
+        var list_of_events=document.getElementById("hover_history").value.split(",");
+        list_of_events.push(argument)
+        if(argument=='A' || argument=='B'|| argument=='C'|| argument=='D'){
+            console.log("inside the highlighting the choice "+argument)
+            document.getElementById("para"+argument).style.backgroundColor="#C0C0C0"
+        }
+        document.getElementById("hover_history").value=list_of_events.join(",")
+        //console.log("Hover history: "+document.getElementById("hover_history").value);
+
+    }
+    function leavingOption(argument){
+        console.log("leaving "+argument)
+        document.getElementById("para"+argument).style.backgroundColor="white"
+    }
+    function clickedOption(element){
+        var list=["paraA","paraB","paraC","paraD","paraE"]
+
+        for(var i=0;i<list.length;++i){
+            console.log("comparing "+list[i].localeCompare(element))
+            if (list[i].localeCompare(element)==0){
+                document.getElementById(element).style.color = "DodgerBlue";
+            }
+            else{
+                document.getElementById(list[i]).style.color = "black";
+            }
+        }
+        console.log("Choosing "+element[element.length-1])
+        document.getElementById("combo").value = element[element.length-1];
+    }
     function HomeFunction(){
+        console.log("inside exit bool")
         document.getElementById("Exit_bool").value="true"
         document.getElementById("form").submit()
     }
     function PauseFunction(){
-        if(document.getElementById("pause_bool").value="true"){
+
+        if(document.getElementById("pause_bool").value=="true"){
+            console.log("inside pause function "+document.getElementById("pause_bool").value)
             document.getElementById("pause_bool").value="false"
             document.getElementById("pause").innerText="Pause"
+
         }
-        if(document.getElementById("pause_bool").value="false"){
+        else if(document.getElementById("pause_bool").value=="false"){
+            console.log("inside pause function "+document.getElementById("pause_bool").value)
             document.getElementById("pause_bool").value="true";
             document.getElementById("pause").innerText="Continue"
+
         }
-
-
 
     }
     function startTimer(duration, display,time) {
@@ -208,7 +284,7 @@
 
                 document.getElementById("normal_Question_Index").value=this.value
                 console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
+                submit()
 
             }
 
@@ -224,7 +300,7 @@
 
             document.getElementById("normal_Question_Index").value=this.value
             console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-            document.getElementById("form").submit()
+            submit()
 
         }
         buttonGroup.appendChild(new_button)
@@ -238,7 +314,7 @@
 
                 document.getElementById("normal_Question_Index").value=this.value
                 console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
+                submit()
 
             }
 
@@ -246,18 +322,19 @@
         }
     }
     function loadButtonsBottom(){
-
+        var targetLi;
         var ul=document.getElementById("btn-group-ul");
         //console.log("Response: "+document.getElementById("Time_Limit_Holder").value)
         //var index=document.getElementById("normal_Question_Index").value
         if(document.getElementById("Final_Questions_holder").value.split(",").length>1){
 
-            for (var i=1;i<parseInt(document.getElementById("Final_Questions_holder").value.split(",").length);++i){
+            for (var i=0;i<parseInt(document.getElementById("Final_Questions_holder").value.split(",").length);++i){
                 //console.log("each question in finals review "+document.getElementById("Final_Questions_holder").value.split(",")[i].split(" ")[0])
 
                 var li=document.createElement("LI");
                 li.className="final_review"
-                var number=document.getElementById("Final_Questions_holder").value.split(",")[i].split(" ")[0]
+                console.log("    preparring red buttons..."+document.getElementById("Final_Questions_holder").value.split(",")[i].split(";")[0])
+                var number=document.getElementById("Final_Questions_holder").value.split(",")[i].split(";")[0]
                 li.innerText=number.toString()
                 li.value=number.toString()
 
@@ -266,12 +343,20 @@
                     //document.getElementById("normal_Question_Index").value=(parseInt(this.value)).toString()
                     document.getElementById("Final_Questions_holder").value=(parseInt(this.value)).toString()
                     console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                    document.getElementById("form").submit()
+                    submit_1()
 
+                }
+                li.onmouseover=async function recordHover_1(event){
+                    console.log("inside recording Hover")
+                    recordHover(this.value)
                 }
                 ul.appendChild(li);
             }
 
+            if(document.getElementById("Time_Limit_Holder").value.length==0){
+
+                return;
+            }
             var e = document.getElementById("para"+document.getElementById("Time_Limit_Holder").value);
             e.style.backgroundColor="#CB5C56";
             var correct=document.getElementById("para"+document.getElementById("Right_Answer").value);
@@ -287,13 +372,19 @@
                 li.className="highlighted"
                 //li.innerText=i.toString()
                 li.value=i.toString()
+                li.id="center"
+
                 li.onclick=async function(event) {
 
                     document.getElementById("normal_Question_Index").value=(parseInt(this.value)).toString()
                     console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                    document.getElementById("form").submit()
+                    submit_1(0)
 
                 }
+
+
+
+
             }
             else{
                 var li=document.createElement("LI");
@@ -304,17 +395,20 @@
 
                     document.getElementById("normal_Question_Index").value=(parseInt(this.value)).toString()
                     console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                    document.getElementById("form").submit()
-
+                    submit_1(0);
                 }
             }
 
 
             ul.appendChild(li);
+            if (li.id=='center'){
+                document.getElementById("center").scrollIntoView();
+
+            }
+
         }
 
-
-
+        //
     }
     function loadbuttons(){
 
@@ -449,7 +543,7 @@
             li.onclick=async function(event) {
 
                 document.getElementById("tagged_Questions_holder").value=this.value
-                console.log('clicked!!!! '+document.getElementById("form").submit());
+                console.log('clicked!!!! '+submit());
 
             }
 
@@ -458,7 +552,13 @@
 
     }
 
-    function loadWeaknessQuestions(){
+    function loadMisc(){
+        document.getElementById("combo").value= document.getElementById("Combo_Holder").value
+        if(document.getElementById("Combo_Holder").value.length>0){
+
+            document.getElementById("para"+document.getElementById("Combo_Holder").value).style.color="DodgerBlue";
+        }
+
 
     }
     function checkCorrectAnswer(){
@@ -481,6 +581,7 @@
             document.getElementById("Correct_Answer").style.fontSize="xx-large";
             document.getElementById("number_checks").value=(parseInt(document.getElementById("number_checks").value)+1).toString()
             document.getElementById("para"+answer).style.display="none";
+            //document.getElementById("number_checks").value=(parseInt(document.getElementById("number_checks").value)+1).toString()
             console.log("number of checks"+" "+ document.getElementById("number_checks").value)
             //await sleep(2000);
             //document.getElementById("tagged_Questions_holder").value=this.value
@@ -581,9 +682,37 @@
 
         console.log("INside the scroll callback (Height) "+" "+document.getElementById("Passage_Box").scrollTop)
         document.getElementById("backdrop").scrollTop=document.getElementById("Passage_Box").scrollTop;
+        recordHover('scrolling '+document.getElementById("Passage_Box").scrollTop)
+    }
+    function centerButtons(){
+
+
+
+
     }
 
     window.onload = function () {
+        document.addEventListener("click", function mainFunction(event) {
+                    console.log("inside main function "+event.target.id.toString())
+                    if(event.target.id.toString()=="menu_1-button_home" || event.target.id.toString()=="menu_1-button_tag" || event.target.id.toString()=="menu_1-button_hint" )
+                    {
+                        console.log("Clicked inside menus")
+                    }
+                    else{
+                        console.log("Clicked outside")
+                        var element = document.getElementById("tagged_question_list").className="menu_1-bar";
+
+                       // element.classList.toggle("close");
+                        element = document.getElementById("hints").className="menu_1-bar";
+
+                       // element.classList.toggle("close");
+                        element = document.getElementById("menu_1-bar").className="menu_1-bar";
+
+                    }
+
+                }
+        );
+
         console.log("Time Limit detected "+document.getElementById("Time_Limit_Holder").value)
         document.getElementById("Exit_bool").value="false"
         document.getElementById("pause_bool").value="false"
@@ -598,6 +727,8 @@
         loadQuestionBody();
         //loadbuttons();
         loadButtonsBottom();
+        centerButtons();
+        loadMisc();
        // console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
         //console.log("Print First"+" "+y)
         document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
@@ -609,22 +740,28 @@
 
 
 
-        var classname=document.getElementById("menu_1-button_home");
+        classname=document.getElementById("menu_1-button_home");
 
-        classname.addEventListener("click",function(){
-            console.log("inside toggle class")
+        classname.addEventListener("mouseenter",function(){
+            console.log("inside toggle class-0")
             var element = document.getElementById("menu_1-bar");
-        element.classList.toggle("open") });
+            element.classList.toggle("open") });
+
+
+
         classname=document.getElementById("menu_1-button_tag");
-        classname.addEventListener("click",function(){
-            console.log("event lister for tagge questions")
+        classname.addEventListener("mouseenter",function(){
+            console.log("event lister for tagge questions-1")
             var element = document.getElementById("tagged_question_list");
             element.classList.toggle("open") });
+
+
         classname=document.getElementById("menu_1-button_hint");
-        classname.addEventListener("click",function(){
-            console.log("event lister for tagge questions")
+        classname.addEventListener("mouseenter",function(){
+            console.log("event lister for tagge questions-2")
             var element = document.getElementById("hints");
             element.classList.toggle("open") });
+
 
     };
 </script>

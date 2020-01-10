@@ -21,8 +21,14 @@ var ResponseSchema = new Schema( {
 
     },
     time_stamp : { type : Date, default: Date.now },
+    Session:Number,
     Hint_Selection: Boolean,
-    Check_Answer:Number
+    Check_Answer:Number,
+    Repeats:Number,
+    Views:Number,
+    Total_Time:String,
+    Hover_History:[String],
+    Confidence:Number,
 });
 
 

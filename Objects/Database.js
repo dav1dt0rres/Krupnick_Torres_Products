@@ -14,7 +14,7 @@ var dict = {
     "ACT-English": English_table
     // etc.
 };
-
+var nodemailer = require('nodemailer');
 const Student = require('./Student.js')
 const Question = require('./Question.js');
 const Math_Question = require('./Math_Question.js')
@@ -46,10 +46,18 @@ module.exports= class Database {
             this.Test_Time_Limit;
             this.Test_Time_Current;
             this.CheckBox_List=option_list.join(" ")
+            this.Total_Time_Display;
+            this.Session;
+        }
+        else if(Test_Type==0){
+            console.log("inside search student database constructor")
+            this.Student=null;
+
         }
         else if(Test!=null){
             this.database_index=index  ;
-            console.log('inside Database COnstructor')
+
+            console.log('inside Database Normal COnstructor'+" "+this.database_index)
             this.List_Questions=[];
             this.Normal_Index=null;
             this.List_TaggedQuestions=[];
@@ -70,13 +78,19 @@ module.exports= class Database {
             this.Test_Time_Limit;
             this.Test_Time_Current;
             this.CheckBox_List=option_list.join(" ")
-
-
+            this.Total_Time_Display;
 
             ////below are just temp for reading it reading questi  ons
             this.Answer="";
             this.Tag="";
             this.Question_Body=""
+            this.Session;
+            if (option_list[2]=="Clues"){
+                this.Confidence=true;
+                return
+            }
+            this.Confidence=false;
+
         } //If the Constructor that carries a lot is to be called
         else{
             this.database_index ;
@@ -102,20 +116,87 @@ module.exports= class Database {
             this.Test_Time_Limit;
             this.Test_Time_Current=0;
             this.CheckBox_List=option_list.join(" ")
+            this.Total_Time_Display;
+            this.Session;
         }//The constructor to form Weakness Questions
 
 
     }
     setTimeLimit(question_time_limit,test_time_limit ){
+
         this.Question_Time_Limit=question_time_limit;
         if (test_time_limit.length==0){
             this.Test_Time_Limit=0;
         }
+        else{
+            this.Test_Time_Limit=test_time_limit
+        }
 
-        console.log("Setting time"+question_time_limit+" "+test_time_limit)
+        console.log("Setting time"+this.Question_Time_Limit+" "+ this.Test_Time_Limit);
     }
     updateCurrentTime(timer){
         this.Test_Time_Current=timer;
+    }
+    send_email(argument,req){
+        console.log("argument in email "+argument)
+        var transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'krupnickapproach@gmail.com',
+                pass: '421854torres'
+            }
+        });
+        if(argument=='started'){
+
+
+            var mailOptions = {
+                from: 'bot@gmail.com',
+                to: 'davidtorres7888@gmail.com',
+                subject: this.Student.firstName+" "+this.Student.lastName+" just signed in to take: "+this.Test+" "+this.Test_Type,
+                text: 'That was easy!'
+            };
+
+
+        }
+        else if(argument.includes("finished")){
+            var string="http://krupnickapproach.ngrok.io/dashboard/automatedEmail?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
+                "Test_Type="+this.Test_Type+"&"+"Session="+argument.split(",")[1]+"&"+"get_test=true&"
+            var mailOptions = {
+                from: 'bot@gmail.com',
+                //to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com,cameronmarshall.gong@gmail.com',
+                to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com,cameronmarshall.gong@gmail.com',
+                subject: this.Student.firstName+" "+this.Student.lastName+" just finished: "+this.Test+" "+this.Test_Type,
+                text: 'That was easy!',
+
+                html: '<p>Click <a href='+string+'>here</a> to go see the results</p>'
+            };
+        }
+        else if(argument=="registered") {
+            var mailOptions = {
+                from: 'bot@gmail.com',
+                to: this.Student.email+',joekrupnick@gmail.com,davidtorres7888@gmail.com',
+                subject: this.Student.firstName+" "+this.Student.lastName+" was just registered on the system: ",
+                text: 'That was easy!'
+            };
+        }
+        else if(argument=="send_reminder"){
+            var string="http://krupnickapproach.ngrok.io/dashboard/automatedEmail_Student?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
+                "Test_Type="+this.Test_Type+"&"
+            var mailOptions = {
+                from: 'bot@gmail.com',
+                to: this.Student.email,
+                subject: "Please take the following Exam at your convenience: "+this.Test+" "+this.Test_Type,
+                text: "",
+                html: '<b>Dont forget to input a time for each question and the Total Time the Test should take. Please use this email to bring up any issues.   </b><p>Click <a href='+string+'>here</a> to go take the test</p>'
+            };
+        }
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
     }
     startTime(){
 
@@ -153,10 +234,12 @@ module.exports= class Database {
     }
     // Adding a method to the constructor
     getTest_Time_Current(){
+
         if (this.Test_Time_Current==0){
             console.log("Test Time is nullified")
             return ""
         }
+        console.log("Total Test Time Current "+this.Test_Time_Current);
         return this.Test_Time_Current
     }
    async InitializeQuestions(){
@@ -184,9 +267,10 @@ module.exports= class Database {
         temp_Object.populate("Student_ID").lean()
         var temp_Tag=this.Last_Question.Tag
         await temp_Object.exec(function(err,Responses){
-            if (Response.length==0){
-                this.List_Tagged_History=[];
-                return;
+
+            if (Responses==null){
+
+              return
             }
             for  (var i=0;i<Responses.length;++i){
 
@@ -429,13 +513,31 @@ module.exports= class Database {
         this.initializeDifficulty_List();
         return;
     }
+    async getNextQuestion_Final_Review(current_index){
+        if (current_index>=this.List_Questions.length){
+            console.log("Youve reached the end of the line!");
+            return false;
+        }
 
+        ++this.Count;
+        var Choice_List=[]
+        //populate difficulty list (if any change in difficulty occured)
+        var keywords=[];
+
+        //console.log("Length of Normal History"+" "+this.Normal_History.length);
+        console.log("current_Final_Review"+" "+current_index);
+        this.Last_Question=this.List_Questions[current_index];
+
+        this.Normal_Index=current_index
+        return true;
+    }
    async getNextQuestion(current_index){
         console.log("Inside Get ORdered Question_Test TYpe(), Database.js",this.Test," ",this.Test_Type)
        if (current_index>=this.List_Questions.length){
            console.log("Youve reached the end of the line!");
             return false;
        }
+
         ++this.Count;
         var Choice_List=[]
         //populate difficulty list (if any change in difficulty occured)
@@ -473,7 +575,7 @@ module.exports= class Database {
                 Question_object=new Question(Question_re.Question_body.join(" "),Question_re.Choices,Question_re.Right_Answer,Question_re.Tag,Question_re.Number,Question_re.Passage_ID.Passage.join(' '),Question_re.Test_Type,Question_re.Test,Question_re._id)
                                // new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                 Question_object.setFirstHint(Question_re.Hint_1);
-
+                Question_object.setID(Question_re._id)
                 Question_object.setPresentation_Highlight(Question_re.Presentation_Highlight)
                 keywords[counter]=Question_object;
                 //++counter;
@@ -567,7 +669,7 @@ module.exports= class Database {
         //Checks to see if the new Passage exists already in the database
         for(var i=0;i<temp_objects.length;++i){
             //console.log("Passage being returned" + " " + temp_objects[i].Passage
-            console.log("Passage BEING COMPARED" + " " + BodyList[10])
+           // console.log("Passage BEING COMPARED" + " " + BodyList[10])
             if(this.comparePassages(temp_objects[i].Passage,BodyList[10])){
                 console.log("Passage already in database" + " " +temp_objects[i].id);
                 Object_ID=temp_objects[i].id
@@ -626,14 +728,26 @@ module.exports= class Database {
     }
     async EditQuestion(BodyList){
 
-        console.log("inside Edit Question"+" "+ BodyList[8])
+        console.log("inside Edit Question"+" "+ BodyList)
+        console.log("Test you are editing ",this.Last_Question._id);
+        for(var i=0;i<BodyList.length;++i){
+           console.log(BodyList[i]+" "+i)
+        }
         await dict[BodyList[8]].update(
-            { "Test" : BodyList[7][0],"Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString() },
-            { $set: { "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13]}
+            { _id : this.Last_Question._id },
+            { $set: { "Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString(),
+                    "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13],
+                    "Test":BodyList[7],
+                    "Right_Answer": BodyList[9][0],
+                    "Choices":[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
+                    "Question_body": BodyList[0],
+                    "Tag":BodyList[6].join(" "),
+                }
             }
         )
+
     }
-    async saveResponse(response,time,First_Hint_holder,check_answer){
+    async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history){
         console.log("saving response "+response+" "+time+" "+check_answer)
         var dict_schema = {
             "ACT-Reading":"ReadingQuestion" ,
@@ -641,13 +755,17 @@ module.exports= class Database {
             "ACT-English": "EnglishQuestion"
         }///associations between the response and the original questions on seperate tables
         var Object_ID;
-        if (response==undefined){
-            console.log("Not saving")
-            return;
+        if (this.CheckBox_List.includes('Clues') && confidence!=undefined){
+            console.log("submitted confidence!")
+            confidence=parseInt(confidence)
+        }
+        else{
+            confidence=-1
         }
         this.List_Tagged_History.push(this.Last_Question._id.toString());
-        this.Last_Question.setResponse(response)
+        this.Last_Question.setResponse(response,confidence,old_answer)
 
+        ++this.Last_Question.Views;
         var hint;
         if(First_Hint_holder=="true"){
             hint=true;
@@ -680,8 +798,14 @@ module.exports= class Database {
             modelId:this.Last_Question._id,
             modelName_1:dict_schema[this.Test_Type],
             Time:this.Last_Question.getTime(),
+            Session:this.Student.Session,
             Hint_Selection:hint,
-            Check_Answer:this.Last_Question.Check_Answer
+            Check_Answer:this.Last_Question.Check_Answer,
+            Repeats:this.Last_Question.Repeats,
+            Views:this.Last_Question.Views,
+            Total_Time:this.Test_Time_Current,
+            Hover_History:hover_history,
+            Confidence:confidence
         });
         await newReponse.save(function(err,object){
             if (err) {
@@ -724,6 +848,7 @@ module.exports= class Database {
         });
         console.log("New Student ID "+Student_ID)
         this.Student.setID(Student_ID)
+
     }
     recordSession(Question_Object,Student_Object){
         var newSession = new SessionSchema({
@@ -741,36 +866,193 @@ module.exports= class Database {
             res.render('AddQuestions',{ title })
         })
 
-}///Record a session in the Session Schema Table
-    async getStudentID(firstName,lastName,email){
+    }///Record a session in the Session Schema Table
 
-        var _ID=0;
-        //First search if he's in there, if not, insert into Student SChema Tble and return newly ID
-        await Student_table.findOne({email:email }).then((artwork) => {
+    async getFinishedTest(test_package){
+        var dict_schema_1 = {
+            "ACT-Reading":"ReadingQuestion" ,
+            "ACT-Math": "MathQuestion",
+            "ACT-English": "EnglishQuestion"
+        }///associations between the response and the original questions on seperate tables
+        var dict_schema_2={
+            "ACT-Reading":'readingquestions' ,
+            "ACT-Math": "mathquestions",
+            "ACT-English": "englishquestions"
+        }
+        var test_list=test_package.split(" ");
+        var temp_list=[]
+        var temp_session=parseInt(test_list[2])
+        console.log("test package "+test_package)
+
+        async.waterfall(
+            [
+                function(callback) { Reading_table.find({ "Test":test_list[0]}).select("_id").exec(callback);
+                    console.log("inside reading table");
+                },
+                function(questions_1,callback) {
+                    console.log("inside Response table "+questions_1.length);
+                    Response_table.find({
+                        "modelId": { "$in": questions_1.map((current) => { return current._id }) },
+                        "Session": temp_session,
+                        "modelName_1": dict_schema_1[test_list[1]]
+                    }).populate("modelId").exec(callback);
+                }
+            ],function(err,questions) {
+                // filter and populated
+
+                var counter=0;
+                if (questions.length==0){
+
+                    return ["This Student had No Tests"];
+                }
+                for(var i=0;i<questions.length;++i){
+                    console.log("responses being returned "+" "+questions[i].modelId.Number+" "+questions[i].modelId.Test+" "+questions[i].modelId.Tag+" "+questions[i].modelId.Right_Answer);
+                    var Question_object=new Question(" ",[" "],questions[i].modelId.Right_Answer,questions[i].modelId.Tag,questions[i].modelId.Number,
+                        " ",questions[i].modelId.Test_Type,questions[i].modelId.Test,-1);
+                    Question_object.setHover_History(questions[i].Hover_History)
+                    Question_object.setCheckAnswer(questions[i].Check_Answer)
+                    Question_object.setResponse(questions[i].Response);
+                    Question_object.setRepeats(questions[i].Repeats);
+                    Question_object.setHint_Selection(questions[i].Hint_Selection);
+                    Question_object.setViews(questions[i].Views);
+                    Question_object.setTotalTime(questions[i].Total_Time.toString());
+                    Question_object.setTime(questions[i].Time);
+                    Question_object.setTime_Stamp(questions[i].time_stamp)
+                    Question_object.setConfidence(questions[i].Confidence)
+                    temp_list[counter]=Question_object
+                    ++counter;
+                }
+                console.log("inside length "+temp_list.length)
+            })
+        this.Normal_History=temp_list;
+        this.Test=test_list[0]//in order for scaled_scores() function to work well.
+        this.Test_Type=test_list[1];
+        var temp_Object=dict[test_list[1]].find({Test: test_list[0],Test_Type: test_list[1]}).populate("Passage_ID").lean()
+        var Question_object;
+        var keywords=[]
+        var counter=0;
+        await temp_Object.exec(function(err,Questions) {
+
+            for  (var i=0;i<Questions.length;++i){
+
+                for(var j=0;j<Questions[i].Choices.length;++j){
+                    Questions[i].Choices[j]=Questions[i].Choices[j].replace(/,/g, ' ');
+                }
+
+                Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                Question_object.setFirstHint(Questions[i].Hint_1);
+                Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
+                keywords[counter]=Question_object;
+                //console.log("keywords "+counter)
+                ++counter;
+            }
+
+        });
+
+        this.List_Questions=keywords;
+
+    }
+    async SearchStudent_Tests(firstName,lastName,email){//returns all tests student has taken
+        var ID= await this.getStudentID(firstName,lastName,email)
+        var set = new Set();
+        var temp_Object= Response_table.find({Student_ID:this.Student.ID}).populate("modelId")
+        temp_Object.populate("Student_ID").lean()
+        await temp_Object.exec(function(err,Responses){
+            if (Response.length==0){
+
+                return ["This Student had No Tests"];
+            }
+            for  (var i=0;i<Responses.length;++i){
+
+                    //console.log("                             Question ID                  Student ID     Tag")
+                    //console.log("REsponses returned "+Responses[i].modelId.Test.toString()+" "+Responses[i].modelId.Test_Type.toString())
+                    set.add(Responses[i].modelId.Test.toString()+" "+Responses[i].modelId.Test_Type.toString()+" "+Responses[i].Session);
+
+            }
+
+        });
+        return Array.from(set);
+    }
+    async addNewStudent(firstName,lastname,email){
+        firstName=firstName.toLowerCase()
+        lastname=lastname.toLowerCase()
+        email=email.toLowerCase()
+        var _ID=-1;
+        var _Session;
+        await Student_table.findOne({lastName:lastname,firstName:firstName}).then((artwork) => {
             if (artwork==null){
-                console.log("no student found")
+                console.log("no student found, now adding")
+
                 var newStudent = new Student_table({
                     firstName: firstName,
-                    lastName: lastName,
+                    lastName: lastname,
                     email: email,
+                    session:0
 
                 });
                 newStudent.save(function (err,id) {
                     if (err) return handleError(err);
                     console.log("Successfully saved student")
                     _ID=id;
+                    _Session=0;
                 })
+
+            }
+
+        })
+        this.setStudent(new Student(firstName,lastname,email,_ID,_Session))
+        return _ID
+    }
+    async getStudentID(firstName,lastname,email){
+
+        var _ID=0;
+        var _Session=0;
+        email=email.toLowerCase();
+        lastname=lastname.toLowerCase();
+        firstName=firstName.toLowerCase();
+        //First search if he's in there, if not, insert into Student SChema Tble and return newly ID
+        await Student_table.findOne({lastName:lastname,firstName:firstName}).then((artwork) => {
+            if (artwork==null){
+                console.log("no student found")
+                return;//We dont want to create a new student
+                var newStudent = new Student_table({
+                    firstName: firstName,
+                    lastName: lastname,
+                    email: email,
+                    session:0
+
+                });
+                newStudent.save(function (err,id) {
+                    if (err) return handleError(err);
+                    console.log("Successfully saved student")
+                    _ID=id;
+                    _Session=0;
+                })
+
             }
             else{
-                console.log("Found Student in Table"+artwork.id)
+                console.log("Found Student in Table"+artwork.id+" "+artwork)
                 _ID=artwork.id
+                email=artwork.email
+                firstName=artwork.firstName
+                _Session=artwork.session+1
             }
 
 
 
         })
+        if (_Session==0){
+            console.log("returing false because no student found")
+            return false;
+        }
+        console.log("Did session make it out? "+_Session+" "+email+" "+firstName )
+        this.setStudent(new Student(firstName,lastname,email,_ID,_Session))
+        if(_Session==0){
+            this.send_email("registered")
+        }
+        await Student_table.update({"firstName":firstName,"lastName":lastname},
+            {$set: { "session" : _Session}})
 
-        this.setStudent(new Student(firstName,lastName,email,_ID))
 
         return _ID
 
@@ -952,26 +1234,138 @@ module.exports= class Database {
 
 
     }
+
+    getRawScore(){//This function should only be called at the end
+        var wrong_count=0;
+        var questions_answered=[];
+        for  (var i=0;i< this.Normal_History.length;++i) {
+
+                if (this.Normal_History[i].Response != this.Normal_History[i].Right_Answer) {
+                    console.log("got it wrong "+this.Normal_History[i].Number+this.Normal_History[i].Response+" "+this.Normal_History[i].Right_Answer )
+                    ++wrong_count;
+                }
+
+            questions_answered.push(this.Normal_History[i].Number);
+        }
+        for (var i=0;i<this.List_Questions.length;++i){
+
+           // console.log("questions answered "+questions_answered)
+
+            if (questions_answered.indexOf(this.List_Questions[i].Number)>=0){
+               // console.log("He did answer this question" + this.List_Questions[i].Number)
+            }
+            else{
+               console.log("NEver answered "+this.List_Questions[i].Number)
+                ++wrong_count;
+            }
+
+        }
+        console.log("Total Wrong "+wrong_count)
+        return this.List_Questions.length-wrong_count;
+    }
+    fillArrayWithNumbers(n) {
+        var arr = Array.apply(null, Array(n));
+        return arr.map(function (x, i) { return i });
+    }
+
     async DisplayResultList(){
 
-        var temp_list=[]
-        temp_list.push("Number"+" "+"Test_Type"+" "+"Test"+" "+"Response"+" "+"Right Answer")
+        var temp_list=this.fillArrayWithNumbers(40)
 
+        //temp_list.push("Number"+" "+"Test_Type"+" "+"Test"+" "+"Time            "+        "Hint: ")
+        var questions_answered=[];
         for  (var i=0;i<this.Normal_History.length;++i){
 
-            console.log("REsponses returned"+" "+" "+this.Normal_History[i].Number+" "+this.Normal_History[i].Test_Type+"   "+this.Normal_History[i].Response+" "+this.Normal_History[i].Right_Answer)
-            if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
-                var temp=this.Normal_History[i].Number+" "+this.Normal_History[i].Test_Type+"         "+this.Normal_History[i].Test+"         "  +this.Normal_History[i].Response+"         "+this.Normal_History[i].Right_Answer
-                temp_list.push(temp);
-            }
+                if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
+                    var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
+                        this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views;
+                    //temp_list.push(temp);
+                    console.log("Displaying Results Got it Wrong "+temp)
+                    temp_list.splice(parseInt(this.Normal_History[i].Number)-1, 1, temp)
+                    this.List_Questions[this.Normal_History[i].Number-1].Response=this.Normal_History[i].Response
+                }
+                else{
+                    var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
+                        this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views;
+                    //temp_list.push(temp);
+                    console.log("Displaying Results Got it Right "+temp)
+                    temp_list.splice(parseInt(this.Normal_History[i].Number)-1, 1, temp)
+                    this.List_Questions[this.Normal_History[i].Number-1].Response=this.Normal_History[i].Response
+                }
+              //console.log("temp_list so far: "+temp_list)
+            questions_answered.push(this.Normal_History[i].Number);
+
         }
+        for (var i=0;i<this.List_Questions.length;++i){
+            if (questions_answered.indexOf(this.List_Questions[i].Number)>=0){
+               // console.log("He did answer this question " +this.List_Questions[i].Number )
 
+            }
+            else{
+                //console.log("Never answered "+this.List_Questions[i].Number)
+                var temp=this.List_Questions[i].Number+";"+this.List_Questions[i].Test_Type+";"+this.List_Questions[i].Test+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+this.List_Questions[i].Views;
+                //temp_list.push(temp);
+                temp_list.splice(parseInt(this.List_Questions[i].Number)-1, 1, temp)
+                console.log("Never Answered regular "+temp)
+            }
 
+        }
         return temp_list;
 
     }
+    async DisplayResultList_Tutor_View(){
+        var temp_list=[]
+
+        //temp_list.push("Number"+" "+"Test_Type"+" "+"Test"+" "+"Time            "+        "Hint: ")
+        console.log("length of Normal History "+this.Normal_History.length)
+        var questions_answered=[];
+        for  (var i=0;i<this.Normal_History.length;++i){
+
+            if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
+                var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
+                    this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
+                    ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence;
+                //temp_list.push(temp);
+                console.log("Displaying Results Got it Wrong_Tutor "+temp)
+                temp_list.push(temp)
+                this.List_Questions[this.Normal_History[i].Number-1].Response=this.Normal_History[i].Response
+                this.List_Questions[this.Normal_History[i].Number-1].Confidence=this.Normal_History[i].Confidence
+            }
+            else{
+                var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
+                    this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
+                    ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence
+                //temp_list.push(temp);
+                console.log("Displaying Results Got it Right_Tutor "+temp);
+                temp_list.push(temp)
+                this.List_Questions[this.Normal_History[i].Number-1].Response=this.Normal_History[i].Response
+                this.List_Questions[this.Normal_History[i].Number-1].Confidence=this.Normal_History[i].Confidence
+            }
+            //console.log("temp_list so far: "+temp_list)
+            questions_answered.push(this.Normal_History[i].Number);
+
+        }
+        this.Total_Time_Display=this.Normal_History[this.Normal_History.length-1].Total_Time;
+
+        for (var i=0;i<this.List_Questions.length;++i){
+            if (questions_answered.indexOf(this.List_Questions[i].Number)>=0){
+                // console.log("He did answer this question " +this.List_Questions[i].Number )
+
+            }
+            else{
+                //console.log("Never answered "+this.List_Questions[i].Number)
+                var temp=this.List_Questions[i].Number+";"+this.List_Questions[i].Test_Type+";"+this.List_Questions[i].Test+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+this.List_Questions[i].Check_Answer+";"+"Never Answered"+";"+this.List_Questions[i].Right_Answer+";"+ (this.List_Questions[i].Repeats-1)+";"+"Never Answered"+";"+"Never Answered"+";"+"Never/Answered";
+
+                temp_list.push(temp)
+                console.log("Never Answered_tutor_view "+temp)
+            }
+
+        }
+
+        return temp_list;
+    }
     DisplayQuestionsList(){
-        var temp=""
+        var temp="This is just a Sample Question, go to the Next Question to begin Test"+"\n"
         for (var i=0; i<this.List_Questions.length;++i){
             temp=temp+"Test: "+this.List_Questions[i].getTest().toString()+" "+ "number: "+" " +this.List_Questions[i].getNumber()+"\n"
 

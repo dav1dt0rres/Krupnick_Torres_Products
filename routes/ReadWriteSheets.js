@@ -58,7 +58,7 @@ router.get('/',function (req, res, next) {
 
     }
     else if (req.query.hasOwnProperty("calculate_button")){
-        console.log("Calculating Odds...")
+        console.log("Calculating Odds..."+req.query.University+" "+req.query.High_School)
         Workbook.Calculate_Odds(req.query.University,req.query.High_School,res,req)
     }
 

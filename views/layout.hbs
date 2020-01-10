@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
+  <head >
     <title id="header" name="header" >{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+      <link rel="stylesheet" type="text/css" media="screen and (min-device-width: 1000px)" href="/stylesheets/style.css" />
+      <link rel="stylesheet" type="text/css" media="screen and  (min-device-width: 600px) and (max-device-width: 999px)" href="/stylesheets/ipad.css" />
+      <link rel="stylesheet" type="text/css" media="screen and (max-device-width: 599px)" href="/stylesheets/mobile.css" />
   </head>
   <body>
     <header  id="header" name="header" >
@@ -36,7 +38,7 @@
 
               </div>
           </h1>
-          <button id="Exit" name="Exit" type="submit" >Exit </button>
+          <button onclick="HomeFunction()" id="Exit" name="Exit" type="submit" >Exit back Home </button>
 
       {{/if}}
     </header>
