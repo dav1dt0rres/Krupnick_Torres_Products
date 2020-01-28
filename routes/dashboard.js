@@ -194,7 +194,7 @@ router.get('/Question_Loop',async function (req, res, next) {
 
     var Database_Object=Current_Sessions[req.query.Database_Index]
 
-    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+req.query.Exit_bool)
+    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+req.query.Masked_bool+" "+req.query.Database_Index)
     //console.log("argument passed"+" "+req.query.tagged_Questions_holder);//brings back the index for the tagged question
     if (Database_Object.Count==0){
 
@@ -209,7 +209,9 @@ router.get('/Question_Loop',async function (req, res, next) {
     else if(req.query.Exit_bool=="true"){
         console.log("Entering Exit")
         console.log("Length before"+Current_Sessions.length)
-        Current_Sessions.splice(req.query.Database_Index,1)
+
+        //Current_Sessions.splice(req.query.Database_Index,1)
+
         title="Welcome to your Dashboard, "+Database_Object.Student.firstName;
         console.log("Length after+Current_Sessions.length"+Current_Sessions.length)
         res.render('dashboard', {title,FirstName:Database_Object.Student.firstName,LastName:Database_Object.Student.lastName, Email:Database_Object.Student.email })
@@ -241,7 +243,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         console.log("Inside get next question at an index")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
 
-        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history)
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history,req.query.Eliminated_Answers)
         var end=await Database_Object.getNextQuestion(parseInt(req.query.normal_Question_Index));
         if(end==false){
             var scaled=readScaledScore(Database_Object)
@@ -292,9 +294,6 @@ router.get('/Question_Loop',async function (req, res, next) {
 
     }
 
-
-
-
     title=Question_object.Number+".)"+" "+Question_object.Question_text;
 
 
@@ -307,15 +306,17 @@ router.get('/Question_Loop',async function (req, res, next) {
     //console.log("Passage Outside"+" "+Question_object.getPassage())
     element.value=Question_object.getPassage()
 
-
+    console.log("timetestcurrent "+Database_Object.getTest_Time_Current())
     res.render('register_Question', {Question_Body_Holder:title, Question_Number: Question_object.Number, Passage_Holder:element.value, Answer_A:Question_object.getOptions()[0],
         Answer_B:Question_object.getOptions()[1],Answer_C:Question_object.getOptions()[2],
         Answer_D: Question_object.getOptions()[3], Answer_E:Question_object.getOptions()[4],
-        Database_Index: req.query.Database_Index, tagged_Questions_holder:Database_Object.DisplayTaggedList(),
+        Database_Index: req.query.Database_Index,
+        Eliminated_Answers:Question_object.Eliminated_Answers.join(","),Masked_bool:req.query.Masked_bool,
         Right_Answer:Question_object.Right_Answer,normal_Question_Index:Database_Object.Normal_Index,Tag_Holder:Question_object.Tag,
         Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
+        Total_Time:Database_Object.getTest_Time_Current(),
         First_Hint_holder:Question_object.First_Hint.join(" "),Final_Questions_holder:[],Time_Limit_Holder:Database_Object.Question_Time_Limit,
-        Total_Time:Database_Object.getTest_Time_Current(),Question_Length:Database_Object.List_Questions.length,
+        Question_Length:Database_Object.List_Questions.length,
         Combo_Holder:Question_object.Response,
         CheckBox_List:Database_Object.CheckBox_List,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
     })
@@ -446,6 +447,7 @@ router.get('/automatedEmail_Student_Send',async function(req,res,next){
 })
 router.get('/SearchStudent',async function (req,res,next){
     var title="     "
+    console.log("/SearchStudent "+req.query.get_test)
     if(req.query.get_test=="true"){//this was done as a warmup to let the lists populate before they are shown
         var Database_Object=Current_Sessions[req.query.Database_Index]
         Database_Object.Student.firstName=req.query.firstName;
@@ -482,13 +484,13 @@ router.get('/SearchStudent',async function (req,res,next){
         return;
 
     }
-    else if (req.query.hasOwnProperty("student_test")){
+    else if (req.query.get_test=="false"){///The user just wants to send the Student an email
         console.log("inside student_test has own property "+req.query.FirstName)
         title="Select the options you want to students to take the Test under...."
         res.render('Test_Options_send_email',{title, FirstName:req.query.firstName,LastName:req.query.lastName,Email:req.query.email})
         return;
     }
-    console.log("looking for this studenets name: "+req.query.lastName);
+    console.log("looking for this studenets name: "+req.query.lastName+" "+req.query.firstName+" "+req.query.email);
     var Database_Object=new Database(0,0,Current_Sessions.length,['student',0,0]);
     //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
     var test_list=await Database_Object.SearchStudent_Tests(req.query.firstName,req.query.lastName,req.query.email);

@@ -20,6 +20,7 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
     }
     else if(test_type=="ACT-English"){
         var English_Question = require('./English_Question.js')
+
         return new English_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID)
     }
     else{
@@ -33,6 +34,7 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         this.Hover_History=hover_history;
     }
     Question.prototype.setResponse=function(response){
+        console.log("setting response short")
         this.Response=response;
     }
     Question.prototype.setRepeats=function(repeats){
@@ -56,6 +58,9 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
     Question.prototype.setConfidence=function(confidence){
         this.Confidence=confidence
     }
+    Question.prototype.setPassageID=function(passage_ID){
+        this.Passage_ID=passage_ID
+    }
     Question.prototype.setPresentation_Highlight=function(presentation_list){
         if(presentation_list==null){
 
@@ -73,13 +78,16 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         this.Right_Answer=Right_Answer;
         this.Passage=Passage;
     }
-    Question.prototype.setResponse=function (response,confidence,old_answer){
-        //console.log("INside setting Response"+response+" "+old_answer)
+    Question.prototype.setResponse_Long=function (response,confidence,old_answer,eliminated_answers){
+        console.log("setting Response LONG"+response+" "+old_answer)
         if (response!=old_answer){
             ++this.Repeats;
         }
         this.Confidence=parseInt(confidence)
         this.Response=response;
+        console.log("Eliminated Answers split: "+eliminated_answers.split(","))
+        this.Eliminated_Answers=eliminated_answers.split(",")
+        console.log("Eliminated Answers joined: "+this.Eliminated_Answers.join(","))
     }
     Question.prototype.setTime=function (time){
         //console.log("INside Setting Time"+time)

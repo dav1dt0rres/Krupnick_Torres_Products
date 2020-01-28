@@ -16,14 +16,16 @@
 
 
 <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
+<div class="Correct_Answer" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
 <div class="container">
-    <div class="Correct_Answer" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
 
-<div id="backdrop" name="backdrop" class="backdrop">
-    <div id ="highlights" name="highlights" class="highlights"></div>
-</div>
 
+    <div id="backdrop" name="backdrop" class="backdrop">
+        <div id ="highlights" name="highlights" class="highlights"></div>
+
+    </div>
     <textarea onmouseenter="recordHover('passage_box_enter')" onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
+
 
 </div>
 
@@ -39,36 +41,36 @@
     <input type="hidden" id="hover_history" name="hover_history" value="{{hover_history}}"  />
 
     <input type="hidden" id="Question_Number" name="Question_Number" value="{{Question_Number}}"  />
-    <div class="container_1">
+    <div id="container_1" class="container_1">
         <div class="Tag_Display" id="Tag_Display" name="Tag_Display"><span ></span> </div>
 
 
         <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  ></h4>
 
 
-    <label  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA" name="Answer_A" >
+    <label  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA_1" name="Answer_A" >
         A.)
         <p onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </p>
 
     </label>
-    <label onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB" >
+    <label onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB_1" >
         B.)
         <p onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </p>
 
     </label>
-    <label onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC">
+    <label onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC_1">
         C.)
         <p onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </p>
 
     </label>
-    <label onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD">
+    <label onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD_1">
         D.)
         <p onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </p>
 
     </label>
     <label onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE">
         E.)
-        <p onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE" >{{Answer_E}} </p>
+        <p onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE_1" >{{Answer_E}} </p>
 
     </label>
 
@@ -125,10 +127,12 @@
     <ul id="hints" class="menu_1-bar">
 
         <li onclick="giveFirstHint()"><a href="#" >Display 1st Hint</a></li>
-        <li><a href="#">Display 2nd Hint</a></li>
-        <li><a href="#">Take away Choices</a></li>
+        <li onclick="maskedMode()" ><a href="#">Masked Mode</a></li>
+        <li onclick="optionEliminateMode()"><a href="#">Take away Choices</a></li>
 
     </ul>
+
+    <input type="hidden" id="Eliminated_Answers" name="Eliminated_Answers" value="{{Eliminated_Answers}}"  />
     <input type="hidden" id="CheckBox_List" name="CheckBox_List" value="{{CheckBox_List}}"  />
     <input type="hidden" id="Question_Body_Holder" name="Question_Body_Holder" value="{{Question_Body_Holder}}"  />
     <input type="hidden" id="time" name="time" value="{{time}}"  />
@@ -137,6 +141,8 @@
     <input type="hidden" id="tagged_Questions_holder" name="tagged_Questions_holder" value="{{tagged_Questions_holder}}"  />
     <input type="hidden" id="First_Hint_holder" name="First_Hint_holder" value="{{First_Hint_holder}}"  />
     <input type="hidden" id="Presentation_Holder" name="Presentation_Holder" value="{{Presentation_Holder}}"  />
+    <input type="hidden" id="Eliminate_bool" name="Eliminate_bool" value="{{Eliminate_bool}}"  />
+    <input type="hidden" id="Masked_bool" name="Masked_bool" value="{{Masked_bool}}"  />
     <input type="hidden" id="Exit_bool" name="Exit_bool" value="{{Exit_bool}}"  />
 </form>
 
@@ -171,10 +177,18 @@
     function recordHover(argument){
 
         var list_of_events=document.getElementById("hover_history").value.split(",");
-        list_of_events.push(argument)
+        //list_of_events.push(argument)
         if(argument=='A' || argument=='B'|| argument=='C'|| argument=='D'){
             console.log("inside the highlighting the choice "+argument)
-            document.getElementById("para"+argument).style.backgroundColor="#C0C0C0"
+            if(document.getElementById("Eliminate_bool").value=="true"){
+                document.getElementById("para"+argument).style.textDecoration = "line-through";
+
+            }
+
+            else{
+                document.getElementById("para"+argument).style.backgroundColor="#C0C0C0"
+            }
+
         }
         document.getElementById("hover_history").value=list_of_events.join(",")
         //console.log("Hover history: "+document.getElementById("hover_history").value);
@@ -182,11 +196,30 @@
     }
     function leavingOption(argument){
         console.log("leaving "+argument)
-        document.getElementById("para"+argument).style.backgroundColor="white"
+        if(document.getElementById("Eliminate_bool").value=="true"){
+            document.getElementById("para"+argument).style.textDecoration = "none";
+        }
+
+        else{
+            document.getElementById("para"+argument).style.backgroundColor="white"
+        }
+
     }
+
     function clickedOption(element){
         var list=["paraA","paraB","paraC","paraD","paraE"]
+        if(document.getElementById("Eliminate_bool").value=="true"){
+            document.getElementById(element).style.textDecoration ="line-through";
+            document.getElementById("Eliminated_Answers").value=document.getElementById("Eliminated_Answers").value+","+element;
+            document.getElementById("html").style.cursor = "default";
+            document.getElementById("Eliminate_bool").value="false"
+            return;
+        }
+        else if(document.getElementById("Masked_bool").value=="true"){
+            console.log("Para print out "+"para"+element)
+            document.getElementById(element).style.visibility="visible"
 
+        }
         for(var i=0;i<list.length;++i){
             console.log("comparing "+list[i].localeCompare(element))
             if (list[i].localeCompare(element)==0){
@@ -257,6 +290,37 @@
         }, 1000);
 
 
+    }
+    function maskedMode(){
+        if(document.getElementById("Masked_bool").value =="true"){//true
+            document.getElementById("Masked_bool").value ="false";
+            document.getElementById("paraA").style.visibility = "visible";
+            document.getElementById("paraB").style.visibility = "visible";
+            document.getElementById("paraC").style.visibility = "visible";
+            document.getElementById("paraD").style.visibility = "visible";
+
+
+        }
+        else {
+            document.getElementById("paraA").style.visibility= "hidden";
+            document.getElementById("paraB").style.visibility = "hidden";
+            document.getElementById("paraC").style.visibility = "hidden";
+            document.getElementById("paraD").style.visibility = "hidden";
+            document.getElementById("Masked_bool").value ="true"
+        }
+    }
+    function optionEliminateMode(){
+        if(document.getElementById("Eliminate_bool").value == "true"){
+            document.getElementById("Eliminate_bool").value ="false";
+            document.getElementById("html").style.cursor = "default";
+            return;
+        }
+        console.log("Inside option eliminate mode")
+        //document.getElementById("container_1").style.cursor = "wait"
+        document.getElementById("html").style.cursor = "wait";
+
+        document.getElementById("Eliminate_bool").value = "true";
+        //document.getElementById("paraA").style.textDecorationThickness = "0.2rem";
     }
     function forceChange(){
 
@@ -383,8 +447,6 @@
                 }
 
 
-
-
             }
             else{
                 var li=document.createElement("LI");
@@ -403,6 +465,7 @@
             ul.appendChild(li);
             if (li.id=='center'){
                 document.getElementById("center").scrollIntoView();
+                window.scrollTo(0,0);
 
             }
 
@@ -551,6 +614,21 @@
         }
 
     }
+    function loadEliminatedAnswers(){
+        console.log("Eliminated_ANswers: "+document.getElementById("Eliminated_Answers").value.replace(/ /g,''))
+
+        if (document.getElementById("Eliminated_Answers").value.replace(/ /g,'').length==0){
+            return;
+        }
+        var eliminated_list=document.getElementById("Eliminated_Answers").value.replace(/\s/g,'').split(",")
+        for (var i=0;i<eliminated_list.length;++i){
+           console.log("letter "+eliminated_list[i])
+            if(eliminated_list[i].length>0){
+                document.getElementById(eliminated_list[i]).style.textDecoration='line-through'
+            }
+
+        }
+    }
 
     function loadMisc(){
         document.getElementById("combo").value= document.getElementById("Combo_Holder").value
@@ -589,39 +667,136 @@
 
         }
     }
+
     function showPresentationHighlight(){
         console.log("Inside presentation highlight")
-        const set1 = new Set([]);
+        var myArr=[]
         var Count=0;
         var highlighted_text=document.getElementById("Presentation_Holder").value.split(" ")
-
+        for(var i=0;i<highlighted_text.length;++i){
+            highlighted_text[i]=highlighted_text[i].replace("*","")
+        }
 
         console.log("PResentation highlight: "+highlighted_text)
         var text_list=document.getElementById("Passage_Holder").value.split(" ")
+        var question_number=(parseInt(document.getElementById("normal_Question_Index").value)+1).toString()
         for (var i=0;i<text_list.length;++i){
-           // console.log("Count  "+ Count+" "+text_list[i].replace(/\n/g, '')+" "+highlighted_text);
-            if (highlighted_text.includes(text_list[i].replace(/\n/g, '')) && text_list[i].length>0 ){
-               // console.log("counting.. "+text_list[i]+" "+Count+" index: "+i)
-                ++Count;
-                if(Count>3){
-                    //console.log("includes"+" "+text_list[i]+" "+Count+" index: "+i)
-                    set1.add(i-4)
-                    set1.add(i-3)
-                    set1.add(i-2)
-                    set1.add(i-1)
-                    set1.add(i)
+          // console.log(text_list[i]);
 
+
+            if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){
+                console.log("Found iT!!!!!: "+highlighted_text)
+                for (var j=0;j<highlighted_text.length;++j){
+                    var text_word=text_list[i-j].replace(/\n/g, '').replace(/\*/g, '').replace(/\s/g, '')
+                    console.log("comparing "+text_word)
+                    if (highlighted_text.includes(text_word)){
+                        //console.log("Accepting "+text_word)
+                        myArr.push(i-j)
+                    }
                 }
-            }
-            else{
-                Count=0;
+
+                break;
+
+
             }
 
         }
-        var myArr = Array.from(set1)
+        console.log("myArray going in_Red "+myArr)
 
 
-        document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Box").value.split(" "),myArr)
+
+        document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Holder").value.split(" "),myArr)
+
+    }
+    function showBlackUnderlines(){
+        var text_list=document.getElementById("Passage_Holder").value.split(" ")
+        console.log("show black underlines "+text_list.length)
+        var i=0;
+        var myArr=[]
+        var highlighted_text=document.getElementById("Presentation_Holder").value.split(" ")
+        var temp_text=text_list.join(" ")
+        var underlined_section=""
+        var question_number=(parseInt(document.getElementById("normal_Question_Index").value)+1).toString()
+        for(var i=0;i<highlighted_text.length;++i){
+            highlighted_text[i]=highlighted_text[i].replace("*","").replace("*","")
+        }
+        console.log("highlighted Text "+highlighted_text)
+       while(i<text_list.length){
+
+            //console.log(text_list[i].replace(/\n/g, '').includes('*'))
+           if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){//the red underlined, looks for the present [number]
+               console.log("Highlighted Text_Red: "+highlighted_text)
+               for (var j=1;j<highlighted_text.length;++j){
+                   var text_word=text_list[i-j].replace(/\n/g, '').replace(/\*/g, '').replace(/\s/g, '')
+                   console.log("comparing_Red "+text_word)
+                   if (highlighted_text.includes(text_word)){
+                       console.log("Accepting_Red "+text_word)
+                       myArr.push(i-j)
+                   }
+
+               }
+
+               for (var x=myArr.length-1;x>=0;--x) {
+
+
+                   underlined_section = underlined_section+" "+text_list[myArr[x]]
+                   console.log("Highlighting_Red so far:" + underlined_section);
+
+               }
+
+               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline>$&</underline>')
+
+
+           }
+           else if (text_list[i].replace('*', '').includes('*')){///if the asteriks are only one word
+               console.log("Found ONLY one: "+text_list[i].replace(/\n/g, ''))
+               if(text_list[i+1].replace(/\n/g, '')=='['+question_number+']'){
+                   underlined_section=""
+               }
+               else{
+                   underlined_section = text_list[i].replace(/\n/g, '')
+               }
+
+               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
+               //myArr.push(i)
+           }
+           else if(text_list[i].replace(/\n/g, '').includes('*')){
+
+                console.log("Found first one: "+text_list[i].replace(/\n/g, ''))
+                underlined_section = text_list[i].replace(/\n/g, '')
+                var j=1;
+                while(text_list[i+j].replace(/\n/g, '').includes('*')==false){
+
+
+                    underlined_section = underlined_section+" "+text_list[i+j].replace(/\n/g, '')
+
+                    ++j;
+                    if(j>100){
+                        break;
+                    }
+                }
+               console.log("Found second one: "+text_list[i+j].replace(/\n/g, ''))
+                if(text_list[i+j+1].replace(/\n/g, '')=='['+question_number+']'){
+                    underlined_section=""
+                }
+                else{
+                    underlined_section = underlined_section+" "+text_list[i+j].replace(/\n/g, '')
+                }
+
+               console.log("underlined "+underlined_section)
+               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
+
+
+                i=i+j
+            }
+
+            i=i+1;
+           underlined_section=""
+        }
+
+        document.getElementById("highlights").innerHTML=temp_text
+        return temp_text
+
     }
     function giveFirstHint(){
         console.log("inside give firstHint")
@@ -663,17 +838,46 @@
         document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Box").value.split(" "),myArr)
     }
     function applyHighlights(text_list,myArr){
-        for (var i=0; i<myArr.length;++i){
-            text_list[myArr[i]]=text_list[myArr[i]]+'*'
-        }
-        var temp_text=text_list.join(" ")
-        for (var i=0;i<myArr.length;++i){
-            console.log("Highlighting "+text_list[myArr[i]]);
 
-            temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<mark>$&</mark>')
+        var temp_text="";
+        var initial=0;
+        var underlined_section=""
+        temp_text=text_list.join(" ")
+
+        for (var i=myArr.length-1;i>=0;--i) {
+            console.log("Highlighting " + text_list[myArr[i]]);
+
+            underlined_section = underlined_section+" "+text_list[myArr[i]]
+            //temp_text = temp_text + " " + '<u>add</u>'
+            //initial = myArr[i]
+            //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<mark>$&</mark>')
+            //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<underline>$&</underline>')
+           // console.log("Highlighted section so far " + underlined_section);
+
         }
+
+        temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline>$&</underline>')
+
         //return text.replace(/\n$/g, '\n\n').replace(/[A-Z].*?\b/g, '<mark>$&</mark>')
+
+        //console.log("Temp TExt COmplte "+temp_text)
         return temp_text; //should always return a string
+    }
+    function applyHighlights_black_underline(text_list,myArr){//The function that underlines all asteriks on the english passage
+        var temp_text="";
+        var underlined_section=""
+
+        for (var i=0;i<myArr.length;++i) {
+            console.log("Highlighting " + text_list[myArr[i]]);
+
+            //underlined_section = underlined_section+" "+text_list[myArr[i]]
+
+        }
+
+        //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
+
+        return temp_text
+
     }
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -684,14 +888,20 @@
         document.getElementById("backdrop").scrollTop=document.getElementById("Passage_Box").scrollTop;
         recordHover('scrolling '+document.getElementById("Passage_Box").scrollTop)
     }
+    function scrollFunction_2(){
+        console.log("INside the scroll callback (Height) "+" "+document.getElementById("highlights").scrollTop)
+        document.getElementById("backdrop").scrollTop=document.getElementById("highlights").scrollTop;
+        recordHover('scrolling '+document.getElementById("Passage_Box").scrollTop)
+    }
     function centerButtons(){
 
 
 
 
     }
-
     window.onload = function () {
+
+        console.log("inside load")
         document.addEventListener("click", function mainFunction(event) {
                     console.log("inside main function "+event.target.id.toString())
                     if(event.target.id.toString()=="menu_1-button_home" || event.target.id.toString()=="menu_1-button_tag" || event.target.id.toString()=="menu_1-button_hint" )
@@ -702,10 +912,10 @@
                         console.log("Clicked outside")
                         var element = document.getElementById("tagged_question_list").className="menu_1-bar";
 
-                       // element.classList.toggle("close");
+                        // element.classList.toggle("close");
                         element = document.getElementById("hints").className="menu_1-bar";
 
-                       // element.classList.toggle("close");
+                        // element.classList.toggle("close");
                         element = document.getElementById("menu_1-bar").className="menu_1-bar";
 
                     }
@@ -722,20 +932,32 @@
         var time_value=document.querySelector('#time')
         startTimer(duration, display,time_value);
         document.getElementById("menu").style.display="block";
-        loadTaggedQuestions();
+       //loadTaggedQuestions();
         //loadWeaknessQuestions();
         loadQuestionBody();
         //loadbuttons();
         loadButtonsBottom();
         centerButtons();
         loadMisc();
-       // console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
-        //console.log("Print First"+" "+y)
-        document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
+        loadEliminatedAnswers();
+        if(document.getElementById("Masked_bool").value =="true"){//true
+
+            document.getElementById("paraA").style.visibility = "hidden";
+            document.getElementById("paraB").style.visibility = "hidden";
+            document.getElementById("paraC").style.visibility = "hidden";
+            document.getElementById("paraD").style.visibility = "hidden";
+
+
+        }
+// console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
+        //console.log("Print First"+" "+y)]
+
+
         document.getElementById("number_checks").value=(0).toString()
+        document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
         //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)
-        showPresentationHighlight();
+        showBlackUnderlines();
 
 
 
@@ -761,7 +983,6 @@
             console.log("event lister for tagge questions-2")
             var element = document.getElementById("hints");
             element.classList.toggle("open") });
-
-
     };
+
 </script>

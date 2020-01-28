@@ -523,12 +523,27 @@ circle{
     from {opacity: 0;}
     to {opacity:1 ;}
 }
+
+.Passage_Box{
+    width: 470px;
+    height: 950px;
+    color:transparent;
+
+}
+.container, .backdrop, textarea {
+    width: 470px;
+    height: 950px;
+    left:40px;
+    position:absolute;
+}
 .container {
-    display: block;
+
+
     margin: 0 auto;
     transform: translateZ(0);
     -webkit-text-size-adjust: none;
-    position: relative;
+
+
 }
 textarea {
     display: block;
@@ -543,23 +558,43 @@ textarea {
     resize: none;
     transition: transform 1s;
 }
-.backdrop {
 
+.backdrop {
+    position: absolute;
     z-index: 1;
     border: 2px solid #685972;
     background-color: #fff;
     overflow: auto;
     pointer-events: none;
     transition: transform 1s;
-
-
 }
-.backdrop, .container, textarea {
-    width: 450px;
-    height: 600px;
-    position: absolute;
-    left: 40px;
+
+.highlights {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color:black;
 }
+.highlights, textarea {
+    padding: 10px;
+    font: 15px/22px 'Open Sans', sans-serif;
+    letter-spacing: 1px;
+}
+
+mark {
+    border-radius: 3px;
+    color: transparent;
+    background-color: #d4e9ab; /* or whatever */
+}
+underline{
+    text-decoration: underline;
+    text-decoration-color: red;
+}
+
+underline_black{
+    text-decoration: underline;
+    text-decoration-color: black;
+}
+
 .text_area_input, .container_input{
     width: 500px;
     height: 600px;
@@ -567,18 +602,6 @@ textarea {
     top:500px;
     left: 10px;
 }
-.highlights, textarea {
-    padding: 10px;
-    font: 20px/28px 'Open Sans', sans-serif;
-    letter-spacing: 1px;
-
-}
-.highlights {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    color: transparent;
-}
-
 .container_1{
     width: 400px;
     height: 800px;

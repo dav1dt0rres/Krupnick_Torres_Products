@@ -8,16 +8,18 @@
     <input type="hidden" id="FirstName_Holder" name="FirstName_Holder" value="{{FirstName_Holder}}"  />
     <input type="hidden" id="email_Holder" name="email_Holder" value="{{email_Holder}}"  />
     <input type="hidden" id="get_test" name="get_test" value="{{get_test}}"  />
+    <input type="hidden" id="Final_Names" name="Final_Names" value="{{Final_Names}}"  />
 
     <div class="col-3">
-        <input id="lastName" name="lastName" class="effect-10" type="text" placeholder="Enter Student Last Name">
+        <input id="lastName" name="lastName" class="effect-10" type="text" placeholder="Enter Student Last Name" value="{{lastName}}">
         <span class="focus-bg"></span>
 
         <input id="firstName" name="firstName" class="effect-10" type="text" placeholder="Enter Student First Name">
         <span class="focus-bg"></span>
 
-        <input id="email" name="email" class="effect-10" type="text" placeholder="Enter Email">
+        <input id="email" name="email" class="effect-10" type="text" placeholder="Enter Email" value="{{email}}">
         <span class="focus-bg"></span>
+
     </div>
 
     <label id="test_label" name="test_label">
@@ -29,15 +31,19 @@
         </select>
     </label>
 
+    <table id='tbl' border=1></table>
 
 
-    <button id="Search" name="Search" type="submit">Get all Past Tests</button>
 
-    <button id="student_test" name="student_test" type="submit">Send this Student a test</button>
 </form>
+<button type="button" onclick= "student_test();" id="student_test" name="student_test" >Send this Student a test</button>
 </body>
 
 <script type="text/javascript">
+    function student_test(){
+        document.getElementById("get_test").value="false";
+        document.getElementById("form").submit()
+    }
     window.onload = function () {
 
     if (document.getElementById("Tests_Returned").value=="true"){
@@ -47,10 +53,59 @@
 
     }
 
-
+    if(document.getElementById("Final_Names").value.length>0){
+        loadFinalNames()
+    }
     };
     function select(){
         document.getElementById("get_test").value="true";
         document.getElementById("form").submit()
+    }
+
+    function loadFinalNames(){
+        console.log("Inside loadFinalQuestions "+document.getElementById("Final_Names").value)
+        var FinalList=document.getElementById("Final_Names").value.split(",")
+        //console.log(FinalList)
+        //var ul=document.getElementById("Final_Questions");
+        var tbl = document.getElementById('tbl');
+
+            addRow(tbl, 'Name',"Email");
+            for (var i=0;i<FinalList.length;++i){
+                console.log(FinalList[i])
+                var temp_list=FinalList[i].split(" ")
+                addRow(tbl, temp_list[0],temp_list[1],temp_list[2]);
+
+               // console.log("This is the value its returned"+FinalList[i].split(",")[0]+FinalList[i].split(",")[1]+" "+ FinalList[i].split(",")[2]+" "+FinalList[i].split(",")[3]+" "+FinalList[i].split(",")[4]+" "+FinalList[i].split(",")[5]+" "+FinalList[i].split(";")[6]+" "+FinalList[i].split(";")[9])
+            }
+
+    }
+    function addRow(tbl, val_1,val_2,val_3) {
+        var tr = document.createElement('tr');
+
+        addCell(tr, val_1);
+        addCell(tr, val_2);
+        addCell(tr, val_3);
+        tr.onclick=async function(event) {
+
+            document.getElementById("lastName").value=val_1;
+            document.getElementById("firstName").value=val_2;
+            document.getElementById("email").value=val_3
+            console.log("Selected Name "+document.getElementById("Final_Names").value)
+            console.log('clicked!!!! '+document.getElementById("form").submit());
+
+        }
+        tbl.appendChild(tr)
+    }
+    function addCell(tr, val) {
+        //console.log("response and right answer"+" "+response+" "+right_answer+" "+val);
+
+            //console.log("correct")
+            var td = document.createElement('td');
+            td.style.color='black'
+            td.innerHTML = val;
+            //td.value=val;
+
+
+        tr.appendChild(td)
     }
 </script>

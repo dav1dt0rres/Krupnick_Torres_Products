@@ -27,8 +27,11 @@ router.get('/', async function (req, res, next) {
 
     if( req.query.hasOwnProperty("Search_Student")){
         title= "Type in student last name"
-
-        res.render('SearchStudent',{title, Test_Type:"ACT",FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email})
+        var Database_Object=new Database(0,0,2,['student',0,0]);
+        //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+        var name_list=await Database_Object.SearchAllStudents();
+        console.log("name list lnegt "+name_list.length)
+        res.render('SearchStudent',{title, Test_Type:"ACT",Final_Names:name_list})
     }
 
 

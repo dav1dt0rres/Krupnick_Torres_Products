@@ -164,7 +164,7 @@ module.exports= class Database {
             var mailOptions = {
                 from: 'bot@gmail.com',
                 //to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com,cameronmarshall.gong@gmail.com',
-                to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com,cameronmarshall.gong@gmail.com',
+                to: 'davidtorres7888@gmail.com',
                 subject: this.Student.firstName+" "+this.Student.lastName+" just finished: "+this.Test+" "+this.Test_Type,
                 text: 'That was easy!',
 
@@ -184,7 +184,7 @@ module.exports= class Database {
                 "Test_Type="+this.Test_Type+"&"
             var mailOptions = {
                 from: 'bot@gmail.com',
-                to: this.Student.email,
+                to: this.Student.email+',joekrupnick@gmail.com',
                 subject: "Please take the following Exam at your convenience: "+this.Test+" "+this.Test_Type,
                 text: "",
                 html: '<b>Dont forget to input a time for each question and the Total Time the Test should take. Please use this email to bring up any issues.   </b><p>Click <a href='+string+'>here</a> to go take the test</p>'
@@ -217,9 +217,13 @@ module.exports= class Database {
                 seconds=59;
             }
             if (minutes < 0){
-                console.log("inside negative")
-                this.Test_Time_Current=0;
-                clearInterval(interval);
+                //console.log("inside negative")
+
+
+
+
+                //this.Test_Time_Current=0;
+                //clearInterval(interval);
 
             }
 
@@ -239,10 +243,20 @@ module.exports= class Database {
             console.log("Test Time is nullified")
             return ""
         }
+        else if(this.Test_Time_Current.includes("-")){
+
+            var minutes = parseInt(this.Test_Time_Current.split(":")[0].replace("-",''), 10);
+            var seconds = parseInt(this.Test_Time_Current.split(":")[1], 10);
+            console.log("Test Time is over, adding it to the total time: "+ (parseInt(this.Test_Time_Limit)+minutes).toString()+":"+seconds.toString())
+
+
+            return (parseInt(this.Test_Time_Limit)+minutes).toString()+":"+seconds.toString()
+        }
         console.log("Total Test Time Current "+this.Test_Time_Current);
         return this.Test_Time_Current
     }
    async InitializeQuestions(){
+
         await this.initializeNormal_List()
         this.orderNormal_List()
         //populate the Tag list with new tag (if any changed occured)
@@ -256,6 +270,10 @@ module.exports= class Database {
         this.Last_Question=this.List_Questions[0]
 
         this.Normal_Index=this.Last_Question.Number
+        for(var i=0;i<this.List_Questions.length;++i){
+           // console.log("ordering "+this.List_Questions[i].Number)
+        }
+
     }
     async initialize_Tag_history(){
         console.log("initialize Tag History")
@@ -366,9 +384,11 @@ module.exports= class Database {
             for  (var i=0;i<Questions.length;++i){
 
                 for(var j=0;j<Questions[i].Choices.length;++j){
+                    //console.log("Choices before "+Questions[i].Choices[j])
                         Questions[i].Choices[j]=Questions[i].Choices[j].replace(/,/g, ' ');
+                    //.log("Choices After "+Questions[i].Choices[j])
                 }
-
+                //console.log("questions returned "+Questions[i].Question_body.join(" ")+" "+Questions[i].Choices+" "+Questions[i].Number+" "+Questions[i].Passage_ID._id+" "+Questions[i]._id)
                 Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                 Question_object.setFirstHint(Questions[i].Hint_1);
                 Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
@@ -546,6 +566,7 @@ module.exports= class Database {
         //console.log("Length of Normal History"+" "+this.Normal_History.length);
         console.log("current"+" "+current_index);
         this.Last_Question=this.List_Questions[current_index];
+        console.log("cjoices "+this.Last_Question.Choices)
         this.Normal_Index=current_index
         return true;
 
@@ -575,6 +596,8 @@ module.exports= class Database {
                 Question_object=new Question(Question_re.Question_body.join(" "),Question_re.Choices,Question_re.Right_Answer,Question_re.Tag,Question_re.Number,Question_re.Passage_ID.Passage.join(' '),Question_re.Test_Type,Question_re.Test,Question_re._id)
                                // new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                 Question_object.setFirstHint(Question_re.Hint_1);
+                Question_object.setPassageID(Question_re.Passage_ID._id);
+                console.log("Passage_ID_OLD "+Question_re.Passage_ID._id)
                 Question_object.setID(Question_re._id)
                 Question_object.setPresentation_Highlight(Question_re.Presentation_Highlight)
                 keywords[counter]=Question_object;
@@ -645,8 +668,8 @@ module.exports= class Database {
 
             ++i
         }
-        console.log("Long Word List"+" "+temp_list)
-        console.log("Long Word List"+" "+temp_list2)
+        //console.log("Long Word List"+" "+temp_list)
+       // console.log("Long Word List"+" "+temp_list2)
         if (count>3){
             console.log("Same passage")
 
@@ -659,27 +682,41 @@ module.exports= class Database {
     async addNewQuestion(BodyList){
         //console.log("Inside adding new Question in Database: Passage-->"+" "+BodyList[10]+"Question Body"+BodyList[0]+"Tag::  "+BodyList[6].join(" "))
         var newQuestion;
-        var newPassage;
-        var Object_ID=-1;
+        var new_passageId;
+
+        if (this.Last_Question==null){///This happens in case user accidently submits a new one if its already there
+            console.log("Inside this.last_question==nulll")
+            if(await this.SearchQuestion("",BodyList[11][0],BodyList[8][0],BodyList[7][0])==1){///this basically covers the Users ass
+                console.log("Question Already exists in database so only editing, adding new branch: "+BodyList.length)
+                new_passageId=await this.EditQuestion(BodyList)
+                return;
+            }
+        }
+        else if(await this.SearchQuestion("",this.Last_Question.Number,this.Last_Question.Test_Type,this.Last_Question.Test)==1){ //he properly recalss the quesiton first to Edit
+            console.log("Question Already exists in database so only editing: , editing branch"+BodyList.length)
+            new_passageId=await this.EditQuestion(BodyList)
+            return;
+        }
+
+        console.log("its a new question"+" "+BodyList[12])
         var global=true;
-
-
         var temp_objects=await Passage_table.find({});
         console.log("length of passages being returned"+" "+temp_objects.length)
         //Checks to see if the new Passage exists already in the database
         for(var i=0;i<temp_objects.length;++i){
             //console.log("Passage being returned" + " " + temp_objects[i].Passage
-           // console.log("Passage BEING COMPARED" + " " + BodyList[10])
+            // console.log("Passage BEING COMPARED" + " " + BodyList[10])
             if(this.comparePassages(temp_objects[i].Passage,BodyList[10])){
                 console.log("Passage already in database" + " " +temp_objects[i].id);
-                Object_ID=temp_objects[i].id
-                global=false;
+                new_passageId=temp_objects[i].id
+               global=false;
                 break;
             }
 
         }
+        console.log("global "+global)
         if(global){
-            newPassage = new Passage_table({
+            var newPassage = new Passage_table({
                 Passage: BodyList[10],
                 Picture_Path: ""
             });
@@ -689,23 +726,14 @@ module.exports= class Database {
                 }
 
                 console.log("New Passage_ID" + " " + object.id)
-                Object_ID = object.id;
+                new_passageId = object.id;
 
             });
         }
 
-        if(await this.SearchQuestion("",BodyList[11][0],BodyList[8][0],BodyList[7][0])==1){
-            console.log("Question Already exists in database so only editing: "+BodyList.length)
-            await this.EditQuestion(BodyList)
-            return;
-        }
-
-        console.log("inside inside"+" "+BodyList[12])
-        console.log("inside inside"+" "+BodyList[13])
-
         newQuestion = new dict[BodyList[8][0]]({
             Question_body: BodyList[0],
-            Passage_ID:Object_ID,
+            Passage_ID:new_passageId,
             Tag:BodyList[6].join(" "),
             Choices:[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
             Test:BodyList[7][0],
@@ -727,15 +755,26 @@ module.exports= class Database {
 
     }
     async EditQuestion(BodyList){
-
+        var Object_ID=-1;
+        var global=true;
         console.log("inside Edit Question"+" "+ BodyList)
-        console.log("Test you are editing ",this.Last_Question._id);
-        for(var i=0;i<BodyList.length;++i){
-           console.log(BodyList[i]+" "+i)
-        }
+        console.log("Question you are editing ",this.Last_Question._id);
+        console.log("Passage you are Editing ",this.Last_Question.Passage_ID);
+
+
+        var newPassage;
+
+
+        var passage_updated=await Passage_table.update(
+            {_id:this.Last_Question.Passage_ID},
+            { $set: {"Passage":BodyList[10]}
+            });
+
+
         await dict[BodyList[8]].update(
             { _id : this.Last_Question._id },
-            { $set: { "Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString(),
+            { $set: {
+                    "Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString(),
                     "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13],
                     "Test":BodyList[7],
                     "Right_Answer": BodyList[9][0],
@@ -745,9 +784,10 @@ module.exports= class Database {
                 }
             }
         )
+        return Object_ID
 
     }
-    async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history){
+    async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history,eliminated_answers){
         console.log("saving response "+response+" "+time+" "+check_answer)
         var dict_schema = {
             "ACT-Reading":"ReadingQuestion" ,
@@ -763,7 +803,7 @@ module.exports= class Database {
             confidence=-1
         }
         this.List_Tagged_History.push(this.Last_Question._id.toString());
-        this.Last_Question.setResponse(response,confidence,old_answer)
+        this.Last_Question.setResponse_Long(response,confidence,old_answer,eliminated_answers)
 
         ++this.Last_Question.Views;
         var hint;
@@ -874,11 +914,12 @@ module.exports= class Database {
             "ACT-Math": "MathQuestion",
             "ACT-English": "EnglishQuestion"
         }///associations between the response and the original questions on seperate tables
-        var dict_schema_2={
-            "ACT-Reading":'readingquestions' ,
-            "ACT-Math": "mathquestions",
-            "ACT-English": "englishquestions"
-        }
+        var dict2 = {
+            "ACT-Reading": Reading_table,
+            "ACT-Math": Math_table,
+            "ACT-English": English_table
+            // etc.
+        };
         var test_list=test_package.split(" ");
         var temp_list=[]
         var temp_session=parseInt(test_list[2])
@@ -886,7 +927,9 @@ module.exports= class Database {
 
         async.waterfall(
             [
-                function(callback) { Reading_table.find({ "Test":test_list[0]}).select("_id").exec(callback);
+                function(callback) {
+                console.log("calllback "+test_list[1])
+                dict[test_list[1]].find({ "Test":test_list[0]}).select("_id").exec(callback);
                     console.log("inside reading table");
                 },
                 function(questions_1,callback) {
@@ -951,6 +994,28 @@ module.exports= class Database {
 
         this.List_Questions=keywords;
 
+    }
+    async SearchAllStudents(){
+        var Name_list=[]
+        await Student_table.find({}).then((artwork) => {
+            if (artwork.length==0){
+                console.log("no students found")
+
+
+            }
+            else{
+               // console.log("Found Student in Table"+(artwork))
+                for (var i=0;i<artwork.length;++i){
+                    Name_list.push(artwork[i].lastName+" "+artwork[i].firstName+" "+artwork[i].email)
+                }
+
+            }
+
+
+
+        })
+       // console.log(Name_list)
+        return Name_list;
     }
     async SearchStudent_Tests(firstName,lastName,email){//returns all tests student has taken
         var ID= await this.getStudentID(firstName,lastName,email)
@@ -1278,7 +1343,7 @@ module.exports= class Database {
 
                 if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
                     var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
-                        this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views;
+                        this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views;
                     //temp_list.push(temp);
                     console.log("Displaying Results Got it Wrong "+temp)
                     temp_list.splice(parseInt(this.Normal_History[i].Number)-1, 1, temp)
@@ -1286,7 +1351,7 @@ module.exports= class Database {
                 }
                 else{
                     var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
-                        this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views;
+                        this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views;
                     //temp_list.push(temp);
                     console.log("Displaying Results Got it Right "+temp)
                     temp_list.splice(parseInt(this.Normal_History[i].Number)-1, 1, temp)
@@ -1322,8 +1387,9 @@ module.exports= class Database {
         for  (var i=0;i<this.Normal_History.length;++i){
 
             if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
+                console.log("tag replace "+this.Normal_History[i].Tag.replace(",","-").replace(",","-"))
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
-                    this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
+                    this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
                     ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence;
                 //temp_list.push(temp);
                 console.log("Displaying Results Got it Wrong_Tutor "+temp)
@@ -1333,7 +1399,7 @@ module.exports= class Database {
             }
             else{
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
-                    this.Normal_History[i].Tag.replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
+                    this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
                     ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence
                 //temp_list.push(temp);
                 console.log("Displaying Results Got it Right_Tutor "+temp);

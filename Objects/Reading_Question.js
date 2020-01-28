@@ -4,6 +4,7 @@ var Question = require('./Question.js'),util = require('util');
 function Reading_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID) {
 
     this.Passage=passage; //its already a string by now.
+    this.Passage_ID;
     this._id=ID;
     this.Test_Type="ACT-Reading";
 
@@ -25,7 +26,7 @@ function Reading_Question(question_text, optionList,right_answer,tag,number,pass
     this.Presentation_Highlight=[];
     this.Hint_Selection;
     this.Check_Answer=0;
-    this.deleted_Answer=[]
+    this.Eliminated_Answers=[]
     this.Repeats=0;
     this.Views=0;
     this.Second_Hint_Text=[];
