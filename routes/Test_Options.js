@@ -12,7 +12,7 @@ var timer;
 var title;
 var {JSDOM} = require("jsdom");
 var jsdom=require("jsdom")
-var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\Test_Options.hbs','utf-8');
+var data = fs.readFileSync('./views/Test_Options.hbs','utf-8');
 var document = new JSDOM(data).window.document;
 router.get('/', async function (req, res, next) {
     console.log("Inside get Test Optoins"+req.query.FirstName+req.query.LastName,+" "+req.query.Email)

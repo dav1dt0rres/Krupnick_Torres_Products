@@ -6,7 +6,7 @@ const Student = require('../Objects/Student.js');
 var fs              = require('fs')
 var {JSDOM} = require("jsdom");
 var jsdom=require("jsdom")
-var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\register_Question.hbs','utf-8');
+var data = fs.readFileSync('./views/register_Question.hbs','utf-8');
 var document = new JSDOM(data).window.document;
 const router = express.Router()
 var counter=0;
@@ -303,7 +303,7 @@ router.get('/Question_Loop',async function (req, res, next) {
     var document = new JSDOM(data).window.document;
 
     var element=document.createElement("textarea");
-    //console.log("Passage Outside"+" "+Question_object.getPassage())
+    //console.log("Passage Outside"+" "+Question_object.getPassageinside student_test has own property())
     element.value=Question_object.getPassage()
 
     console.log("timetestcurrent "+Database_Object.getTest_Time_Current())
@@ -409,7 +409,7 @@ router.get('/automatedEmail',async function (req,res,next){
 
 })
 router.get('/automatedEmail_Student', async function(req,res,next){
-    console.log("inside automated Email for students "+req.query.firstName+" "+req.query.lastName+" "+req.query.email+" "+req.query.Test+" "+req.query.Test_Type);
+    console.log("inside automated Email for students "+req.query.firstName+" "+req.query.lastName+" "+req.query.email+" "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test);
 
    // var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
     //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
@@ -424,13 +424,13 @@ router.get('/automatedEmail_Student', async function(req,res,next){
         tests.add(option)
     }
     //pCurrent_Sessions.push(Database_Object);
-    res.render('Test_Options',{title, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.firstName,LastName:req.query.lastName,Email:req.query.email,Test:tests})
+    res.render('Test_Options',{title, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.firstName,LastName:req.query.lastName,Time_Limit_Test:req.query.Time_Limit_Test,Time_Limit_Question:req.query.Time_Limit_Question,Email:req.query.email,Test:tests})
     //Current_Sessions.push(Database_Object);
 })
 router.get('/automatedEmail_Student_Send',async function(req,res,next){
-    console.log("inside automatedEmail student send "+req.query.Test+" "+req.query.Test_Type+" "+req.query.LastName)
+    console.log("inside automatedEmail student send "+req.query.Test+" "+req.query.Test_Type+" "+req.query.LastName+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test)
     var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[0,0,0]);//keeping record of the index in Current_Session
-
+    Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
     //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
 
     var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also

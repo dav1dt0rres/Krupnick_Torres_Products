@@ -180,11 +180,12 @@ module.exports= class Database {
             };
         }
         else if(argument=="send_reminder"){
+            console.log("Sending Time LImits: "+this.Question_Time_Limit+" "+this.Test_Time_Limit)
             var string="http://krupnickapproach.ngrok.io/dashboard/automatedEmail_Student?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
-                "Test_Type="+this.Test_Type+"&"
+                "Test_Type="+this.Test_Type+"&"+"Time_Limit_Question="+this.Question_Time_Limit+"&"+"Time_Limit_Test="+this.Test_Time_Limit
             var mailOptions = {
                 from: 'bot@gmail.com',
-                to: this.Student.email+',joekrupnick@gmail.com',
+                to: this.Student.email,
                 subject: "Please take the following Exam at your convenience: "+this.Test+" "+this.Test_Type,
                 text: "",
                 html: '<b>Dont forget to input a time for each question and the Total Time the Test should take. Please use this email to bring up any issues.   </b><p>Click <a href='+string+'>here</a> to go take the test</p>'

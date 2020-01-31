@@ -5,11 +5,11 @@ var ReadFromFile = require('../Objects/ReadFromFile.js');
 var fs              = require('fs'),
     readline        = require('readline'),
     {google}        = require('googleapis');
-var creds             = require("C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Razvan-579c7c6068ea.json");
+//var creds             = require("C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Razvan-579c7c6068ea.json");
 var GoogleSpreadsheet = require('google-spreadsheet');
 const XLSX = require('xlsx')
 
-const workbook=XLSX.readFile('C:\\Users\\david\\Downloads\\biotech cos ipo.xlsm')
+const workbook=XLSX.readFile('./biotech cos ipo.xlsm')
 const sheet_name_list= workbook.SheetNames
 var title;
 
