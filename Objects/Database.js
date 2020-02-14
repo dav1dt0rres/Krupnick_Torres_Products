@@ -168,13 +168,14 @@ module.exports= class Database {
                 subject: this.Student.firstName+" "+this.Student.lastName+" just finished: "+this.Test+" "+this.Test_Type,
                 text: 'That was easy!',
 
+
                 html: '<p>Click <a href='+string+'>here</a> to go see the results</p>'
             };
         }
         else if(argument=="registered") {
             var mailOptions = {
                 from: 'bot@gmail.com',
-                to: this.Student.email+',joekrupnick@gmail.com,davidtorres7888@gmail.com',
+                to: this.Student.email+',davidtorres7888@gmail.com,joekrupnick@gmail.com',
                 subject: this.Student.firstName+" "+this.Student.lastName+" was just registered on the system: ",
                 text: 'That was easy!'
             };
@@ -583,13 +584,14 @@ module.exports= class Database {
         var Question_object;
         var keywords=[]
         var counter=0;
-
+        console.log("Number outside "+number)
        temp_Object= dict[Test_Type].findOne({Test:Test,Number:number}).populate("Passage_ID").lean()
         await temp_Object.exec(function(err,Question_re) {
-                console.log("INside find One()"+Question_re)
+
                 if (Question_re==null){
                     return 0;
                 }
+                console.log("INside find One()"+Question_re.Number)
                 for(var j=0;j<Question_re.Choices.length;++j){
                     Question_re.Choices[j]=Question_re.Choices[j].replace(/,/g, ' ');
                 }
@@ -698,23 +700,26 @@ module.exports= class Database {
             new_passageId=await this.EditQuestion(BodyList)
             return;
         }
-
         console.log("its a new question"+" "+BodyList[12])
         var global=true;
+
         var temp_objects=await Passage_table.find({});
         console.log("length of passages being returned"+" "+temp_objects.length)
         //Checks to see if the new Passage exists already in the database
-        for(var i=0;i<temp_objects.length;++i){
-            //console.log("Passage being returned" + " " + temp_objects[i].Passage
-            // console.log("Passage BEING COMPARED" + " " + BodyList[10])
-            if(this.comparePassages(temp_objects[i].Passage,BodyList[10])){
-                console.log("Passage already in database" + " " +temp_objects[i].id);
-                new_passageId=temp_objects[i].id
-               global=false;
-                break;
-            }
+        if(BodyList[10].length>3){
+            for(var i=0;i<temp_objects.length;++i){
+                //console.log("Passage being returned" + " " + temp_objects[i].Passage
+                // console.log("Passage BEING COMPARED" + " " + BodyList[10])
+                if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
+                    console.log("Passage already in database" + " " +temp_objects[i].id);
+                    new_passageId=temp_objects[i].id
+                    global=false;
+                    break;
+                }
 
+            }
         }
+
         console.log("global "+global)
         if(global){
             var newPassage = new Passage_table({
@@ -785,16 +790,21 @@ module.exports= class Database {
                 }
             }
         )
+        this.Last_Question=null;
         return Object_ID
 
     }
-    async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history,eliminated_answers){
+    async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history,eliminated_answers,checked_answers){
         console.log("saving response "+response+" "+time+" "+check_answer)
         var dict_schema = {
             "ACT-Reading":"ReadingQuestion" ,
             "ACT-Math": "MathQuestion",
             "ACT-English": "EnglishQuestion"
         }///associations between the response and the original questions on seperate tables
+        var dict_new_schema={
+            "ACT-Reading":"Reading_Question",
+            "ACT-English":"English_Question"
+        }
         var Object_ID;
         if (this.CheckBox_List.includes('Clues') && confidence!=undefined){
             console.log("submitted confidence!")
@@ -804,7 +814,7 @@ module.exports= class Database {
             confidence=-1
         }
         this.List_Tagged_History.push(this.Last_Question._id.toString());
-        this.Last_Question.setResponse_Long(response,confidence,old_answer,eliminated_answers)
+        this.Last_Question.setResponse_Long(response,confidence,old_answer,eliminated_answers,checked_answers)
 
         ++this.Last_Question.Views;
         var hint;
@@ -832,30 +842,86 @@ module.exports= class Database {
 
 
 
-        console.log("Going in saving"+" "+response+" "+this.Student.ID+" "+this.Last_Question._id+" "+"CheckAnswers"+this.Last_Question.Check_Answer+" "+"Hint Selected?");
-        var newReponse = new Response_table({
-            Response:response,
-            Student_ID:this.Student.ID,
-            modelId:this.Last_Question._id,
-            modelName_1:dict_schema[this.Test_Type],
-            Time:this.Last_Question.getTime(),
-            Session:this.Student.Session,
-            Hint_Selection:hint,
-            Check_Answer:this.Last_Question.Check_Answer,
-            Repeats:this.Last_Question.Repeats,
-            Views:this.Last_Question.Views,
-            Total_Time:this.Test_Time_Current,
-            Hover_History:hover_history,
-            Confidence:confidence
-        });
-        await newReponse.save(function(err,object){
-            if (err) {
-                console.log("Error caough"+err.toString())
-            }
+        console.log("Going in saving"+" "+response+" "+this.Student.ID+" "+this.Last_Question._id+" "+"CheckAnswers"+this.Last_Question.Checked_Answers);
+        if(this.Test_Type=="ACT-Reading"){
+            var newReponse = new Response_table({
+                Response:response,
+                Student_ID:this.Student.ID,
+                Model_Name:"ReadingQuestion",
+                Reading_Question:this.Last_Question._id,
+                Time:this.Last_Question.getTime(),
+                Session:this.Student.Session,
+                Hint_Selection:hint,
+                Check_Answer:this.Last_Question.Check_Answer,
+                Eliminated_Answers:this.Last_Question.Eliminated_Answers,
+                Checked_Answers:this.Last_Question.Checked_Answers,
+                Views:this.Last_Question.Views,
+                Total_Time:this.Test_Time_Current,
+                Hover_History:hover_history,
+                Confidence:confidence
+            });
+            await newReponse.save(function(err,object){
+                if (err) {
+                    console.log("Error caough"+err.toString())
+                }
 
-            Object_ID=object.id;
+                Object_ID=object.id;
 
-        });
+            });
+        }
+        else if(this.Test_Type=="ACT-English"){
+            var newReponse = new Response_table({
+                Response:response,
+                Student_ID:this.Student.ID,
+                Model_Name:"EnglishQuestion",
+                English_Question:this.Last_Question._id,
+                Time:this.Last_Question.getTime(),
+                Session:this.Student.Session,
+                Hint_Selection:hint,
+                Check_Answer:this.Last_Question.Check_Answer,
+                Eliminated_Answers:this.Last_Question.Eliminated_Answers,
+                Checked_Answers:this.Last_Question.Checked_Answers,
+                Views:this.Last_Question.Views,
+                Total_Time:this.Test_Time_Current,
+                Hover_History:hover_history,
+                Confidence:confidence
+            });
+            await newReponse.save(function(err,object){
+                if (err) {
+                    console.log("Error caough"+err.toString())
+                }
+
+                Object_ID=object.id;
+
+            });
+        }
+        else if(this.Test_Type=="ACT-Math"){
+            console.log("inside ACT Math Saving")
+            var newReponse = new Response_table({
+                Response:response,
+                Student_ID:this.Student.ID,
+                Model_Name:"MathQuestion",
+                English_Question:this.Last_Question._id,
+                Time:this.Last_Question.getTime(),
+                Session:this.Student.Session,
+                Hint_Selection:hint,
+                Check_Answer:this.Last_Question.Check_Answer,
+                Eliminated_Answers:this.Last_Question.Eliminated_Answers,
+                Checked_Answers:this.Last_Question.Checked_Answers,
+                Views:this.Last_Question.Views,
+                Total_Time:this.Test_Time_Current,
+                Hover_History:hover_history,
+                Confidence:confidence
+            });
+            await newReponse.save(function(err,object){
+                if (err) {
+                    console.log("Error caough"+err.toString())
+                }
+
+                Object_ID=object.id;
+
+            });
+        }
         console.log("Response ID"+" "+Object_ID)
         //also add the question to the Historical questions list maitained at this object
 
@@ -916,9 +982,8 @@ module.exports= class Database {
             "ACT-English": "EnglishQuestion"
         }///associations between the response and the original questions on seperate tables
         var dict2 = {
-            "ACT-Reading": Reading_table,
-            "ACT-Math": Math_table,
-            "ACT-English": English_table
+            "ACT-Reading": "Reading_Question",
+            "ACT-English": "English_Question"
             // etc.
         };
         var test_list=test_package.split(" ");
@@ -935,37 +1000,73 @@ module.exports= class Database {
                 },
                 function(questions_1,callback) {
                     console.log("inside Response table "+questions_1.length);
-                    Response_table.find({
-                        "modelId": { "$in": questions_1.map((current) => { return current._id }) },
-                        "Session": temp_session,
-                        "modelName_1": dict_schema_1[test_list[1]]
-                    }).populate("modelId").exec(callback);
+                    if  (test_list[1]=="ACT-English"){
+                        Response_table.find({
+                            "English_Question": { "$in": questions_1.map((current) => { return current._id }) },
+                            "Session": temp_session,
+                            "Model_Name": dict_schema_1[test_list[1]]
+                    }).populate("English_Question").exec(callback);
+                    }
+                    else if(test_list[1]=="ACT-Reading"){
+                        Response_table.find({
+                            "Reading_Question": { "$in": questions_1.map((current) => { return current._id }) },
+                            "Session": temp_session,
+                            "Model_Name": dict_schema_1[test_list[1]]
+                        }).populate("Reading_Question").exec(callback);
+                    }
+
                 }
             ],function(err,questions) {
                 // filter and populated
 
                 var counter=0;
                 if (questions.length==0){
+                    console.log("thus student has no tests")
+                    return ["NO QUESTIONS WERE FOUND TO MATCH"];
+                }
+                if(test_list[1]=="ACT-English"){
+                    for(var i=0;i<questions.length;++i){
 
-                    return ["This Student had No Tests"];
+                        console.log("responses being returned English"+" "+questions[i].English_Question.Number+" "+questions[i].English_Question.Test+" "+questions[i].English_Question.Tag+" "+questions[i].English_Question.Right_Answer+" -->"+questions[i].Checked_Answers[0]);
+                        var Question_object=new Question(" ",[" "],questions[i].English_Question.Right_Answer,questions[i].English_Question.Tag,questions[i].English_Question.Number,
+                            " ",questions[i].English_Question.Test_Type,questions[i].English_Question.Test,-1);
+                        Question_object.setHover_History(questions[i].Hover_History);
+                        Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
+                        Question_object.setCheckAnswer(questions[i].Check_Answer)
+                        Question_object.setResponse(questions[i].Response);
+                        Question_object.setRepeats(questions[i].Repeats);
+                        Question_object.setHint_Selection(questions[i].Hint_Selection);
+                        Question_object.setViews(questions[i].Views);
+                        Question_object.setTotalTime(questions[i].Total_Time.toString());
+                        Question_object.setTime(questions[i].Time);
+                        Question_object.setTime_Stamp(questions[i].time_stamp)
+                        Question_object.setConfidence(questions[i].Confidence)
+                        temp_list[counter]=Question_object
+                        ++counter;
+                    }
                 }
-                for(var i=0;i<questions.length;++i){
-                    console.log("responses being returned "+" "+questions[i].modelId.Number+" "+questions[i].modelId.Test+" "+questions[i].modelId.Tag+" "+questions[i].modelId.Right_Answer);
-                    var Question_object=new Question(" ",[" "],questions[i].modelId.Right_Answer,questions[i].modelId.Tag,questions[i].modelId.Number,
-                        " ",questions[i].modelId.Test_Type,questions[i].modelId.Test,-1);
-                    Question_object.setHover_History(questions[i].Hover_History)
-                    Question_object.setCheckAnswer(questions[i].Check_Answer)
-                    Question_object.setResponse(questions[i].Response);
-                    Question_object.setRepeats(questions[i].Repeats);
-                    Question_object.setHint_Selection(questions[i].Hint_Selection);
-                    Question_object.setViews(questions[i].Views);
-                    Question_object.setTotalTime(questions[i].Total_Time.toString());
-                    Question_object.setTime(questions[i].Time);
-                    Question_object.setTime_Stamp(questions[i].time_stamp)
-                    Question_object.setConfidence(questions[i].Confidence)
-                    temp_list[counter]=Question_object
-                    ++counter;
+                else if(test_list[1]=="ACT-Reading"){
+                    for(var i=0;i<questions.length;++i){
+                        //console.log(  questions[i].Reading_Question)
+                        console.log("responses being returned reading"+" "+questions[i].Reading_Question.Number+" "+questions[i].Reading_Question.Test+" "+questions[i].Reading_Question.Tag+" "+questions[i].Reading_Question.Right_Answer+" -->"+questions[i].Checked_Answers[0]);
+                        var Question_object=new Question(" ",[" "],questions[i].Reading_Question.Right_Answer,questions[i].Reading_Question.Tag,questions[i].Reading_Question.Number,
+                            " ",questions[i].Reading_Question.Test_Type,questions[i].Reading_Question.Test,-1);
+                        Question_object.setHover_History(questions[i].Hover_History);
+                        Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
+                        Question_object.setCheckAnswer(questions[i].Check_Answer)
+                        Question_object.setResponse(questions[i].Response);
+                        Question_object.setRepeats(questions[i].Repeats);
+                        Question_object.setHint_Selection(questions[i].Hint_Selection);
+                        Question_object.setViews(questions[i].Views);
+                        Question_object.setTotalTime(questions[i].Total_Time.toString());
+                        Question_object.setTime(questions[i].Time);
+                        Question_object.setTime_Stamp(questions[i].time_stamp)
+                        Question_object.setConfidence(questions[i].Confidence)
+                        temp_list[counter]=Question_object
+                        ++counter;
+                    }
                 }
+
                 console.log("inside length "+temp_list.length)
             })
         this.Normal_History=temp_list;
@@ -1016,27 +1117,41 @@ module.exports= class Database {
 
         })
        // console.log(Name_list)
-        return Name_list;
+        return Name_list.sort();
     }
     async SearchStudent_Tests(firstName,lastName,email){//returns all tests student has taken
         var ID= await this.getStudentID(firstName,lastName,email)
         var set = new Set();
-        var temp_Object= Response_table.find({Student_ID:this.Student.ID}).populate("modelId")
-        temp_Object.populate("Student_ID").lean()
+        var dict_schema_1 = {
+            "ACT-Reading":"ReadingQuestion" ,
+            "ACT-Math": "MathQuestion",
+            "ACT-English": "EnglishQuestion"
+        }
+        var temp_Object= Response_table.find({Student_ID:this.Student.ID}).populate("English_Question").populate("Reading_Question")
+        //temp_Object.populate("Student_ID").lean()
         await temp_Object.exec(function(err,Responses){
             if (Response.length==0){
 
                 return ["This Student had No Tests"];
             }
             for  (var i=0;i<Responses.length;++i){
+                        if(Responses[i].Model_Name=="EnglishQuestion"){
+
+                            set.add(Responses[i].English_Question.Test.toString()+" "+Responses[i].English_Question.Test_Type.toString()+" "+Responses[i].Session);
+                        }
+                        else if(Responses[i].Model_Name=="ReadingQuestion"){
+                            set.add(Responses[i].Reading_Question.Test.toString()+" "+Responses[i].Reading_Question.Test_Type.toString()+" "+Responses[i].Session);
+                        }
+
+
 
                     //console.log("                             Question ID                  Student ID     Tag")
-                    //console.log("REsponses returned "+Responses[i].modelId.Test.toString()+" "+Responses[i].modelId.Test_Type.toString())
-                    set.add(Responses[i].modelId.Test.toString()+" "+Responses[i].modelId.Test_Type.toString()+" "+Responses[i].Session);
-
+                    //console.log("REsponses returned "+Responses[i].modelId.Test.toString()+" "+Responses[i].modelId.Test_Type.toString()+" "+Responses[i].Session+" "+Responses[i].modelId._id+" "+Responses[i].Response)
             }
 
         });
+
+
         return Array.from(set);
     }
     async addNewStudent(firstName,lastname,email){
@@ -1335,8 +1450,13 @@ module.exports= class Database {
     }
 
     async DisplayResultList(){
-
-        var temp_list=this.fillArrayWithNumbers(40)
+        var temp_list=[]
+        if(this.Test_Type=="ACT-Reading"){
+            temp_list=this.fillArrayWithNumbers(40)
+        }
+       else if(this.Test_Type=="ACT-English"){
+            temp_list=this.fillArrayWithNumbers(75)
+        }
 
         //temp_list.push("Number"+" "+"Test_Type"+" "+"Test"+" "+"Time            "+        "Hint: ")
         var questions_answered=[];
@@ -1348,6 +1468,7 @@ module.exports= class Database {
                     //temp_list.push(temp);
                     console.log("Displaying Results Got it Wrong "+temp)
                     temp_list.splice(parseInt(this.Normal_History[i].Number)-1, 1, temp)
+                    //console.log("temp_list so far "+temp_list)
                     this.List_Questions[this.Normal_History[i].Number-1].Response=this.Normal_History[i].Response
                 }
                 else{
@@ -1356,6 +1477,7 @@ module.exports= class Database {
                     //temp_list.push(temp);
                     console.log("Displaying Results Got it Right "+temp)
                     temp_list.splice(parseInt(this.Normal_History[i].Number)-1, 1, temp)
+                    //console.log("temp_list so far "+temp_list)
                     this.List_Questions[this.Normal_History[i].Number-1].Response=this.Normal_History[i].Response
                 }
               //console.log("temp_list so far: "+temp_list)
@@ -1391,7 +1513,7 @@ module.exports= class Database {
                 console.log("tag replace "+this.Normal_History[i].Tag.replace(",","-").replace(",","-"))
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
                     this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
-                    ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence;
+                    ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence+";"+this.Normal_History[i].Checked_Answers.join("/")
                 //temp_list.push(temp);
                 console.log("Displaying Results Got it Wrong_Tutor "+temp)
                 temp_list.push(temp)
@@ -1401,7 +1523,7 @@ module.exports= class Database {
             else{
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
                     this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
-                    ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence
+                    ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence+";"+this.Normal_History[i].Checked_Answers.join("/")
                 //temp_list.push(temp);
                 console.log("Displaying Results Got it Right_Tutor "+temp);
                 temp_list.push(temp)

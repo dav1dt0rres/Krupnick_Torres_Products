@@ -58,7 +58,7 @@
 
         tr.appendChild(td)
     }
-    function addRow(tbl, val_1, val_2, val_3,val_4,val_5,val_6,val_7,repeats,views,response,right_answer) {
+    function addRow(tbl, val_1, val_2, val_3,val_4,val_5,val_6,val_7,repeats,views,response,right_answer){
         var tr = document.createElement('tr');
 
         addCell(tr, val_1,response,right_answer);
@@ -78,7 +78,7 @@
         }
         tbl.appendChild(tr)
     }
-    function addRow_Tutor(tbl, val_1, val_2, val_3,val_4,val_5,val_6,val_7,repeats,views,time_stamp,hover_history,confidence,response,right_answer){
+    function addRow_Tutor(tbl, val_1, val_2, val_3,val_4,val_5,val_6,val_7,repeats,views,time_stamp,hover_history,confidence,checked_answers,response,right_answer){
         var tr = document.createElement('tr');
         console.log("inside tutor"+" "+response+" "+right_answer)
         addCell(tr, val_1,response,right_answer);
@@ -93,6 +93,7 @@
         addCell(tr, time_stamp,'A','A');
         addCell(tr, hover_history,'A','A');
         addCell(tr,confidence,'A','A');
+        addCell(tr,checked_answers,'A','A');
         tr.onclick=async function(event) {
 
             document.getElementById("Final_Questions_holder").value=val_1
@@ -108,14 +109,14 @@
         //var ul=document.getElementById("Final_Questions");
         var tbl = document.getElementById('tbl');
         if(document.getElementById("tutor_boolean").value=="true"){
-            addRow_Tutor(tbl, 'Number', 'Test Type', 'Test','Time','Tag','Hint Selection','Checked if Correct','Changed Answer','Views','Time Stamp','Hover History','Confidence');
+            addRow_Tutor(tbl, 'Number', 'Test Type', 'Test','Time','Tag','Hint Selection','Checked if Correct','Changed Answer','Views','Time Stamp','Hover History','Confidence','Checked Answers');
            //console.log("Final List "+" "+FinalList)
             for (var i=0;i<FinalList.length;++i){
                 console.log("Length "+FinalList[i].split(";").length)
                 console.log("Final List "+FinalList[i])
                 console.log("Inside loading Tutor View Questions "+ FinalList[i].split(";")[0]+" "+FinalList[i].split(";")[11]+" "+FinalList[i].split(";")[12].split("/").length)
                 addRow_Tutor(tbl, FinalList[i].split(";")[0], FinalList[i].split(";")[1], FinalList[i].split(";")[2],FinalList[i].split(";")[3],FinalList[i].split(";")[4],FinalList[i].split(";")[5],FinalList[i].split(";")[6],FinalList[i].split(";")[9],FinalList[i].split(";")[10],
-                        FinalList[i].split(";")[11],FinalList[i].split(";")[12],FinalList[i].split(";")[13],FinalList[i].split(";")[7],FinalList[i].split(";")[8]);
+                        FinalList[i].split(";")[11],FinalList[i].split(";")[12],FinalList[i].split(";")[13],FinalList[i].split(";")[14],FinalList[i].split(";")[7],FinalList[i].split(";")[8]);
 
                 //console.log("This is the value its returned"+FinalList[i].split(",")[0]+FinalList[i].split(",")[1]+" "+ FinalList[i].split(",")[2]+" "+FinalList[i].split(",")[3]+" "+FinalList[i].split(",")[4]+" "+FinalList[i].split(",")[5]+" "+FinalList[i].split(";")[6]+" "+FinalList[i].split(";")[9]+" "+
                        ///FinalList[i].split(";")[10]+" "+FinalList[i].split(";")[11]+" "+FinalList[i].split(";")[12]+" "+FinalList[i].split(";")[7]+" "+FinalList[i].split(";")[8])

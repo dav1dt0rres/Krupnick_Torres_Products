@@ -8,23 +8,23 @@ var ResponseSchema = new Schema( {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student'
     },
-    modelId:{
-        type:Schema.Types.ObjectId,
-        required:true,
-        refPath: 'modelName_1'
+    Reading_Question: {
+        type: Schema.Types.ObjectId,
 
+        ref: 'ReadingQuestion'
     },
-    modelName_1:{
-        type: String,
-        required:true,
-        enum:["ReadingQuestion","MathQuestion","EnglishQuestion"]
+    English_Question: {
+        type: Schema.Types.ObjectId,
 
+        ref: 'EnglishQuestion'
     },
+    Model_Name:String,
     time_stamp : { type : Date, default: Date.now },
     Session:Number,
     Hint_Selection: Boolean,
     Check_Answer:Number,
-    Repeats:Number,
+    Checked_Answers:[String],
+    Eliminated_Answers:[String],
     Views:Number,
     Total_Time:String,
     Hover_History:[String],

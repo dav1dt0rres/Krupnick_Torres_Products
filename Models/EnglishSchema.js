@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 var EnglishSchema = new Schema( {
     Question_body: [String],
-    Passage_ID:{type: mongoose.Schema.Types.ObjectId,
+    Passage_ID:{
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
 
     },

@@ -6,7 +6,7 @@ const spawn = require("child_process").spawn;
 var fs              = require('fs'),
     readline        = require('readline'),
     {google}        = require('googleapis');
-var creds             = require("C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Razvan-579c7c6068ea.json");
+var creds             = require("../Razvan-579c7c6068ea.json");
 var GoogleSpreadsheet = require('google-spreadsheet');
 var MainList_HighSchool=['University of Chicago Lab Schools','St. Ignatius','Latin','New Trier',"Other"];
 
@@ -33,7 +33,7 @@ module.exports= class Excelworkbook {
         console.log("Exited out side spawn")
         var {JSDOM} = require("jsdom");
         var jsdom=require("jsdom")
-        var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\tutor_credentials.hbs','utf-8');
+        var data = fs.readFileSync('./views/tutor_credentials.hbs','utf-8');
         var document = new JSDOM(data).window.document;
 
         const doc = new GoogleSpreadsheet('1FrqqYB1gXLnYcSVix_NM4HFKxE1yR88qtxayZcGDbIk');
@@ -68,7 +68,7 @@ module.exports= class Excelworkbook {
         var title="";
         var {JSDOM} = require("jsdom");
         var jsdom=require("jsdom")
-        var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\tutor_credentials.hbs','utf-8');
+        var data = fs.readFileSync('./views/tutor_credentials.hbs','utf-8');
         var document = new JSDOM(data).window.document;
         var high_school_column;
         var masteruniversitylist=this.Master_University_List
@@ -429,7 +429,7 @@ module.exports= class Excelworkbook {
         pythonProcess.stdout.on('end', function(){
             //console.log("Final string its sending"+" "+dataString)
             dataString=dataString+'\n'+'-------------------------->-------------------->---------------->Seperation'+'\n'
-            fs.appendFile('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\past_searches.txt',  dataString, (err) => {
+            fs.appendFile('../past_searches.txt',  dataString, (err) => {
                 // throws an error, you could also catch it here
                 if (err) throw err;
 
@@ -454,7 +454,7 @@ module.exports= class Excelworkbook {
         var current_sheet, row;
         var {JSDOM} = require("jsdom");
         var jsdom=require("jsdom")
-        var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\tutor_credentials.hbs','utf-8');
+        var data = fs.readFileSync('./views/tutor_credentials.hbs','utf-8');
         var document = new JSDOM(data).window.document;
        var university_list=[]
         var masteruniversitylist=this.Master_University_List
@@ -588,7 +588,7 @@ function populateMasterUniversityList(){
         "University of Florida"
     var {JSDOM} = require("jsdom");
     var jsdom=require("jsdom")
-    var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\tutor_credentials.hbs','utf-8');
+    var data = fs.readFileSync('./views/tutor_credentials.hbs','utf-8');
     var document = new JSDOM(data).window.document;
     var master=document.createElement('select')
     var master_list=university_master.split(/\r?\n/)

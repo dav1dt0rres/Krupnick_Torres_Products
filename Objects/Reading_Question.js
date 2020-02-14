@@ -26,6 +26,7 @@ function Reading_Question(question_text, optionList,right_answer,tag,number,pass
     this.Presentation_Highlight=[];
     this.Hint_Selection;
     this.Check_Answer=0;
+    this.Checked_Answers=[];
     this.Eliminated_Answers=[]
     this.Repeats=0;
     this.Views=0;

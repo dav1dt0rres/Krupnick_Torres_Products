@@ -1,6 +1,15 @@
 
 <h4>Please Enter the details of the Question</h4>
+
 <form id="form" action="/AddQuestions/ScrollEditQuestions"  method="post">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <label style="font-family:verdana;font-size:15px;" color="#2C3539" id ="checkbox_math_science_label" for="checkbox_math_science">
+        Is this a Math or Science Question?
+        <input onChange="loadMathCommands()"  type="checkbox" name="checkbox_math_science" id="checkbox_math_science"   >
+
+    </label>
+    <input type="hidden" id="math_science_holder" name="math_science_holder" value="{{math_science_holder}}"  />
     <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
     <input type="hidden" id="Test_Holder" name="Test_Holder" value="{{Test_Holder}}"  />
     <input type="hidden" id="Test_Type_Holder" name="Test_Type_Holder" value="{{Test_Type_Holder}}"  />
@@ -11,7 +20,7 @@
 
         <button id="Presentation_Highlight_Button" name="Presentation_Highlight_Button" type="button" onclick="Highlight_Presentation()">Presentation Highlight</button>
             <div class="col-3">
-                <input id="QuestionText" name="QuestionText" class="effect-11" type="text" placeholder="Question Text" rows="5" value="{{QuestionText}}" >
+                <input  id="QuestionText" name="QuestionText" class="effect-11" type="text" placeholder="Question Text" rows="5" value="{{QuestionText}}" >
 
                 <span class="focus-border">
             	<i></i>
@@ -30,35 +39,35 @@
 
     <div class="column" name="MiddleColumn" id="MiddleColumn">
         <div class="col-3">
-            <input id="AnswerA" name="AnswerA" class="effect-9" type="text" placeholder="Type Choice A" value="{{AnswerA}}">
+            <input onkeyup="Math_Science('AnswerA')" id="AnswerA" name="AnswerA" class="effect-9" type="text" placeholder="Type Choice A" value="{{AnswerA}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerB" name="AnswerB" class="effect-9" type="text" placeholder="Type Choice B" value="{{AnswerB}}">
+            <input onkeyup="Math_Science('AnswerB')" id="AnswerB" name="AnswerB" class="effect-9" type="text" placeholder="Type Choice B" value="{{AnswerB}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerC" name="AnswerC" class="effect-9" type="text" placeholder="Type Choice C" value="{{AnswerC}}">
+            <input onkeyup="Math_Science('AnswerC')" id="AnswerC" name="AnswerC" class="effect-9" type="text" placeholder="Type Choice C" value="{{AnswerC}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerD" name="AnswerD" class="effect-9" type="text" placeholder="Type Choice D" value="{{AnswerD}}">
+            <input onkeyup="Math_Science('AnswerD')" id="AnswerD" name="AnswerD" class="effect-9" type="text" placeholder="Type Choice D" value="{{AnswerD}}">
             <span class="focus-border">
                 <i></i>
               </span>
         </div>
 
         <div class="col-3">
-            <input id="AnswerE" name="AnswerE" class="effect-9" type="text" placeholder="Type Choice E" value="{{AnswerE}}">
+            <input onkeyup="Math_Science('AnswerE')" id="AnswerE" name="AnswerE" class="effect-9" type="text" placeholder="Type Choice E" value="{{AnswerE}}">
             <span class="focus-border">
                 <i></i>
               </span>
@@ -141,6 +150,9 @@
 
         </select>
         <button name=Save_Button id="Save_Button" type="submit">Save Question</button>
+        <p id="math_text" name="math_text"  >{{math_text}}</p>
+        <input type="file" name="file">
+        <input type="submit" value="Submit">
 
     </div>
 
@@ -148,8 +160,7 @@
         <label for="Passage">
             Passage
         </label>
-            <textarea class="text_area_input" id="Passage" name="Passage" rows="4" cols="5" value="{{Passage}}" >
-                </textarea>
+            <textarea onkeyup="Math_Science('Passage')" class="text_area_input" id="Passage" name="Passage" rows="4" cols="5" value="{{Passage}}" >{{Passage}}</textarea>
 
 
 
@@ -161,9 +172,81 @@
 </form>
 
 <script type="text/javascript">
+
+
+
     function HomeFunction(){
         console.log("Go back home function")
         window.location.href = '/register'
+    }
+    function loadMathCommands(){
+        console.log("inside load math commands")
+
+            console.log("commands: ");
+            //document.getElementById("Passage").value=
+
+
+
+    }
+
+    function Math_Science(argument){
+
+        var final_string="";
+        console.log("inside math_science: "+document.getElementById("checkbox_math_science").checked)
+        if (document.getElementById("checkbox_math_science").checked ) {
+            //document.getElementById('QuestionText').style.height="400px";
+
+            if(document.getElementById(argument).value.charAt(document.getElementById(argument).value.length-1)==">"){
+                var start=document.getElementById(argument).value.lastIndexOf('<',document.getElementById(argument).value.length-1)
+
+                var final=document.getElementById(argument).value.length-1
+                var math_string=Math_Algo( document.getElementById(argument).value.substring(start))
+                console.log(document.getElementById(argument).value.substring(0,start)+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1))
+                //final_string=document.getElementById("QuestionText").value.substring(0,start)+math_string+document.getElementById("QuestionText").value.substring(final,document.getElementById("QuestionText").value.length-1)
+                final_string=final_string+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1)
+                document.getElementById("math_text").innerHTML=final_string;
+                document.getElementById("math_science_holder").value=final_string
+                document.getElementById("form").submit()
+            }
+
+
+
+            //appendtoPassageBox();
+        }
+
+    }
+
+    function Math_Algo(math_string){
+        var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline"]
+        console.log("Math Algo "+math_string)
+        math_string=math_string.replace("<","(");
+        math_string=math_string.replace(">",")");
+        //math_string=math_string.replace(/.$/,")");
+        math_string="\\"+math_string
+        var math_string_final=math_string.substring(0, math_string.length-1) + "\\" + math_string.substring(math_string.length-1, math_string.length)
+        console.log("final_string_Math ALgo "+math_string_final)
+        for (var i=0;i<command_list.length;++i){
+            if(math_string_final.indexOf(command_list[i])>-1){
+                if( command_list[i]=="ne" && math_string_final.indexOf("overline")==-1){
+                    console.log("its a legitame ne")
+                    var c_start=math_string_final.indexOf(command_list[i])
+                    math_string_final=math_string_final.substring(0,c_start)+"\\"+math_string_final.substring(c_start)
+                }
+                else if(command_list[i]!="ne") {
+                    console.log("string command" +command_list[i])
+                    var c_start=math_string_final.indexOf(command_list[i])
+                    math_string_final=math_string_final.substring(0,c_start)+"\\"+math_string_final.substring(c_start)
+                    console.log("WITH string command" +math_string_final)
+                }
+
+
+
+            }
+
+        }
+
+        console.log("only section for math "+math_string_final)
+        return math_string_final;
     }
     function Highlight(){
         console.log("Inside hihglight hint")
@@ -285,6 +368,7 @@
         //console.log("setting all holders"+document.getElementById("Right_Answer_Holder").value)
         //console.log("Print First"+" "+document.getElementById("Passage_Holder").value)
         if(document.getElementById("Test_Holder").value.length!=0){
+            console.log("preparing test holders...")
             document.getElementById("Test").value=document.getElementById("Test_Holder").value;
             document.getElementById("Test_Type").value=document.getElementById("Test_Type_Holder").value
             document.getElementById("RightAnswer").value=document.getElementById("Right_Answer_Holder").value
@@ -309,6 +393,12 @@
         }
         else{
             document.getElementById("First_Hint").type="input"
+        }
+        if( document.getElementById("math_text").innerHTML.length>0){
+            console.log("detected inside ath science holder")
+            loadMathCommands()
+            //document.getElementById("math_text").innerHTML=document.getElementById("math_science_holder").value;
+            document.getElementById("checkbox_math_science").checked=true;
         }
 
         //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)

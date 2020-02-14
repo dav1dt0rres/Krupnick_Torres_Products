@@ -31,7 +31,7 @@
 
 </body>
 
-<form id ="form" action="/dashboard/Question_Loop"  method="get">
+<form id ="form" action="/dashboard/Question_Loop_Math"  method="get">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <input type="hidden" id="Combo_Holder" name="Combo_Holder" value="{{Combo_Holder}}"  />
@@ -47,42 +47,44 @@
         <div class="Tag_Display" id="Tag_Display" name="Tag_Display"><span ></span> </div>
 
 
-        <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  ></h4>
+        <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  >
+            {{Question_Body_Display}}
+        </h4>
 
 
-    <label  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA_1" name="Answer_A" >
-        A.)
-        <p onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </p>
+        <label  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA_1" name="Answer_A" >
+            A.)
+            <p onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </p>
 
-    </label>
-    <label onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB_1" >
-        B.)
-        <p onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </p>
+        </label>
+        <label onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB_1" >
+            B.)
+            <p onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </p>
 
-    </label>
-    <label onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC_1">
-        C.)
-        <p onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </p>
+        </label>
+        <label onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC_1">
+            C.)
+            <p onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </p>
 
-    </label>
-    <label onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD_1">
-        D.)
-        <p onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </p>
+        </label>
+        <label onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD_1">
+            D.)
+            <p onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </p>
 
-    </label>
-    <label onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE">
-        E.)
-        <p onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE_1" >{{Answer_E}} </p>
+        </label>
+        <label onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE">
+            E.)
+            <p onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE_1" >{{Answer_E}} </p>
 
-    </label>
+        </label>
 
-    <select onmouseenter="recordHover('sroll_down')" id="combo" name="combo" name="combo">
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-        <option value="D">D</option>
-        <option disabled selected value> -- select an option -- </option>
-    </select>
+        <select onmouseenter="recordHover('sroll_down')" id="combo" name="combo" name="combo">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option disabled selected value> -- select an option -- </option>
+        </select>
         <select  onchange="finalsubmit()" style="display: none;" id="confidence" name="confidence">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -427,7 +429,7 @@
             e.style.backgroundColor="#CB5C56";
             var correct=document.getElementById("para"+document.getElementById("Right_Answer").value);
             correct.style.backgroundColor="#75E17A"
-          //this actually contains the response the User submitted
+            //this actually contains the response the User submitted
 
             return;
         }
@@ -475,126 +477,39 @@
 
         //
     }
-    function loadbuttons(){
+    function Math_Science(argument){
 
-        var buttonGroup=document.getElementById("btn-group")
+        var final_string="";
+        console.log("inside math_science")
+        if (document.getElementById("checkbox_math_science").checked ) {
+            //document.getElementById('QuestionText').style.height="400px";
 
-        buttonGroup.name="button-group"
+            if(document.getElementById(argument).value.charAt(document.getElementById(argument).value.length-1)=="}"){
+                var start=document.getElementById(argument).value.lastIndexOf('{',document.getElementById(argument).value.length-1)
 
-        var temp_list=document.getElementById("Final_Questions_holder").value.split(",")
-        if(temp_list.length>1){
-
-            for (var i=1;i<temp_list.length;++i){
-                console.log("Button Numbesr that are Incorrect"+" "+temp_list[i])
-                new_button = document.createElement('button');
-
-                new_button.innerHTML=temp_list[i].toString();
-                new_button.value=temp_list[i].toString();
-                new_button.onclick=async function(event) {
-
-                    document.getElementById("Final_Questions_holder").value=this.value
-
-                    document.getElementById("form").submit()
-
-                }
-
-                buttonGroup.appendChild(new_button)
-            }
-
-            return;
-        }
-        //var index=document.getElementById("Question_Number").value
-        var index=document.getElementById("normal_Question_Index").value
-        console.log("loading buttons "+index)
-
-        //console.log("header " +header.value + ' '+header.innerText)
-        if(parseInt(index)==6){
-            console.log("Inside of 7 button")
-            loadbuttonsV2(7);
-            return;
-        }
-        if(parseInt(index)<7){
-            console.log("inside less than 7")
-            for (var i=1;i<8;++i){
-                new_button = document.createElement('button');
-                if(i==parseInt(index)){
-                    new_button.className="current_index"
-                }
-                new_button.innerHTML=i.toString();
-                new_button.value=i.toString();
-                new_button.onclick=async function(event) {
-
-                    document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-
-                    document.getElementById("form").submit()
-
-                }
-
-                buttonGroup.appendChild(new_button)
-                console.log("Length of children"+" "+document.getElementById("header").children.length)
-                console.log("Length of children"+" "+buttonGroup.children.length)
-            }
-            return;
-        }
-
-        for (var i=4;i>0;--i){
-            new_button = document.createElement('button');
-            var less= (parseInt(index)+1)-i
-            string=less.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
-
-                document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+                var final=document.getElementById(argument).value.length-1
+                var math_string=Math_Algo( document.getElementById(argument).value.substring(start))
+                console.log(document.getElementById(argument).value.substring(0,start)+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1))
+                //final_string=document.getElementById("QuestionText").value.substring(0,start)+math_string+document.getElementById("QuestionText").value.substring(final,document.getElementById("QuestionText").value.length-1)
+                final_string=final_string+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1)
+                document.getElementById("math_text").innerHTML=final_string;
+                document.getElementById("math_science_holder").value=final_string
                 document.getElementById("form").submit()
-
             }
 
-            buttonGroup.appendChild(new_button)
 
-        }
-        var center= (parseInt(index)+1)
-        var string="(Currently)"+center.toString();
-        var new_button = document.createElement('button')
-        new_button.innerHTML=string;
-        new_button.value=string
-        new_button.onclick=async function(event) {
 
-            document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-            console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-            document.getElementById("form").submit()
-
-        }
-        buttonGroup.appendChild(new_button)
-
-        for(var i=1;i<4;++i){
-            new_button = document.createElement('button');
-            var more=(parseInt(index)+1)+i
-            string=more.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
-
-                document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
-
-            }
-
-            buttonGroup.appendChild(new_button)
+            //appendtoPassageBox();
         }
 
-        //document.getElementById("header").appendChild(buttonGroup)
-        console.log("button chidlren "+document.getElementById("header").children.length)
     }
     function loadQuestionBody(){
-        var question=document.getElementById("Question_Body_Holder");
+        //var question=document.getElementById("Question_Body_Holder");
 
-        var display=document.getElementById("Question_Body_Display");
-        display.innerHTML=question.value
+        //var display=document.getElementById("Question_Body_Display");
+        //display.innerHTML=question.value
     }
-   function loadTaggedQuestions(){
+    function loadTaggedQuestions(){
 
         var TaggedList=document.getElementById("tagged_Questions_holder").value.split(",")
 
@@ -602,7 +517,7 @@
 
         for (var i=0;i<TaggedList.length;++i){
             var li=document.createElement("LI");
-           // li.className="tagged_icon"
+            // li.className="tagged_icon"
             li.innerText=TaggedList[i]
             li.value=i
             li.onclick=async function(event) {
@@ -624,7 +539,7 @@
         }
         var eliminated_list=document.getElementById("Eliminated_Answers").value.replace(/\s/g,'').split(",")
         for (var i=0;i<eliminated_list.length;++i){
-           console.log("letter "+eliminated_list[i])
+            console.log("letter "+eliminated_list[i])
             if(eliminated_list[i].length>0){
                 document.getElementById(eliminated_list[i]).style.textDecoration='line-through'
             }
@@ -684,7 +599,7 @@
         var text_list=document.getElementById("Passage_Holder").value.split(" ")
         var question_number=(parseInt(document.getElementById("normal_Question_Index").value)+1).toString()
         for (var i=0;i<text_list.length;++i){
-          // console.log(text_list[i]);
+            // console.log(text_list[i]);
 
 
             if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){
@@ -724,46 +639,46 @@
             highlighted_text[i]=highlighted_text[i].replace("*","").replace("*","")
         }
         console.log("highlighted Text "+highlighted_text)
-       while(i<text_list.length){
+        while(i<text_list.length){
 
             //console.log(text_list[i].replace(/\n/g, '').includes('*'))
-           if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){//the red underlined, looks for the present [number]
-               console.log("Highlighted Text_Red: "+highlighted_text)
-               for (var j=1;j<highlighted_text.length;++j){
-                   var text_word=text_list[i-j].replace(/\n/g, '').replace(/\*/g, '').replace(/\s/g, '')
-                   console.log("comparing_Red "+text_word)
-                   if (highlighted_text.includes(text_word)){
-                       console.log("Accepting_Red "+text_word)
-                       myArr.push(i-j)
-                   }
+            if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){//the red underlined, looks for the present [number]
+                console.log("Highlighted Text_Red: "+highlighted_text)
+                for (var j=1;j<highlighted_text.length;++j){
+                    var text_word=text_list[i-j].replace(/\n/g, '').replace(/\*/g, '').replace(/\s/g, '')
+                    console.log("comparing_Red "+text_word)
+                    if (highlighted_text.includes(text_word)){
+                        console.log("Accepting_Red "+text_word)
+                        myArr.push(i-j)
+                    }
 
-               }
+                }
 
-               for (var x=myArr.length-1;x>=0;--x) {
-
-
-                   underlined_section = underlined_section+" "+text_list[myArr[x]]
-                   console.log("Highlighting_Red so far:" + underlined_section);
-
-               }
-
-               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline>$&</underline>')
+                for (var x=myArr.length-1;x>=0;--x) {
 
 
-           }
-           else if (text_list[i].replace('*', '').includes('*')){///if the asteriks are only one word
-               console.log("Found ONLY one: "+text_list[i].replace(/\n/g, ''))
-               if(text_list[i+1].replace(/\n/g, '')=='['+question_number+']'){
-                   underlined_section=""
-               }
-               else{
-                   underlined_section = text_list[i].replace(/\n/g, '')
-               }
+                    underlined_section = underlined_section+" "+text_list[myArr[x]]
+                    console.log("Highlighting_Red so far:" + underlined_section);
 
-               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
-               //myArr.push(i)
-           }
-           else if(text_list[i].replace(/\n/g, '').includes('*')){
+                }
+
+                temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline>$&</underline>')
+
+
+            }
+            else if (text_list[i].replace('*', '').includes('*')){///if the asteriks are only one word
+                console.log("Found ONLY one: "+text_list[i].replace(/\n/g, ''))
+                if(text_list[i+1].replace(/\n/g, '')=='['+question_number+']'){
+                    underlined_section=""
+                }
+                else{
+                    underlined_section = text_list[i].replace(/\n/g, '')
+                }
+
+                temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
+                //myArr.push(i)
+            }
+            else if(text_list[i].replace(/\n/g, '').includes('*')){
 
                 console.log("Found first one: "+text_list[i].replace(/\n/g, ''))
                 underlined_section = text_list[i].replace(/\n/g, '')
@@ -778,7 +693,7 @@
                         break;
                     }
                 }
-               console.log("Found second one: "+text_list[i+j].replace(/\n/g, ''))
+                console.log("Found second one: "+text_list[i+j].replace(/\n/g, ''))
                 if(text_list[i+j+1].replace(/\n/g, '')=='['+question_number+']'){
                     underlined_section=""
                 }
@@ -786,15 +701,15 @@
                     underlined_section = underlined_section+" "+text_list[i+j].replace(/\n/g, '')
                 }
 
-               console.log("underlined "+underlined_section)
-               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
+                console.log("underlined "+underlined_section)
+                temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
 
 
                 i=i+j
             }
 
             i=i+1;
-           underlined_section=""
+            underlined_section=""
         }
 
         document.getElementById("highlights").innerHTML=temp_text
@@ -803,9 +718,9 @@
     }
     function giveFirstHint(){
         console.log("inside give firstHint")
-       // var popup = document.getElementById("myPopup");
-      //  popup.innerText="This should be a description of Method/Tag. Also display the way to do it in a sentence."
-       // popup.classList.toggle("show");
+        // var popup = document.getElementById("myPopup");
+        //  popup.innerText="This should be a description of Method/Tag. Also display the way to do it in a sentence."
+        // popup.classList.toggle("show");
         var Tag_Holder = document.getElementById("Tag_Holder");
         document.getElementById("Tag_Display").innerHTML=Tag_Holder.value
         //console.log("First Hint Text "+ document.getElementById("First_Hint_holder").value)
@@ -855,7 +770,7 @@
             //initial = myArr[i]
             //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<mark>$&</mark>')
             //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<underline>$&</underline>')
-           // console.log("Highlighted section so far " + underlined_section);
+            // console.log("Highlighted section so far " + underlined_section);
 
         }
 
@@ -935,7 +850,7 @@
         var time_value=document.querySelector('#time')
         startTimer(duration, display,time_value);
         document.getElementById("menu").style.display="block";
-       //loadTaggedQuestions();
+        //loadTaggedQuestions();
         //loadWeaknessQuestions();
         loadQuestionBody();
         //loadbuttons();

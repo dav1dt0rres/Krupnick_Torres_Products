@@ -75,6 +75,11 @@
 </form>
 </body>
 <script type="text/javascript">
+    function HomeFunction(){
+        console.log("inside exit bool")
+        document.getElementById("Exit_bool").value="true"
+        document.getElementById("form").submit()
+    }
     function loadTests(){
         if(document.getElementById("Type_Holder").value=="Weakness"){
             return;

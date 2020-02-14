@@ -11,7 +11,7 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
 
     if (test_type=="ACT-Math"){
         var Math_Question = require('./Math_Question.js')
-        return new Math_Question(question_text, optionList,right_answer,tag,number,test_type,test,ID)
+        return new Math_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID)
     }
     else if(test_type=="ACT-Reading"){
         var Reading_Question = require('./Reading_Question.js')
@@ -78,12 +78,13 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         this.Right_Answer=Right_Answer;
         this.Passage=Passage;
     }
-    Question.prototype.setResponse_Long=function (response,confidence,old_answer,eliminated_answers){
+    Question.prototype.setResponse_Long=function (response,confidence,old_answer,eliminated_answers,checked_answers){
         console.log("setting Response LONG"+response+" "+old_answer)
         if (response!=old_answer){
             ++this.Repeats;
         }
         this.Confidence=parseInt(confidence)
+        this.Checked_Answers=this.Checked_Answers+checked_answers.split(",");
         this.Response=response;
         console.log("Eliminated Answers split: "+eliminated_answers.split(","))
         this.Eliminated_Answers=eliminated_answers.split(",")
@@ -126,6 +127,69 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
     Question.prototype.getOptions=function() {
 
         return this.OptionList;
+    }
+    Question.prototype.getMathOptions=function(){//returns a list of the math-formatted options
+        var final_string=""
+        var final_list=[];
+        for(var i=0;i<this.OptionList.length;++i){
+
+            var temp_list=this.OptionList[i].split(" ");
+            for(var j=0;j<temp_list.length;++j){
+                var math_string;
+                if(temp_list[j].includes("<")){
+                    math_string=this.Math_Algo(temp_list[j])
+                }
+                else{
+                    math_string=temp_list[j]
+                }
+                final_string=final_string+" "+math_string;
+
+            }
+            console.log("final string Options: "+final_string)
+            final_list.push(final_string);
+            final_string=""
+        }
+        return final_list;
+    }
+    Question.prototype.Math_Algo=function(section){
+        var final_string="";
+        //console.log("inside math_science algo "+section)
+        var math_string=section
+        //document.getElementById('QuestionText').style.height="400px";
+        var command_list=["ne","frac","sqrt","gt","lt","ge","le","theta","pi","log","div","overline"]
+
+        math_string=math_string.replace(/</g,"(");
+
+        math_string=math_string.replace(/>/g,")");
+        var f_p= math_string.indexOf("(");
+        math_string=math_string.substring(0,f_p)+"\\"+math_string.substring(f_p)
+        //math_string="\\"+math_string;
+        var index=0;
+        //console.log("Final string before for loop ",math_string)
+        index=math_string.lastIndexOf(")",math_string.length-1);
+        //console.log("index "+index)
+
+
+        var math_string_final=math_string.substring(0, index) + "\\" + math_string.substring(index, math_string.length)
+        //console.log("math_string_final: ",math_string_final)
+        for (var i=0;i<command_list.length;++i){
+            if(math_string_final.indexOf(command_list[i])>-1) {
+                if (command_list[i] == "ne" && math_string_final.indexOf("overline") == -1) {
+                    console.log("its a legitame ne_choices")
+                    var c_start = math_string_final.indexOf(command_list[i])
+                    math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
+                } else if (command_list[i] != "ne") {
+                    console.log("string command" + command_list[i])
+                    var c_start = math_string_final.indexOf(command_list[i])
+                    math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
+                    console.log("WITH string command" + math_string_final)
+                }
+            }
+
+        }
+
+        //console.log("Final String "+math_string_final)
+        return math_string_final;
     }
     Question.prototype.setFirstHint=function(hint_list) {
         this.First_Hint=hint_list;

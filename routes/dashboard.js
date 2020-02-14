@@ -82,12 +82,23 @@ router.get('/', async function (req, res, next) {
 
 
     title="This is a Sample Question, please press Submit(Next Question)"
-    res.render('register_Question', {Question_Body_Holder:title, Answer_A:"Sample A",
-        Answer_B:"SampleB",Answer_C:"Sample C",
-        Passage_Holder:Database_Object.DisplayQuestionsList(),
-        storyboxID:"STORY BOARD", Database_Index:Current_Sessions.length,Time_Limit_Holder:req.query.Time_Limit_Question,
-        CheckBox_List:Database_Object.CheckBox_List
-    })
+    if(Database_Object.Test_Type=="ACT-Math"){
+        res.render('register_Question_Math', {Question_Body_Holder:title, Answer_A:"Sample A",
+            Answer_B:"SampleB",Answer_C:"Sample C",
+            Passage_Holder:Database_Object.DisplayQuestionsList(),
+            storyboxID:"STORY BOARD", Database_Index:Current_Sessions.length,Time_Limit_Holder:req.query.Time_Limit_Question,
+            CheckBox_List:Database_Object.CheckBox_List
+        })
+    }
+    else{
+        res.render('register_Question', {Question_Body_Holder:title, Answer_A:"Sample A",
+            Answer_B:"SampleB",Answer_C:"Sample C",
+            Passage_Holder:Database_Object.DisplayQuestionsList(),
+            storyboxID:"STORY BOARD", Database_Index:Current_Sessions.length,Time_Limit_Holder:req.query.Time_Limit_Question,
+            CheckBox_List:Database_Object.CheckBox_List
+        })
+    }
+
     Current_Sessions.push(Database_Object);
 })
 router.get('/Weakness',async function(req, res, next){
@@ -188,7 +199,7 @@ router.get('/Question_Loop',async function (req, res, next) {
     console.log("Inside Question_Loop!!!!!!")
     var {JSDOM} = require("jsdom");
     var jsdom=require("jsdom")
-    var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\register_Question.hbs','utf-8');
+    var data = fs.readFileSync('./views/register_Question.hbs','utf-8');
     var document = new JSDOM(data).window.document;
 
 
@@ -202,9 +213,9 @@ router.get('/Question_Loop',async function (req, res, next) {
         Database_Object.startTime();//Only keeps track of total time.
         Question_object=Database_Object.Last_Question
         Database_Object.Normal_Index=0;
-        await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
-        await Database_Object.initializeTagged_List();//erasing past ones
-        Database_Object.orderTagged_List();//Usually means shuffling
+        //await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
+        //await Database_Object.initializeTagged_List();//erasing past ones
+        //Database_Object.orderTagged_List();//Usually means shuffling
     }
     else if(req.query.Exit_bool=="true"){
         console.log("Entering Exit")
@@ -243,7 +254,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         console.log("Inside get next question at an index")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
 
-        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history,req.query.Eliminated_Answers)
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history,req.query.Eliminated_Answers,req.query.Presentation_Holder)//Presenetation holder is only place holder for check answers
         var end=await Database_Object.getNextQuestion(parseInt(req.query.normal_Question_Index));
         if(end==false){
             var scaled=readScaledScore(Database_Object)
@@ -258,15 +269,15 @@ router.get('/Question_Loop',async function (req, res, next) {
             return;
         };
         Question_object=Database_Object.Last_Question
-        await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
-        await Database_Object.initializeTagged_List();//erasing past ones
-        Database_Object.orderTagged_List();//Usually means shuffling
+        //await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
+        //await Database_Object.initializeTagged_List();//erasing past ones
+        //Database_Object.orderTagged_List();//Usually means shuffling
 
     }
     else if (req.query.hasOwnProperty("next_question")){
         console.log("Inside next Question")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks+" "+req.query.Combo_Holder)
-        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history)
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history,req.query.Eliminated_Answers,req.query.Presentation_Holder)//Presenetation holder is only place holder for check answers
         var end=await Database_Object.getNextQuestion(parseInt(req.query.normal_Question_Index)+1);
         if(end==false){
             var scaled=readScaledScore(Database_Object)
@@ -281,9 +292,9 @@ router.get('/Question_Loop',async function (req, res, next) {
             return;
         };
         Question_object=Database_Object.Last_Question
-        await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
-        await Database_Object.initializeTagged_List();//erasing past ones
-        Database_Object.orderTagged_List();//Usually means shuffling
+        //wait Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
+        //await Database_Object.initializeTagged_List();//erasing past ones
+        //Database_Object.orderTagged_List();//Usually means shuffling
     }
     else if(parseInt(req.query.tagged_Questions_holder)>=0){
         console.log("INside tagged question"+" "+req.query.combo)
@@ -299,7 +310,7 @@ router.get('/Question_Loop',async function (req, res, next) {
 
     var {JSDOM} = require("jsdom");
     var jsdom=require("jsdom")
-    var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\register_Question.hbs','utf-8');
+    var data = fs.readFileSync('./views/register_Question.hbs','utf-8');
     var document = new JSDOM(data).window.document;
 
     var element=document.createElement("textarea");
@@ -333,27 +344,239 @@ router.get('/Question_Loop',async function (req, res, next) {
     ++counter;
 })
 
+router.get('/Question_Loop_Math',async function(req,res,next){
+    console.log("Inside Question_Loop_MATH!!!!!!")
+    var {JSDOM} = require("jsdom");
+    var jsdom=require("jsdom")
+    var data = fs.readFileSync('./views/register_Question.hbs','utf-8');
+    var document = new JSDOM(data).window.document;
+
+
+    var Database_Object=Current_Sessions[req.query.Database_Index]
+
+    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+req.query.Masked_bool+" "+req.query.Database_Index)
+    //console.log("argument passed"+" "+req.query.tagged_Questions_holder);//brings back the index for the tagged question
+    if (Database_Object.Count==0){
+
+        ++Database_Object.Count;
+        Database_Object.startTime();//Only keeps track of total time.
+        Question_object=Database_Object.Last_Question
+        Database_Object.Normal_Index=0;
+        //await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
+        //await Database_Object.initializeTagged_List();//erasing past ones
+        //Database_Object.orderTagged_List();//Usually means shuffling
+    }
+    else if(req.query.Exit_bool=="true"){
+        console.log("Entering Exit")
+        console.log("Length before"+Current_Sessions.length)
+
+        //Current_Sessions.splice(req.query.Database_Index,1)
+
+        title="Welcome to your Dashboard, "+Database_Object.Student.firstName;
+        console.log("Length after+Current_Sessions.length"+Current_Sessions.length)
+        res.render('dashboard', {title,FirstName:Database_Object.Student.firstName,LastName:Database_Object.Student.lastName, Email:Database_Object.Student.email })
+
+        return
+    }
+    else if(parseInt(req.query.Final_Questions_holder)>=0){//the question is begin rendered for review purposes
+        console.log("INside Final Review question ")
+
+        await Database_Object.getNextQuestion_Final_Review(parseInt(req.query.Final_Questions_holder)-1);
+        Question_object=Database_Object.Last_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
+
+        var element=document.createElement("textarea");
+        //console.log("Passage Outside"+" "+Question_object.getPassage())
+        element.value=Question_object.getPassage()
+
+        //this.Math_Algo(Question_object.Question_text);
+        title=Question_object.Number+".)"+" "+findAllbrackets_Math(Question_object.Math_Question_Text);;
+        var optionsList=Question_object.getMathOptions();
+        res.render('register_Question_Math', {Question_Body_Display:title, Passage_Holder:element.value, Answer_A:optionsList[0],
+            Answer_B:optionsList[1],Answer_C:optionsList[2],
+            Answer_D: optionsList[3], Answer_E:optionsList[4],
+            Database_Index: req.query.Database_Index,
+            Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder,Tag_Holder:Question_object.Tag,
+            Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
+            First_Hint_holder:Question_object.First_Hint.join(" "),Final_Questions_holder: await Database_Object.DisplayResultList(),Time_Limit_Holder:Question_object.Response,
+            Question_Length:Database_Object.List_Questions.length,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
+        })
+        return;
+    }
+    else if(parseInt(req.query.normal_Question_Index)!=parseInt(Database_Object.Last_Question.Number)-1 ){//He switched to a another question number from the buttons
+        console.log("Inside get next question at an index")
+        console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
+
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history,req.query.Eliminated_Answers,req.query.Presentation_Holder)//Presenetation holder is only place holder for check answers
+        var end=await Database_Object.getNextQuestion(parseInt(req.query.normal_Question_Index));
+        if(end==false){
+            var scaled=readScaledScore(Database_Object)
+            title="You have reached the end, congratulations. Please review your answers below           Scaled Score: "+scaled
+            res.render('Ending', {title:title,
+                Database_Index: req.query.Database_Index,scaled_score:scaled,
+                Final_Questions_holder:await Database_Object.DisplayResultList(),
+                normal_Question_Index:req.query.normal_Question_Index,Total_Time:Database_Object.getTest_Time_Current()
+
+            })
+            Database_Object.send_email("finished,"+Database_Object.Student.Session)
+            return;
+        };
+        Question_object=Database_Object.Last_Question
+        //await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
+        //await Database_Object.initializeTagged_List();//erasing past ones
+        //Database_Object.orderTagged_List();//Usually means shuffling
+
+    }
+    else if (req.query.hasOwnProperty("next_question")){
+        console.log("Inside next Question")
+        console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks+" "+req.query.Combo_Holder)
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.Combo_Holder,req.query.hover_history,req.query.Eliminated_Answers,req.query.Presentation_Holder)//Presenetation holder is only place holder for check answers
+        var end=await Database_Object.getNextQuestion(parseInt(req.query.normal_Question_Index)+1);
+        if(end==false){
+            var scaled=readScaledScore(Database_Object)
+            title="You have reached the end, congratulations. Please review your answers below                       Scaled Score: "+ scaled
+            res.render('Ending', {title:title,
+                Database_Index: req.query.Database_Index,scaled_score:scaled,
+                Final_Questions_holder: await Database_Object.DisplayResultList(),
+                normal_Question_Index:req.query.normal_Question_Index,Time_Limit_Holder:Database_Object.Question_Time_Limit,
+                Total_Time:Database_Object.getTest_Time_Current()
+            })
+            Database_Object.send_email("finished,"+Database_Object.Student.Session)
+            return;
+        };
+        Question_object=Database_Object.Last_Question
+        //wait Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
+        //await Database_Object.initializeTagged_List();//erasing past ones
+        //Database_Object.orderTagged_List();//Usually means shuffling
+    }
+    else if(parseInt(req.query.tagged_Questions_holder)>=0){
+        console.log("INside tagged question"+" "+req.query.combo)
+        console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
+        await Database_Object.saveResponse(req.query.combo,req.query.confidence,req.query.time,req.query.First_Hint_holder,req.query.number_checks,req.query.hover_history) //its important you always save response BEFORE getSameTag because it updates history in this function
+        await Database_Object.getSame_TagQuestion(parseInt(req.query.tagged_Questions_holder));
+        Question_object=Database_Object.Last_Tagged_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
+
+    }
+
+    title=Question_object.Number+".)"+" "+findAllbrackets_Math(Question_object.Math_Question_Text);;
+    var optionsList=Question_object.getMathOptions();
+
+    var {JSDOM} = require("jsdom");
+    var jsdom=require("jsdom")
+    var data = fs.readFileSync('./views/register_Question.hbs','utf-8');
+    var document = new JSDOM(data).window.document;
+
+    var element=document.createElement("textarea");
+    //console.log("Passage Outside"+" "+Question_object.getPassageinside student_test has own property())
+    element.value=Question_object.getPassage()
+
+    console.log("timetestcurrent_MATH "+Database_Object.getTest_Time_Current())
+    res.render('register_Question_Math', {Question_Body_Display:title, Question_Number: Question_object.Number, Passage_Holder:element.value, Answer_A:optionsList[0],
+        Answer_B:optionsList[1],Answer_C:optionsList[2],
+        Answer_D: optionsList[3], Answer_E:optionsList[4],
+        Database_Index: req.query.Database_Index,
+        Eliminated_Answers:Question_object.Eliminated_Answers.join(","),Masked_bool:req.query.Masked_bool,
+        Right_Answer:Question_object.Right_Answer,normal_Question_Index:Database_Object.Normal_Index,Tag_Holder:Question_object.Tag,
+        Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
+        Total_Time:Database_Object.getTest_Time_Current(),
+        First_Hint_holder:Question_object.First_Hint.join(" "),Final_Questions_holder:[],Time_Limit_Holder:Database_Object.Question_Time_Limit,
+        Question_Length:Database_Object.List_Questions.length,
+        Combo_Holder:Question_object.Response,
+        CheckBox_List:Database_Object.CheckBox_List,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
+    })
+
+    if (counter!=0){
+        Question_object.recordResponse(req.body.combo,timer)
+        Responses.push(Question_object);
+        //Database_Object.recordSession(Question_object,Student_Object);
+    }
+    //Current_Sessions[req.query.Database_Index]=Question_object;
+
+    console.log(JSON.stringify(req.body))
+
+    ++counter;
+})
+
 function readScaledScore_Tutor_Review(Database_Object){
     const lineByLine = require('n-readlines');
     const liner = new lineByLine('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
     var line;
     var raw_score=Database_Object.getRawScore();
-    console.log("raw_score "+raw_score)
+    //console.log("raw_score "+raw_score)
     while (line = liner.next()) {
         var temp_line = line.toString('ascii').split(" ")
         //console.log("comparing "+temp_line[0]+" "+raw_score)
 
         if (parseInt(temp_line[0])==raw_score){
-            console.log("Found the scaled score!! "+temp_line[1])
+            //console.log("Found the scaled score!! "+temp_line[1])
             return temp_line[1]
         }
         //console.log("Scaled Scores "+temp_line[0]+" "+temp_line[1]);
 
     }
 }
+function findAllbrackets_Math(Question_Text_List){
+    //console.log("Entire QUestion going in: "+Question_Text_List)
+    //var start=Question_Text_List.indexOf('{',0)
+    var count=0
+    var final_string=""
+    for (var i =0 ;i<Question_Text_List.length;++i){
+        if(Question_Text_List[i].includes("<")){
+            var math_string=Math_Algo(Question_Text_List[i])
+        }
+        else{
+            math_string=Question_Text_List[i]
+        }
+        final_string=final_string+" "+math_string;
+        console.log("final string so far: "+final_string)
+    }
+
+
+    return final_string
+}
+
+function Math_Algo(section){
+    var final_string="";
+    console.log("inside math_science algo "+section)
+    var math_string=section
+                //document.getElementById('QuestionText').style.height="400px";
+    var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline"]
+
+    math_string=math_string.replace(/</g,"(");
+
+    math_string=math_string.replace(/>/g,")");
+    //math_string=math_string.replace(/.$/,")");
+    math_string="\\"+math_string;
+    var index=0;
+
+    index=math_string.lastIndexOf(")",math_string.length-1);
+
+    var math_string_final=math_string.substring(0, index) + "\\" + math_string.substring(index, math_string.length)
+    //console.log("math_string_final: ",math_string_final)
+    for (var i=0;i<command_list.length;++i){
+        if(math_string_final.indexOf(command_list[i])>-1) {
+            if (command_list[i] == "ne" && math_string_final.indexOf("overline") == -1) {
+                console.log("its a legitame ne")
+                var c_start = math_string_final.indexOf(command_list[i])
+                math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
+            } else if (command_list[i] != "ne") {
+                console.log("string command" + command_list[i])
+                var c_start = math_string_final.indexOf(command_list[i])
+                math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
+                console.log("WITH string command" + math_string_final)
+            }
+        }
+
+    }
+
+    console.log("Final String "+math_string_final)
+    return math_string_final;
+
+
+}
+
 function  readScaledScore(Database_Object){
         const lineByLine = require('n-readlines');
-        const liner = new lineByLine('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
+        const liner = new lineByLine('./Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
         var line;
         var raw_score=Database_Object.getRawScore();
         console.log("raw_score "+raw_score)
@@ -428,16 +651,39 @@ router.get('/automatedEmail_Student', async function(req,res,next){
     //Current_Sessions.push(Database_Object);
 })
 router.get('/automatedEmail_Student_Send',async function(req,res,next){
-    console.log("inside automatedEmail student send "+req.query.Test+" "+req.query.Test_Type+" "+req.query.LastName+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test)
-    var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[0,0,0]);//keeping record of the index in Current_Session
-    Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
-    //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+    if(req.query.get_test!="true"){
+        console.log("inside automatedEmail student send "+req.query.Test+" "+req.query.Test_Type+" "+req.query.LastName+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test)
+        var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[0,0,0]);//keeping record of the index in Current_Session
+        Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+        //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+        var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also
+    }
 
-    var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also
+
     if(id==false){
         title="Please try again no Student Found with Name:"+req.query.LastName+","+" "+req.query.FirstName
         res.render('Test_Options_send_email',{title, FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email})
         return;
+    }
+    else if(req.query.get_test=="true"){
+        console.log("inside loadtests-sending email")
+        var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
+        Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+        var test_list=await Database_Object.getTests();
+        var tests=document.createElement('select')
+        title="Are you ready? "+req.query.FirstName+", to take the ACT?"
+        for(var i =0; i<test_list.length;++i){
+
+            var option=document.createElement('option')
+            option.value=test_list[i]
+            option.text=test_list[i];
+            tests.add(option)
+        }
+
+
+        res.render('Test_Options_send_email',{title, FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test_Type_Holder:req.query.Test_Type,Test:tests})
+        return;
+
     }
     Database_Object.send_email("send_reminder")
     title="Successfully send reminder to :"+req.query.FirstName+" "+req.query.LastName
@@ -469,7 +715,7 @@ router.get('/SearchStudent',async function (req,res,next){
     }
     else if(req.query.show_final=="true"){//Actualy question lists shown just like the Ending for the student (with minor changes)
         var Database_Object=Current_Sessions[req.query.Database_Index]
-
+        console.log("ABout to show final resulkts ")
         //res.render('SearchStudent',{title, Tests_Returned:"false",Test_Type_Holder:req.query.Test_Type,FirstName_Holder:req.query.firstName,LastName_Holder:req.query.lastName,email_Holder:req.query.email,Test_Holder:req.query.Test,get_test:"false", Database_Index:req.query.Database_Index})
         var scaled=readScaledScore_Tutor_Review(Database_Object)
         var display_list=await Database_Object.DisplayResultList_Tutor_View();
@@ -487,6 +733,8 @@ router.get('/SearchStudent',async function (req,res,next){
     else if (req.query.get_test=="false"){///The user just wants to send the Student an email
         console.log("inside student_test has own property "+req.query.FirstName)
         title="Select the options you want to students to take the Test under...."
+
+        //res.render('Test_Options',{title, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests})
         res.render('Test_Options_send_email',{title, FirstName:req.query.firstName,LastName:req.query.lastName,Email:req.query.email})
         return;
     }
