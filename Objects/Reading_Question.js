@@ -34,7 +34,7 @@ function Reading_Question(question_text, optionList,right_answer,tag,number,pass
     this.Total_Time;
     this.Hover_History=[]
     this.Confidence;
-
+    this.punctuationChoices();
 }
 
 util.inherits(Reading_Question, Question);
@@ -43,6 +43,22 @@ Reading_Question.prototype.getPassage=function(){
     return this.Passage //returns a string
     //return this.Passage.replace(',', '');
 
+}
+Reading_Question.prototype.punctuationChoices=function(){
+    for(var j=0;j<this.OptionList.length;++j){
+        //console.log("Choices before "+Questions[i].Choices[j])
+        this.OptionList[j]=this.OptionList[j].replace(/,/g, ' ');
+        //.log("Choices After "+Questions[i].Choices[j])
+    }
+    for(var i=0;i<this.OptionList.length;++i){
+        if(this.OptionList[i].includes("  ")){
+            //console.log("OPtion List before "+i+" "+this.OptionList[i])
+            this.OptionList[i]=this.OptionList[i].replace(/  /g, ', ');
+
+            //console.log("OPtion List "+ this.OptionList[i])
+        }
+
+    }
 }
 module.exports = Reading_Question;
 

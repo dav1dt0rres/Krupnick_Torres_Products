@@ -8,6 +8,7 @@ require('./Models/PassageSchema')
 require('./Models/ReadingSchema');
 require('./Models/Student_Schema');
 require('./Models/MathSchema');
+require('./Models/ScienceSchema')
 require('./Models/EnglishSchema');
 
 

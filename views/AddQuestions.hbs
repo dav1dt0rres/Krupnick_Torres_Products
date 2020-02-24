@@ -1,12 +1,17 @@
 
 <h4>Please Enter the details of the Question</h4>
 
-<form id="form" action="/AddQuestions/ScrollEditQuestions"  method="post">
+<form id="form" action="/AddQuestions/ScrollEditQuestions"  method="post" enctype="multipart/form-data">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <label style="font-family:verdana;font-size:15px;" color="#2C3539" id ="checkbox_math_science_label" for="checkbox_math_science">
-        Is this a Math or Science Question?
-        <input onChange="loadMathCommands()"  type="checkbox" name="checkbox_math_science" id="checkbox_math_science"   >
+        Is this a Math Question?
+        <input onChange="loadMathCommands()"  type="checkbox" name="checkbox_math_science" id="checkbox_math_science"  >
+
+    </label>
+    <label style="font-family:verdana;font-size:15px;" color="#2C3539" id ="checkbox_science_label" for="checkbox_science">
+        Is this a Science Question?
+        <input onChange="loadScienceCommands()"  type="checkbox" name="checkbox_science" id="checkbox_science"  >
 
     </label>
     <input type="hidden" id="math_science_holder" name="math_science_holder" value="{{math_science_holder}}"  />
@@ -149,11 +154,13 @@
 
 
         </select>
-        <button name=Save_Button id="Save_Button" type="submit">Save Question</button>
+        <button name="butt" id="butt" type="button" onclick="submitFinal()" value="save_question">Save Question</button>
         <p id="math_text" name="math_text"  >{{math_text}}</p>
-        <input type="file" name="file">
-        <input type="submit" value="Submit">
 
+
+        <input type="hidden" id="submission" name="submission"  value="" />
+        <input type="hidden" id="Image_List_Holder" name="Image_List_Holder" value="{{Image_List_Holder}}"  />
+        <input onChange="filechange()" type="file" name="file" id="file" size="60" multiple value="{{Image}}" />
     </div>
 
 
@@ -162,9 +169,9 @@
         </label>
             <textarea onkeyup="Math_Science('Passage')" class="text_area_input" id="Passage" name="Passage" rows="4" cols="5" value="{{Passage}}" >{{Passage}}</textarea>
 
+    <img style="position: absolute; left:500px; top:550px" src={{Image}} />
 
-
-    <button  id="Edit_Button" name="Edit_Button" type="submit">Edit a Question</button>
+    <button  id="butt" name="butt" type="submit" value="edit_question">Edit a Question</button>
     <button  id="ReadIn_Button" name="ReadIn_Button" type="submit">ReadIn_Button</button>
 
     <button onclick="goBack()">Go Back</button>
@@ -172,20 +179,83 @@
 </form>
 
 <script type="text/javascript">
-
-
+    function submitFinal(){
+        console.log("inside final submissiont "+document.getElementById("checkbox_math_science").checked +" "+document.getElementById("checkbox_science").checked)
+        if(document.getElementById("file").files.length == 0 && ( document.getElementById("checkbox_science").checked )){
+            alert("Make sure to upload Files! ");
+        }
+        else{
+            document.getElementById("submission").value="true"
+            document.getElementById("form").submit()
+        }
+    }
+    function filechange(){
+        console.log("inside on change "+document.getElementById("file").files.length )
+        var file_list=document.getElementById("file").files
+        for (var i=0;i<file_list.length;++i){
+            console.log("file "+file_list[i].name)
+        }
+        //file.files.length;
+    }
 
     function HomeFunction(){
         console.log("Go back home function")
         window.location.href = '/register'
     }
+    function loadScienceCommands(){
+
+        document.getElementById("checkbox_math_science").checked = false;
+        console.log("inside load Science commands")
+
+        console.log("commands: ");
+        var command_list="not equal = 'ne'  \nexponent = ^ \n" +
+                "angle ='angle'\n"+
+                "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
+                "fraction='frac{}{}'\n"+
+                "Scientific Notation X='times'\n"+
+                "square root='sqrt{}'\n"+
+                "absolute value='|   |'\n"+
+                "pi='pi'\n"+
+                "theta = 'theta'\n"+
+                "subscript = '_'\n"+
+                "repeating decimal= 'overline{}'\n"+
+                "division symbol = 'div'\n"+
+                "logarithmic='log_y x'\n"+
+                "greater than='gt'\n"+
+                "greater than or equal='ge'\n"+
+                "less than ='lt'\n"+
+                "less than or equal='le'\n"+
+                "DO NOT LEAVE ANY SPACES BETWEEN THE BRACKETS: '<   >'\n"+
+                "---------------------------------------------------------------------------------->end\n"
+
+        document.getElementById("Passage").value=command_list
+    }
     function loadMathCommands(){
         console.log("inside load math commands")
-
+        document.getElementById("checkbox_science").checked = false;
             console.log("commands: ");
-            //document.getElementById("Passage").value=
+        var command_list="not equal = 'ne'  \nexponent = ^ \n" +
+                "angle ='angle'\n"+
+                "fraction='frac{}{}'\n"+
+                "square root='sqrt{}'\n"+
+                "absolute value='|   |'\n"+
+                "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
+                "Scientific Notation X='times'\n"+
+        "pi='pi'\n"+
+        "theta = 'theta'\n"+
+        "subscript = '_'\n"+
+        "repeating decimal= 'overline{}'\n"+
+        "division symbol = 'div'\n"+
+        "logarithmic='log_y x'\n"+
+        "greater than='gt'\n"+
+        "greater than or equal='ge'\n"+
+        "less than ='lt'\n"+
+        "less than or equal='le'\n"+
 
+        "DO NOT LEAVE ANY SPACES BETWEEN THE BRACKETS: '<   >'\n"+
+        "---------------------------------------------------------------------------------->end\n"
 
+        document.getElementById("Passage").value=command_list
 
     }
 
@@ -193,7 +263,7 @@
 
         var final_string="";
         console.log("inside math_science: "+document.getElementById("checkbox_math_science").checked)
-        if (document.getElementById("checkbox_math_science").checked ) {
+        if (document.getElementById("checkbox_math_science").checked ||document.getElementById("checkbox_science").checked ) {
             //document.getElementById('QuestionText').style.height="400px";
 
             if(document.getElementById(argument).value.charAt(document.getElementById(argument).value.length-1)==">"){
@@ -217,7 +287,7 @@
     }
 
     function Math_Algo(math_string){
-        var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline"]
+        var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline","angle","matrix","cr","times"]
         console.log("Math Algo "+math_string)
         math_string=math_string.replace("<","(");
         math_string=math_string.replace(">",")");
@@ -232,12 +302,17 @@
                     var c_start=math_string_final.indexOf(command_list[i])
                     math_string_final=math_string_final.substring(0,c_start)+"\\"+math_string_final.substring(c_start)
                 }
-                else if(command_list[i]!="ne") {
-                    console.log("string command" +command_list[i])
-                    var c_start=math_string_final.indexOf(command_list[i])
-                    math_string_final=math_string_final.substring(0,c_start)+"\\"+math_string_final.substring(c_start)
-                    console.log("WITH string command" +math_string_final)
+                else if(command_list[i] == "le" && math_string_final.indexOf("angle") == -1){
+                    console.log("its a legitame le")
+                    var c_start = math_string_final.indexOf(command_list[i])
+                    math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
                 }
+                else if(command_list[i]!="le" && command_list[i]!="ne" ){
+                    console.log("command "+command_list[i])
+                    var c_start = math_string_final.indexOf(command_list[i])
+                    math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
+                }
+
 
 
 
@@ -263,6 +338,7 @@
         document.getElementById("First_Hint").value=document.getElementById("First_Hint").value+" "+selectedText;
         document.getElementById("Label_First_Hint").style.display = 'block';
     }
+
     function Highlight_Presentation(){
         console.log("Inside hihglight presentation")
         var txtArea = document.getElementById("Passage");
@@ -394,13 +470,22 @@
         else{
             document.getElementById("First_Hint").type="input"
         }
-        if( document.getElementById("math_text").innerHTML.length>0){
-            console.log("detected inside ath science holder")
-            loadMathCommands()
+        if( document.getElementById("title").innerHTML.includes("Math")){
+            console.log("detected inside math holder")
+
+            //loadMathCommands()
+            //loadPicture();
             //document.getElementById("math_text").innerHTML=document.getElementById("math_science_holder").value;
             document.getElementById("checkbox_math_science").checked=true;
         }
+        if( document.getElementById("title").innerHTML.includes("Science")){
+            console.log("detected inside science holder")
 
+            //loadScienceCommands()
+            //loadPicture();
+            //document.getElementById("math_text").innerHTML=document.getElementById("math_science_holder").value;
+            document.getElementById("checkbox_science").checked=true;
+        }
         //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)
 

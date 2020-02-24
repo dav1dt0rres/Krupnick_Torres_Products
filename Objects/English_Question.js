@@ -44,7 +44,11 @@ function English_Question(question_text, optionList,right_answer,tag,number,pass
 util.inherits(English_Question, Question);
 
 English_Question.prototype.punctuationChoices=function(){
-
+    for(var j=0;j<this.OptionList.length;++j){
+        //console.log("Choices before "+Questions[i].Choices[j])
+        this.OptionList[j]=this.OptionList[j].replace(/,/g, ' ');
+        //.log("Choices After "+Questions[i].Choices[j])
+    }
     for(var i=0;i<this.OptionList.length;++i){
         if(this.OptionList[i].includes("  ")){
             //console.log("OPtion List before "+i+" "+this.OptionList[i])

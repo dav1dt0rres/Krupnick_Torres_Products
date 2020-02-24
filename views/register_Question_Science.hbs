@@ -13,25 +13,22 @@
 
 <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
 <input type="hidden" id="pause_bool" name="pause_bool" value="{{pause_bool}}"  />
-
+<input type="hidden" id="Passage_Display_Holder" name="Passage_Display_Holder" value="{{Passage_Display_Holder}}"  />
 
 <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
-<div class="Correct_Answer" align="left" style="margin-left: 55px;" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
-<div class="container">
+<div class="Correct_Answer" style="margin-left: 55px;" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
+<div id="container"  class="container">
 
+    <p style="margin-left: 55px;" id="Passage_Display" name="Passage_Display" align="left">
 
-    <div id="backdrop" name="backdrop" class="backdrop">
-        <div id ="highlights" name="highlights" class="highlights"></div>
+    </p>
 
-    </div>
-    <textarea onmouseenter="recordHover('passage_box_enter')" onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
-
-
+    <input type="hidden" id="Image_List_Holder" name="Image_List_Holder" value="{{Image_List_Holder}}"  />
 </div>
 
 </body>
 
-<form id ="form" action="/dashboard/Question_Loop"  method="get">
+<form id ="form" action="/dashboard/Question_Loop_Science"  method="get">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <input type="hidden" id="Combo_Holder" name="Combo_Holder" value="{{Combo_Holder}}"  />
@@ -47,42 +44,44 @@
         <div class="Tag_Display" id="Tag_Display" name="Tag_Display"><span ></span> </div>
 
 
-        <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  ></h4>
+        <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  >
+            {{Question_Body_Display}}
+        </h4>
 
 
-    <p  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA_1" name="Answer_A" >
-        A.)
-        <span onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </span>
+        <p  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA_1" name="Answer_A" >
+            A.)
+            <span onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </span>
 
-    </p>
-    <p onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB_1" >
-        B.)
-        <span onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </span>
+        </p>
+        <p onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB_1" >
+            B.)
+            <span onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </span>
 
-    </p>
-    <p onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC_1">
-        C.)
-        <span onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </span>
+        </p>
+        <p onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC_1">
+            C.)
+            <span onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </span>
 
-    </p>
-    <p onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD_1">
-        D.)
-        <span onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </span>
+        </p>
+        <p onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD_1">
+            D.)
+            <span onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </span>
 
-    </p>
-    <p onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE">
-        E.)
-        <span onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE_1" >{{Answer_E}} </span>
+        </p>
+        <p onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE_1">
+            E.)
+            <span onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE" >{{Answer_E}} </span>
 
-    </p>
+        </p>
 
-    <select onmouseenter="recordHover('sroll_down')" id="combo" name="combo" name="combo">
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-        <option value="D">D</option>
-        <option disabled selected value> -- select an option -- </option>
-    </select>
+        <select onmouseenter="recordHover('sroll_down')" id="combo" name="combo" name="combo">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option disabled selected value> -- select an option -- </option>
+        </select>
         <select  onchange="finalsubmit()" style="display: none;" id="confidence" name="confidence">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -92,8 +91,9 @@
         </select>
         <button id="checkanswer" type="button" onclick="checkCorrectAnswer()" >Check if Correct</button>
 
-        <a id="backwards_question" name="backwards_question" onclick="submit_1(-1)" class="previous round">&#8249;</a>
-        <a id="next_question" name="next_question" onclick="submit_1(1)" class="next round">&#8250;</a>
+        <a href="#" id="backwards_question" name="backwards_question" onclick="submit_1(-1)" class="previous round">&#8249;</a>
+        <a href="#" id="next_question" name="next_question" onclick="submit_1(1)" class="next round">&#8250;</a>
+
         <div id="confidence_tool" class="tooltip"  style="display: none;" >
             <span id="confidence_input" class="tooltiptext">Please Select a Confidence Score</span>
         </div>
@@ -137,8 +137,8 @@
     <input type="hidden" id="Eliminated_Answers" name="Eliminated_Answers" value="{{Eliminated_Answers}}"  />
     <input type="hidden" id="CheckBox_List" name="CheckBox_List" value="{{CheckBox_List}}"  />
     <input type="hidden" id="Question_Body_Holder" name="Question_Body_Holder" value="{{Question_Body_Holder}}"  />
-    <input type="hidden" id="Total_Time_Holder" name="Total_Time_Holder" value="{{Total_Time_Holder}}"  />
     <input type="hidden" id="time" name="time" value="{{time}}"  />
+    <input type="hidden" id="Total_Time_Holder" name="Total_Time_Holder" value="{{Total_Time_Holder}}"  />
     <input type="hidden" id="normal_Question_Index" name="normal_Question_Index" value="{{normal_Question_Index}}"  />
     <input type="hidden" id="Question_Length" name="Question_Length" value="{{Question_Length}}"  />
     <input type="hidden" id="tagged_Questions_holder" name="tagged_Questions_holder" value="{{tagged_Questions_holder}}"  />
@@ -197,6 +197,7 @@
         //console.log("Hover history: "+document.getElementById("hover_history").value);
 
     }
+
     function leavingOption(argument){
         console.log("leaving "+argument)
         if(document.getElementById("Eliminate_bool").value=="true"){
@@ -230,6 +231,34 @@
             }
             else{
                 document.getElementById(list[i]).style.color = "black";
+            }
+        }
+        console.log("Choosing "+element[element.length-1])
+        document.getElementById("combo").value = element[element.length-1];
+    }
+    function clickedOption_Picture(element){
+        console.log("inside clicked option picture")
+        var list=["paraA","paraB","paraC","paraD","paraE"]
+        if(document.getElementById("Eliminate_bool").value=="true"){
+            document.getElementById(element).style.textDecoration ="line-through";
+            document.getElementById("Eliminated_Answers").value=document.getElementById("Eliminated_Answers").value+","+element;
+            document.getElementById("html").style.cursor = "default";
+            document.getElementById("Eliminate_bool").value="false"
+            return;
+        }
+        else if(document.getElementById("Masked_bool").value=="true"){
+            console.log("Para print out "+"para"+element)
+            document.getElementById(element).style.visibility="visible"
+
+        }
+        for(var i=0;i<list.length;++i){
+            console.log("comparing "+list[i].localeCompare(element))
+            if (list[i].localeCompare(element)==0){
+                //document.getElementById(element).style.color = "DodgerBlue";
+                document.getElementById(element).style.border= "1px solid blue";
+            }
+            else{
+                document.getElementById(list[i]).style.border = "none";
             }
         }
         console.log("Choosing "+element[element.length-1])
@@ -464,7 +493,7 @@
             e.style.backgroundColor="#CB5C56";
             var correct=document.getElementById("para"+document.getElementById("Right_Answer").value);
             correct.style.backgroundColor="#75E17A"
-          //this actually contains the response the User submitted
+            //this actually contains the response the User submitted
 
             return;
         }
@@ -512,126 +541,39 @@
 
         //
     }
-    function loadbuttons(){
+    function Math_Science(argument){
 
-        var buttonGroup=document.getElementById("btn-group")
+        var final_string="";
+        console.log("inside math_science")
+        if (document.getElementById("checkbox_math_science").checked ) {
+            //document.getElementById('QuestionText').style.height="400px";
 
-        buttonGroup.name="button-group"
+            if(document.getElementById(argument).value.charAt(document.getElementById(argument).value.length-1)=="}"){
+                var start=document.getElementById(argument).value.lastIndexOf('{',document.getElementById(argument).value.length-1)
 
-        var temp_list=document.getElementById("Final_Questions_holder").value.split(",")
-        if(temp_list.length>1){
-
-            for (var i=1;i<temp_list.length;++i){
-                console.log("Button Numbesr that are Incorrect"+" "+temp_list[i])
-                new_button = document.createElement('button');
-
-                new_button.innerHTML=temp_list[i].toString();
-                new_button.value=temp_list[i].toString();
-                new_button.onclick=async function(event) {
-
-                    document.getElementById("Final_Questions_holder").value=this.value
-
-                    document.getElementById("form").submit()
-
-                }
-
-                buttonGroup.appendChild(new_button)
-            }
-
-            return;
-        }
-        //var index=document.getElementById("Question_Number").value
-        var index=document.getElementById("normal_Question_Index").value
-        console.log("loading buttons "+index)
-
-        //console.log("header " +header.value + ' '+header.innerText)
-        if(parseInt(index)==6){
-            console.log("Inside of 7 button")
-            loadbuttonsV2(7);
-            return;
-        }
-        if(parseInt(index)<7){
-            console.log("inside less than 7")
-            for (var i=1;i<8;++i){
-                new_button = document.createElement('button');
-                if(i==parseInt(index)){
-                    new_button.className="current_index"
-                }
-                new_button.innerHTML=i.toString();
-                new_button.value=i.toString();
-                new_button.onclick=async function(event) {
-
-                    document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-
-                    document.getElementById("form").submit()
-
-                }
-
-                buttonGroup.appendChild(new_button)
-                console.log("Length of children"+" "+document.getElementById("header").children.length)
-                console.log("Length of children"+" "+buttonGroup.children.length)
-            }
-            return;
-        }
-
-        for (var i=4;i>0;--i){
-            new_button = document.createElement('button');
-            var less= (parseInt(index)+1)-i
-            string=less.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
-
-                document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
+                var final=document.getElementById(argument).value.length-1
+                var math_string=Math_Algo( document.getElementById(argument).value.substring(start))
+                console.log(document.getElementById(argument).value.substring(0,start)+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1))
+                //final_string=document.getElementById("QuestionText").value.substring(0,start)+math_string+document.getElementById("QuestionText").value.substring(final,document.getElementById("QuestionText").value.length-1)
+                final_string=final_string+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1)
+                document.getElementById("math_text").innerHTML=final_string;
+                document.getElementById("math_science_holder").value=final_string
                 document.getElementById("form").submit()
-
             }
 
-            buttonGroup.appendChild(new_button)
 
-        }
-        var center= (parseInt(index)+1)
-        var string="(Currently)"+center.toString();
-        var new_button = document.createElement('button')
-        new_button.innerHTML=string;
-        new_button.value=string
-        new_button.onclick=async function(event) {
 
-            document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-            console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-            document.getElementById("form").submit()
-
-        }
-        buttonGroup.appendChild(new_button)
-
-        for(var i=1;i<4;++i){
-            new_button = document.createElement('button');
-            var more=(parseInt(index)+1)+i
-            string=more.toString();
-            new_button.innerHTML=string;
-            new_button.value=string
-            new_button.onclick=async function(event) {
-
-                document.getElementById("normal_Question_Index").value=(parseInt(this.value)-1).toString()
-                console.log('clicked BUTTON_index '+document.getElementById("normal_Question_Index").value);
-                document.getElementById("form").submit()
-
-            }
-
-            buttonGroup.appendChild(new_button)
+            //appendtoPassageBox();
         }
 
-        //document.getElementById("header").appendChild(buttonGroup)
-        console.log("button chidlren "+document.getElementById("header").children.length)
     }
     function loadQuestionBody(){
-        var question=document.getElementById("Question_Body_Holder");
+        //var question=document.getElementById("Question_Body_Holder");
 
-        var display=document.getElementById("Question_Body_Display");
-        display.innerHTML=question.value
+        //var display=document.getElementById("Question_Body_Display");
+        //display.innerHTML=question.value
     }
-   function loadTaggedQuestions(){
+    function loadTaggedQuestions(){
 
         var TaggedList=document.getElementById("tagged_Questions_holder").value.split(",")
 
@@ -639,7 +581,7 @@
 
         for (var i=0;i<TaggedList.length;++i){
             var li=document.createElement("LI");
-           // li.className="tagged_icon"
+            // li.className="tagged_icon"
             li.innerText=TaggedList[i]
             li.value=i
             li.onclick=async function(event) {
@@ -661,7 +603,7 @@
         }
         var eliminated_list=document.getElementById("Eliminated_Answers").value.replace(/\s/g,'').split(",")
         for (var i=0;i<eliminated_list.length;++i){
-           console.log("letter "+eliminated_list[i])
+            console.log("letter "+eliminated_list[i])
             if(eliminated_list[i].length>0){
                 document.getElementById(eliminated_list[i]).style.textDecoration='line-through'
             }
@@ -721,7 +663,7 @@
         var text_list=document.getElementById("Passage_Holder").value.split(" ")
         var question_number=(parseInt(document.getElementById("normal_Question_Index").value)+1).toString()
         for (var i=0;i<text_list.length;++i){
-          // console.log(text_list[i]);
+            // console.log(text_list[i]);
 
 
             if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){
@@ -761,46 +703,46 @@
             highlighted_text[i]=highlighted_text[i].replace("*","").replace("*","")
         }
         console.log("highlighted Text "+highlighted_text)
-       while(i<text_list.length){
+        while(i<text_list.length){
 
             //console.log(text_list[i].replace(/\n/g, '').includes('*'))
-           if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){//the red underlined, looks for the present [number]
-               console.log("Highlighted Text_Red: "+highlighted_text)
-               for (var j=1;j<highlighted_text.length;++j){
-                   var text_word=text_list[i-j].replace(/\n/g, '').replace(/\*/g, '').replace(/\s/g, '')
-                   console.log("comparing_Red "+text_word)
-                   if (highlighted_text.includes(text_word)){
-                       console.log("Accepting_Red "+text_word)
-                       myArr.push(i-j)
-                   }
+            if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){//the red underlined, looks for the present [number]
+                console.log("Highlighted Text_Red: "+highlighted_text)
+                for (var j=1;j<highlighted_text.length;++j){
+                    var text_word=text_list[i-j].replace(/\n/g, '').replace(/\*/g, '').replace(/\s/g, '')
+                    console.log("comparing_Red "+text_word)
+                    if (highlighted_text.includes(text_word)){
+                        console.log("Accepting_Red "+text_word)
+                        myArr.push(i-j)
+                    }
 
-               }
+                }
 
-               for (var x=myArr.length-1;x>=0;--x) {
-
-
-                   underlined_section = underlined_section+" "+text_list[myArr[x]]
-                   console.log("Highlighting_Red so far:" + underlined_section);
-
-               }
-
-               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline>$&</underline>')
+                for (var x=myArr.length-1;x>=0;--x) {
 
 
-           }
-           else if (text_list[i].replace('*', '').includes('*')){///if the asteriks are only one word
-               console.log("Found ONLY one: "+text_list[i].replace(/\n/g, ''))
-               if(text_list[i+1].replace(/\n/g, '')=='['+question_number+']'){
-                   underlined_section=""
-               }
-               else{
-                   underlined_section = text_list[i].replace(/\n/g, '')
-               }
+                    underlined_section = underlined_section+" "+text_list[myArr[x]]
+                    console.log("Highlighting_Red so far:" + underlined_section);
 
-               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
-               //myArr.push(i)
-           }
-           else if(text_list[i].replace(/\n/g, '').includes('*')){
+                }
+
+                temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline>$&</underline>')
+
+
+            }
+            else if (text_list[i].replace('*', '').includes('*')){///if the asteriks are only one word
+                console.log("Found ONLY one: "+text_list[i].replace(/\n/g, ''))
+                if(text_list[i+1].replace(/\n/g, '')=='['+question_number+']'){
+                    underlined_section=""
+                }
+                else{
+                    underlined_section = text_list[i].replace(/\n/g, '')
+                }
+
+                temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
+                //myArr.push(i)
+            }
+            else if(text_list[i].replace(/\n/g, '').includes('*')){
 
                 console.log("Found first one: "+text_list[i].replace(/\n/g, ''))
                 underlined_section = text_list[i].replace(/\n/g, '')
@@ -815,7 +757,7 @@
                         break;
                     }
                 }
-               console.log("Found second one: "+text_list[i+j].replace(/\n/g, ''))
+                console.log("Found second one: "+text_list[i+j].replace(/\n/g, ''))
                 if(text_list[i+j+1].replace(/\n/g, '')=='['+question_number+']'){
                     underlined_section=""
                 }
@@ -823,26 +765,26 @@
                     underlined_section = underlined_section+" "+text_list[i+j].replace(/\n/g, '')
                 }
 
-               console.log("underlined "+underlined_section)
-               temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
+                console.log("underlined "+underlined_section)
+                temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
 
 
                 i=i+j
             }
 
             i=i+1;
-           underlined_section=""
+            underlined_section=""
         }
 
-        document.getElementById("highlights").innerHTML=temp_text
+        //document.getElementById("highlights").innerHTML=temp_text
         return temp_text
 
     }
     function giveFirstHint(){
         console.log("inside give firstHint")
-       // var popup = document.getElementById("myPopup");
-      //  popup.innerText="This should be a description of Method/Tag. Also display the way to do it in a sentence."
-       // popup.classList.toggle("show");
+        // var popup = document.getElementById("myPopup");
+        //  popup.innerText="This should be a description of Method/Tag. Also display the way to do it in a sentence."
+        // popup.classList.toggle("show");
         var Tag_Holder = document.getElementById("Tag_Holder");
         document.getElementById("Tag_Display").innerHTML=Tag_Holder.value
         //console.log("First Hint Text "+ document.getElementById("First_Hint_holder").value)
@@ -892,7 +834,7 @@
             //initial = myArr[i]
             //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<mark>$&</mark>')
             //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(text_list[myArr[i]], '<underline>$&</underline>')
-           // console.log("Highlighted section so far " + underlined_section);
+            // console.log("Highlighted section so far " + underlined_section);
 
         }
 
@@ -933,11 +875,157 @@
         document.getElementById("backdrop").scrollTop=document.getElementById("highlights").scrollTop;
         recordHover('scrolling '+document.getElementById("Passage_Box").scrollTop)
     }
+    function reloadMathJax(){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+        document.getElementById("header_1").appendChild(script)
+
+
+    }
+    function replace (Passage,index, replacement) {
+        return Passage.substr(0, index) + replacement+ Passage.substr(index + 1);
+    }
+    function Italizise(Passage){
+        var Passage=document.getElementById("Passage_Holder").value
+        var counter=0;
+        for (var position = 0; position < Passage.length; position++)
+        {
+            if (Passage.charAt(position) == "@")
+            {
+                counter += 1;
+            }
+        }
+        var start=0;
+        var bool=true;
+        var place_holder=0;
+        var end=0;
+        var tally=0;
+
+        while(tally<counter){
+            start=Passage.indexOf('@',place_holder+1)
+            if(bool){
+                Passage=replace(Passage,start, "<i>")
+                bool=false;
+                place_holder=start;
+                console.log("first "+Passage)
+            }
+            else{
+                Passage=replace(Passage,start, "</i>")
+
+                bool=true;
+                place_holder=start;
+                console.log("second "+Passage)
+            }
+
+
+            ++tally;
+            //start=Passage.indexOf('$',place_holder+1)
+        }
+        return Passage;
+
+    }
+    function showPicturePassage(){//Science only
+        //console.log("inside show Picture passage")
+        var Passage=document.getElementById("Passage_Holder").value
+        if(Passage==undefined){
+            return
+        }
+        Passage=Italizise(Passage)
+
+        var count = (Passage.match(/Picture/g) || []).length;
+        var temp_Passage=""
+        var start=0;
+        var end=0;
+        var index=0;
+
+        for (var i=0;i<count;++i){
+            start=end;
+            end=Passage.indexOf("Picture",start+1);
+            temp_Passage=Passage.substring(start,end)
+            console.log("passage text "+temp_Passage)
+            var para = document.createElement("p");
+            para.setAttribute("align","left")
+            //para.style.left = "100px"
+            para.style.marginLeft="55px"
+            para.innerHTML=temp_Passage.replace(/\n/g, '<br>\n');;
+            document.getElementById("container").appendChild(para)
+            var image = document.createElement("img");
+
+
+            image.src = mapImage(Passage.substring(end,end+20))
+            image.style.marginLeft="55px"
+            document.getElementById("container").appendChild(image)
+            /////
+            var para = document.createElement("p");
+            para.setAttribute("align","left")
+            //para.style.left = "100px"
+            para.style.marginLeft="55px"
+
+            document.getElementById("container").appendChild(para)
+        }
+        if(Passage.length>end+20){
+            var png_index=Passage.indexOf(".png");
+            temp_Passage=Passage.substring(png_index+4)
+            var para = document.createElement("p");
+            para.innerHTML=temp_Passage.replace(/\n/g, '<br>\n');;
+            para.setAttribute("align","left")
+            para.style.marginLeft="55px"
+            document.getElementById("container").appendChild(para)
+            //console.log("passage after picture "+temp_Passage)
+        }
+        reloadMathJax()
+    }
+    function showPictureOptions(){
+        var choice_list=['A','B','C','D'];
+
+        for (var i=0;i<choice_list.length;++i){
+           //console.log("Choice PIctures "+document.getElementById("para"+choice_list[i]).innerHTML)
+            if(document.getElementById("para"+choice_list[i]).innerHTML.includes("Picture")){
+               var image=document.createElement("img");
+               image.id="para"+choice_list[i];
+               image.name="para"+choice_list[i];
+                image.src = mapImage(document.getElementById("para"+choice_list[i]).innerHTML)
+                var element = document.getElementById("para"+choice_list[i])
+                element.parentNode.removeChild(element);
+                //image.addEventListener('mouseleave',leavingOption(choice_list[i]));
+                image.addEventListener('mouseenter',function(event){
+                    console.log("recordHover Pictre "+event.target.id.toString())
+                    document.getElementById(event.target.id.toString()).style.border= "1px solid blue";
+                    document.getElementById(event.target.id.toString()).style.background= "1px solid blue";
+                })
+                image.addEventListener("mouseleave", function(event){
+                    console.log("mouse leaving picture "+event.target.id.toString().substring(4))
+                    if(event.target.id.toString().substring(4)!= document.getElementById("combo").value){
+                        document.getElementById(event.target.id.toString()).style.border= "none";
+                    }
+
+                })
+                image.addEventListener("click",function(event){
+                    clickedOption_Picture(event.target.id.toString())
+                })
+
+
+                var parent=document.getElementById("para"+choice_list[i]+"_1");
+                parent.appendChild(image)
+            }
+        }
+    }
+    function mapImage(Passage_Section){
+        var picture_list_objects=document.getElementById("Image_List_Holder").value.split('*');
+        console.log("Passage going in "+Passage_Section)
+        for (var i=0;i<picture_list_objects.length;++i){
+            var filename=picture_list_objects[i].split(" ")[0]
+            var png_index=filename.indexOf(".png");
+            if(Passage_Section.includes(picture_list_objects[i].split(" ")[0].substring(0,png_index))){
+                console.log("Foud the pic")
+                return picture_list_objects[i].split(" ")[1]
+            }
+            //console.log("filename "+picture_list_objects[i].split(" ")[0].substring(0,png_index))
+        }
+    }
     function centerButtons(){
-
-
-
-
+        return;
     }
     window.onload = function () {
 
@@ -973,7 +1061,8 @@
         startTotalTime();
         startTimer(duration, display,time_value);
         document.getElementById("menu").style.display="block";
-       //loadTaggedQuestions();
+        document.getElementById("Passage_Display").innerHTML=document.getElementById("Passage_Display_Holder").value.replace(/\n/g, '<br>\n');;
+        //loadTaggedQuestions();
         //loadWeaknessQuestions();
         loadQuestionBody();
         //loadbuttons();
@@ -995,11 +1084,12 @@
 
 
         document.getElementById("number_checks").value=(0).toString()
-        document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
+        //  document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
         //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)
         showBlackUnderlines();
-
+        showPicturePassage();//Just for Science Rendering
+        showPictureOptions()
         //clear the presentaiton holder in order to hold check answers list
         document.getElementById("Presentation_Holder").value="";
 

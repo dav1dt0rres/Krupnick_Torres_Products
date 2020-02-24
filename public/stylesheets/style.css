@@ -525,7 +525,7 @@ circle{
 .container, .backdrop, textarea {
   width: 600px;
   height: 800px;
-  left:40px;
+  left:55px;
   position:absolute;
 }
 .container {
@@ -741,19 +741,27 @@ button:hover {
   background-color: #ddd;
   color: black;
 }
-.next {
-  border: .25em solid #ccc;
-  background: #000;
-  color: #fff;
-
-  height:50px;
-  width:200px;
-  font-family:'Roboto',sans-serif;
-  font-weight:300;
-
-
+a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
 }
 
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+.next {
+  background-color: #000;
+  color: white;
+}
+.previous {
+  background-color: #000;
+  color: white;
+}
+.round {
+  border-radius: 50%;
+}
 .menu_1, .menu_1-bar {
   position: fixed;
   bottom: 0;
@@ -778,7 +786,7 @@ ul li.li-class-1 {
   display: inline-block;
   text-indent: -500em;
   height: 4em;
-  width: 5em;
+  width: 3em;
   line-height: 5em;
   text-align:center;
   color: #72739f;

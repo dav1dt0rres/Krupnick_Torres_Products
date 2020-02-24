@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
 const async = require('async');
-
+const path = require("path");
+const fs = require("fs");
 const Reading_table=mongoose.model('ReadingQuestion')
 const Math_table=mongoose.model('MathQuestion')
 const English_table=mongoose.model('EnglishQuestion')
+const Science_table=mongoose.model('ScienceQuestion')
 const Passage_table=mongoose.model('Passage')
 var Response_table=mongoose.model('Response')
 var Student_table=mongoose.model('Student')
@@ -11,7 +13,8 @@ var dict;
 var dict = {
     "ACT-Reading": Reading_table,
     "ACT-Math": Math_table,
-    "ACT-English": English_table
+    "ACT-English": English_table,
+    "ACT-Science":Science_table
     // etc.
 };
 var nodemailer = require('nodemailer');
@@ -33,7 +36,7 @@ module.exports= class Database {
             this.Time_Limit;
             this.Normal_History=[]
             this.List_DifficultyQuestions=[]
-
+            this.PNGPath=[]
             this.List_WeaknessQuestions=[];
             this.List_Weakness_History=[];
             this.Count=0;
@@ -54,6 +57,47 @@ module.exports= class Database {
             this.Student=null;
 
         }
+        else if(Test_Type=="MISC"){
+            console.log('inside Database Adding COnstructor'+" "+this.database_index)
+            this.database_index=index  ;
+
+            console.log('inside Database Normal COnstructor_MISC'+" "+this.database_index)
+            this.List_Questions=[];
+            this.Normal_Index=null;
+            this.List_TaggedQuestions=[];
+            this.List_Tagged_History=[];
+            this.Time_Limit;
+            this.Normal_History=[]
+            this.List_DifficultyQuestions=[]
+            this.PNGPaths=[]
+            this.List_WeaknessQuestions=[];
+            this.List_Weakness_History=[];
+            this.Count=0;
+            this.Last_Question;
+            this.Last_Tagged_Question;
+            this.Student=null;
+            this.Test_Type=Test_Type;
+            this.set_boolean=false;//this is to see if the student has select a shortened test of 10 questions
+
+            this.Test=Test;
+
+            this.Question_Time_Limit;
+            this.Test_Time_Limit;
+            this.Test_Time_Current;
+            this.CheckBox_List=option_list.join(" ")
+            this.Total_Time_Display;
+
+            ////below are just temp for reading it reading questi  ons
+            this.Answer="";
+            this.Tag="";
+            this.Question_Body=""
+            this.Session;
+            if (option_list[2]=="Clues"){
+                this.Confidence=true;
+                return
+            }
+            this.Confidence=false;
+        }
         else if(Test!=null){
             this.database_index=index  ;
 
@@ -65,7 +109,7 @@ module.exports= class Database {
             this.Time_Limit;
             this.Normal_History=[]
             this.List_DifficultyQuestions=[]
-
+            this.PNGPaths=[]
             this.List_WeaknessQuestions=[];
             this.List_Weakness_History=[];
             this.Count=0;
@@ -73,7 +117,18 @@ module.exports= class Database {
             this.Last_Tagged_Question;
             this.Student=null;
             this.Test_Type=Test_Type;
+            this.set_boolean=false;//this is to see if the student has select a shortened test of 10 questions
+            if(Test.includes("Set of")){
+                // console.log("it does contain Set of: "+Test.substring(0,Test.indexOf('-')))
+                this.Test=Test.substring(0,Test.indexOf('-'))
+                this.set_boolean=true;
+            }
+            else{
+                this.Test=Test;
+                this.set_boolean=false;
+            }
             this.Test=Test;
+
             this.Question_Time_Limit;
             this.Test_Time_Limit;
             this.Test_Time_Current;
@@ -99,7 +154,7 @@ module.exports= class Database {
             this.Normal_Index=null;
             this.List_TaggedQuestions=[];
             this.List_Tagged_History=[];
-
+            this.PNGPaths=[];
             this.Time_Limit;
             this.Normal_History=[]
             this.List_DifficultyQuestions=[]
@@ -136,6 +191,13 @@ module.exports= class Database {
     }
     updateCurrentTime(timer){
         this.Test_Time_Current=timer;
+    }
+    setPNGfile(path){
+       this.PNGPath=path;
+    }
+    setPNGfiles(paths){//paths is a list, this fucntion is called in "preparation" to add the rest of the SCeince/Math question
+        this.PNGPaths=paths;
+        //console.log("after reverseal "+this.PNGPaths)
     }
     send_email(argument,req){
         console.log("argument in email "+argument)
@@ -239,6 +301,9 @@ module.exports= class Database {
 
     }
     // Adding a method to the constructor
+    setTest_Time_Current(current_time){
+        this.Test_Time_Current=current_time;
+    }
     getTest_Time_Current(){
 
         if (this.Test_Time_Current==0){
@@ -272,10 +337,13 @@ module.exports= class Database {
         this.Last_Question=this.List_Questions[0]
 
         this.Normal_Index=this.Last_Question.Number
-        for(var i=0;i<this.List_Questions.length;++i){
-           // console.log("ordering "+this.List_Questions[i].Number)
+        var question_length;
+        if(this.set_boolean){
+            question_length=10;
+            console.log("shortening the question length")
         }
-
+        this.List_Questions=this.List_Questions.slice(0,question_length)
+        console.log("size of normal list "+this.List_Questions.length)
     }
     async initialize_Tag_history(){
         console.log("initialize Tag History")
@@ -385,13 +453,16 @@ module.exports= class Database {
 
             for  (var i=0;i<Questions.length;++i){
 
-                for(var j=0;j<Questions[i].Choices.length;++j){
-                    //console.log("Choices before "+Questions[i].Choices[j])
-                        Questions[i].Choices[j]=Questions[i].Choices[j].replace(/,/g, ' ');
-                    //.log("Choices After "+Questions[i].Choices[j])
-                }
+
                 //console.log("questions returned "+Questions[i].Question_body.join(" ")+" "+Questions[i].Choices+" "+Questions[i].Number+" "+Questions[i].Passage_ID._id+" "+Questions[i]._id)
                 Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                if (Question_object.Test_Type=="ACT-Math"){
+
+                    Question_object.setPNGPictures(Questions[i].Img_List)
+                }
+                if(Question_object.Test_Type=="ACT-Science"){
+                    Question_object.setPNGPictures(Questions[i].Img_List)
+                }
                 Question_object.setFirstHint(Questions[i].Hint_1);
                 Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
                 keywords[counter]=Question_object;
@@ -400,7 +471,7 @@ module.exports= class Database {
 
         });
 
-        this.List_Questions=keywords;
+        this.List_Questions=keywords
         console.log("List of normal questions"+" "+this.List_Questions.length)
 
 
@@ -592,14 +663,21 @@ module.exports= class Database {
                     return 0;
                 }
                 console.log("INside find One()"+Question_re.Number)
-                for(var j=0;j<Question_re.Choices.length;++j){
-                    Question_re.Choices[j]=Question_re.Choices[j].replace(/,/g, ' ');
-                }
+
 
                 Question_object=new Question(Question_re.Question_body.join(" "),Question_re.Choices,Question_re.Right_Answer,Question_re.Tag,Question_re.Number,Question_re.Passage_ID.Passage.join(' '),Question_re.Test_Type,Question_re.Test,Question_re._id)
                                // new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                if (Question_object.Test_Type=="ACT-Math"){
+                    Question_object.setPNGPictures(Question_re.Img_List)
+                    Question_object.setPNG_PlaceHolder(Question_re.Img_List)
+                }
+                else if(Question_object.Test_Type=="ACT-Science"){
+                    Question_object.setPNGPictures(Question_re.Img_List)
+                    Question_object.setPNG_PlaceHolder(Question_re.Img_List)
+                }
                 Question_object.setFirstHint(Question_re.Hint_1);
                 Question_object.setPassageID(Question_re.Passage_ID._id);
+
                 console.log("Passage_ID_OLD "+Question_re.Passage_ID._id)
                 Question_object.setID(Question_re._id)
                 Question_object.setPresentation_Highlight(Question_re.Presentation_Highlight)
@@ -682,22 +760,87 @@ module.exports= class Database {
 
 
     }
+    async addScienceQuestion(BodyList,new_passageId){
+        var newQuestion;
+        var temp_image_list=this.PNGPaths;
+        newQuestion = new dict[BodyList[8][0]]({
+            Question_body: BodyList[0],
+            Passage_ID:new_passageId,
+            Tag:BodyList[6].join(" "),
+            Choices:[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
+            Test:BodyList[7][0],
+            Test_Type: BodyList[8][0],
+            Right_Answer: BodyList[9][0],
+            Number: BodyList[11][0],
+            Hint_1:BodyList[12],
+            Presentation_Highlight:BodyList[13],
+            Img_List:temp_image_list
+
+        });
+
+        newQuestion.save(function (err,object) {
+            if (err) {
+                console.log("Error caough_Question"+err.toString())
+            }
+
+
+            //const title='Successful Entry of Question, if you would like to enter new questions please do below...'
+            //res.render('AddQuestions',{ title })
+        });
+        console.log("Successfully save Science Question ")
+    }
+    async addMathQuestion(BodyList,new_passageId){
+        var newQuestion;
+        var temp_image_list=this.PNGPaths;
+
+        //console.log("length of the picture list "+temp_image_list)
+        newQuestion = new dict[BodyList[8][0]]({
+            Question_body: BodyList[0],
+            Passage_ID:new_passageId,
+            Tag:BodyList[6].join(" "),
+            Choices:[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
+            Test:BodyList[7][0],
+            Test_Type: BodyList[8][0],
+            Right_Answer: BodyList[9][0],
+            Number: BodyList[11][0],
+            Hint_1:BodyList[12],
+            Presentation_Highlight:BodyList[13],
+            Img_List:temp_image_list
+
+        });
+        newQuestion.save(function (err,object) {
+            if (err) {
+                console.log("Error caough_Question"+err.toString())
+            }
+        });
+
+        console.log("Successfully save math Question ")
+    }
     async addNewQuestion(BodyList){
         //console.log("Inside adding new Question in Database: Passage-->"+" "+BodyList[10]+"Question Body"+BodyList[0]+"Tag::  "+BodyList[6].join(" "))
         var newQuestion;
         var new_passageId;
 
         if (this.Last_Question==null){///This happens in case user accidently submits a new one if its already there
-            console.log("Inside this.last_question==nulll")
-            if(await this.SearchQuestion("",BodyList[11][0],BodyList[8][0],BodyList[7][0])==1){///this basically covers the Users ass
-                console.log("Question Already exists in database so only editing, adding new branch: "+BodyList.length)
-                new_passageId=await this.EditQuestion(BodyList)
-                return;
-            }
+            console.log("Inside this.last_question==nulll, probably a new question")
+
+
         }
         else if(await this.SearchQuestion("",this.Last_Question.Number,this.Last_Question.Test_Type,this.Last_Question.Test)==1){ //he properly recalss the quesiton first to Edit
             console.log("Question Already exists in database so only editing: , editing branch"+BodyList.length)
+            if(BodyList[8]=="ACT-Math"){
+
+                await this.EditMathQuestion(BodyList)
+                this.Last_Question=null;
+                return
+            }
+            else if(BodyList[8]=="ACT-Science"){
+                await this.EditScienceQuestion(BodyList)
+                this.Last_Question=null;
+                return
+            }
             new_passageId=await this.EditQuestion(BodyList)
+            this.Last_Question=null;
             return;
         }
         console.log("its a new question"+" "+BodyList[12])
@@ -708,13 +851,15 @@ module.exports= class Database {
         //Checks to see if the new Passage exists already in the database
         if(BodyList[10].length>3){
             for(var i=0;i<temp_objects.length;++i){
-                //console.log("Passage being returned" + " " + temp_objects[i].Passage
-                // console.log("Passage BEING COMPARED" + " " + BodyList[10])
-                if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
-                    console.log("Passage already in database" + " " +temp_objects[i].id);
-                    new_passageId=temp_objects[i].id
-                    global=false;
-                    break;
+                //console.log("Passage being returned" + " " + temp_objects[i].Passage);
+                if (temp_objects[i].Passage.length>1 ){
+                    //console.log("its DEFINED "+temp_objects[i].Passage.length)
+                    if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
+                        console.log("Passage already in database" + " " +temp_objects[i].id);
+                        new_passageId=temp_objects[i].id
+                        global=false;
+                        break;
+                    }
                 }
 
             }
@@ -722,6 +867,7 @@ module.exports= class Database {
 
         console.log("global "+global)
         if(global){
+
             var newPassage = new Passage_table({
                 Passage: BodyList[10],
                 Picture_Path: ""
@@ -736,7 +882,14 @@ module.exports= class Database {
 
             });
         }
-
+        if (BodyList[8]=="ACT-Math"){
+            await this.addMathQuestion(BodyList,new_passageId);
+            return;
+        }
+        else if(BodyList[8]=="ACT-Science"){
+            await this.addScienceQuestion(BodyList,new_passageId);
+            return;
+        }
         newQuestion = new dict[BodyList[8][0]]({
             Question_body: BodyList[0],
             Passage_ID:new_passageId,
@@ -760,6 +913,59 @@ module.exports= class Database {
         });
 
     }
+
+    async EditScienceQuestion(BodyList){
+
+
+        var passage_updated=await Passage_table.update(
+            {_id:this.Last_Question.Passage_ID},
+            { $set: {"Passage":BodyList[10]}
+            });
+
+
+        var temp_image_list=this.PNGPaths;
+        await dict[BodyList[8]].update(
+            { _id : this.Last_Question._id },
+            { $set: {
+                    "Img_List":temp_image_list,
+                    "Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString(),
+                    "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13],
+                    "Test":BodyList[7],
+                    "Right_Answer": BodyList[9][0],
+                    "Choices":[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
+                    "Question_body": BodyList[0],
+                    "Tag":BodyList[6].join(" "),
+                }
+            }
+        )
+    }
+    async EditMathQuestion(BodyList){
+        var passage_updated=await Passage_table.update(
+            {_id:this.Last_Question.Passage_ID},
+            { $set: {"Passage":BodyList[10]}
+            });
+        console.log("right before saving "+BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5])
+        var temp_pic_list=this.PNGPaths;
+        if (temp_pic_list.length==0){
+            temp_pic_list=this.Last_Question.Picture_png_Objects
+            console.log("No pics were sent in, setting the last questions List "+this.Last_Question.Picture_png_Objects)
+        }
+            await dict[BodyList[8]].update(
+                { _id : this.Last_Question._id },
+                { $set: {
+                    "Img_List": temp_pic_list,
+                        "Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString(),
+                        "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13],
+                    "Test":BodyList[7],
+                    "Right_Answer": BodyList[9][0],
+                    "Choices":[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
+                    "Question_body": BodyList[0],
+                    "Tag":BodyList[6].join(" "),
+        }
+        }
+        )
+
+    }
     async EditQuestion(BodyList){
         var Object_ID=-1;
         var global=true;
@@ -777,19 +983,22 @@ module.exports= class Database {
             });
 
 
-        await dict[BodyList[8]].update(
-            { _id : this.Last_Question._id },
-            { $set: {
-                    "Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString(),
-                    "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13],
-                    "Test":BodyList[7],
-                    "Right_Answer": BodyList[9][0],
-                    "Choices":[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
-                    "Question_body": BodyList[0],
-                    "Tag":BodyList[6].join(" "),
+
+            await dict[BodyList[8]].update(
+                { _id : this.Last_Question._id },
+                { $set: {
+                        "Test_Type": BodyList[8][0],"Number":BodyList[11][0].toString(),
+                        "Hint_1" : BodyList[12],"Presentation_Highlight": BodyList[13],
+                        "Test":BodyList[7],
+                        "Right_Answer": BodyList[9][0],
+                        "Choices":[BodyList[1],BodyList[2],BodyList[3],BodyList[4],BodyList[5]],
+                        "Question_body": BodyList[0],
+                        "Tag":BodyList[6].join(" "),
+                    }
                 }
-            }
-        )
+            )
+
+
         this.Last_Question=null;
         return Object_ID
 
@@ -1561,7 +1770,7 @@ module.exports= class Database {
 
             //console.log("list display "+ this.List_Questions[i].getNumber())
         }
-
+        //console.log("dispalying the sample "+temp)
         return temp
     }
     DisplayWeaknessList(){

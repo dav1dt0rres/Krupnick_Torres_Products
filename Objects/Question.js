@@ -13,6 +13,10 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         var Math_Question = require('./Math_Question.js')
         return new Math_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID)
     }
+    else if (test_type=="ACT-Science"){
+        var Science_Question = require('./Science_Question.js')
+        return new Science_Question(question_text, optionList,right_answer,tag,number,passage,test_type,test,ID)
+    }
     else if(test_type=="ACT-Reading"){
         var Reading_Question = require('./Reading_Question.js')
 
@@ -125,15 +129,52 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
     }
     // Adding a method to the constructor
     Question.prototype.getOptions=function() {
-
+        if (this.Test_Type=="ACT-Science"){
+            return this.getScienceOptions();
+        }
+        else if(this.Test_Type=="ACT-Math"){
+            return this.getMathOptions();
+        }
         return this.OptionList;
+    }
+    Question.prototype.eliminateCommas=function(math_option){
+        //console.log("Comma testing: "+math_option.replace(/\s/g,'').split(","));
+        var option_list=math_option.replace(/\s/g,'').split(",")
+        var number_counter=0;
+        var notvalid=0;
+        var valid=0;
+        for (var i=0;i<option_list.length;++i){
+            if (isNaN(parseInt(option_list[i])) && option_list[i].includes("$")==false && option_list[i].includes("(")==false){
+
+              //console.log("its nota valid number "+option_list[i])
+                ++notvalid;
+
+            }
+            else{
+                ///console.log("it is a valid number "+option_list[i])
+
+
+                ++valid
+
+            }
+        }
+        //console.log("Valid: "+valid+" "+"Not valid: "+notvalid)
+        if(valid>notvalid){
+            //console.log("returning...."+  math_option)
+            return math_option;
+        }
+       // console.log("returning "+option_list.join(" "))
+        return option_list.join(" ")
+
+
     }
     Question.prototype.getMathOptions=function(){//returns a list of the math-formatted options
         var final_string=""
         var final_list=[];
         for(var i=0;i<this.OptionList.length;++i){
-
+            //console.log("inside getmathOptions:"+this.OptionList[i])
             var temp_list=this.OptionList[i].split(" ");
+            //console.log("options temp list "+temp_list)
             for(var j=0;j<temp_list.length;++j){
                 var math_string;
                 if(temp_list[j].includes("<")){
@@ -142,21 +183,30 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
                 else{
                     math_string=temp_list[j]
                 }
-                final_string=final_string+" "+math_string;
+                final_string=final_string+math_string+" ";
 
             }
-            console.log("final string Options: "+final_string)
-            final_list.push(final_string);
+            //console.log("final string Options(Math):"+final_string.substring(0, final_string.length - 1))
+
+
+            final_list.push(this.eliminateCommas(final_string.substring(0, final_string.length - 1)));
             final_string=""
         }
         return final_list;
     }
+    Question.prototype.getPicture_png_Objects=function(){
+    var temp_list=[];
+    this.Picture_png_Objects.forEach(function(object){
+        temp_list.push(object.filename+" "+object.data);
+    })
+    return temp_list.join("*")
+}
     Question.prototype.Math_Algo=function(section){
         var final_string="";
         //console.log("inside math_science algo "+section)
         var math_string=section
         //document.getElementById('QuestionText').style.height="400px";
-        var command_list=["ne","frac","sqrt","gt","lt","ge","le","theta","pi","log","div","overline"]
+        var command_list=["ne","frac","sqrt","gt","lt","ge","le","theta","pi","log","div","overline","angle","matrix","cr","times"]
 
         math_string=math_string.replace(/</g,"(");
 
@@ -174,15 +224,20 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         //console.log("math_string_final: ",math_string_final)
         for (var i=0;i<command_list.length;++i){
             if(math_string_final.indexOf(command_list[i])>-1) {
-                if (command_list[i] == "ne" && math_string_final.indexOf("overline") == -1) {
-                    console.log("its a legitame ne_choices")
+                if( command_list[i]=="ne" && math_string_final.indexOf("overline")==-1){
+                    console.log("its a legitame ne")
+                    var c_start=math_string_final.indexOf(command_list[i])
+                    math_string_final=math_string_final.substring(0,c_start)+"\\"+math_string_final.substring(c_start)
+                }
+                else if(command_list[i] == "le" && math_string_final.indexOf("angle") == -1){
+                    console.log("its a legitame le")
                     var c_start = math_string_final.indexOf(command_list[i])
                     math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
-                } else if (command_list[i] != "ne") {
-                    console.log("string command" + command_list[i])
+                }
+                else if(command_list[i]!="le" && command_list[i]!="ne" ){
+                    //console.log("command "+command_list[i])
                     var c_start = math_string_final.indexOf(command_list[i])
                     math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
-                    console.log("WITH string command" + math_string_final)
                 }
             }
 

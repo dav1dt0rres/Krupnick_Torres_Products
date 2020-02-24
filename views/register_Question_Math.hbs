@@ -13,19 +13,19 @@
 
 <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
 <input type="hidden" id="pause_bool" name="pause_bool" value="{{pause_bool}}"  />
-
+<input type="hidden" id="Passage_Display_Holder" name="Passage_Display_Holder" value="{{Passage_Display_Holder}}"  />
 
 <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
-<div class="Correct_Answer" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
-<div class="container">
+
+<div class="Correct_Answer" align="left" style="margin-left: 55px;" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
+<div id="container" class="container">
+
+    <p  style="margin-left: 55px;" id="Passage_Display" name="Passage_Display" align="left">
+
+    </p>
 
 
-    <div id="backdrop" name="backdrop" class="backdrop">
-        <div id ="highlights" name="highlights" class="highlights"></div>
-
-    </div>
-    <textarea onmouseenter="recordHover('passage_box_enter')" onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
-
+    <input type="hidden" id="Image_List_Holder" name="Image_List_Holder" value="{{Image_List_Holder}}"  />
 
 </div>
 
@@ -52,31 +52,30 @@
         </h4>
 
 
-        <label  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA_1" name="Answer_A" >
-            A.)
-            <p onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </p>
+        <p  onmouseleave="leavingOption('A')" onclick= "clickedOption('paraA')" onmouseenter="recordHover('A')" for="Answer_A" id="paraA_1" name="Answer_A" >A.)
+        <span onmouseleave="leavingOption('A')" onmouseenter="recordHover('A')" id="paraA" >{{Answer_A}} </span>
+        </p>
 
-        </label>
-        <label onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB_1" >
+        <p onmouseleave="leavingOption('B')" onclick= "clickedOption('paraB')" onmouseenter="recordHover('B')" for="Answer B" id="paraB_1" >
             B.)
-            <p onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </p>
+            <span onmouseleave="leavingOption('B')" onmouseenter="recordHover('B')" id="paraB" >{{Answer_B}} </span>
 
-        </label>
-        <label onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC_1">
+        </p>
+        <p onmouseleave="leavingOption('C')" onclick= "clickedOption('paraC')" onmouseenter="recordHover('C')" for="Answer_C" id="paraC_1">
             C.)
-            <p onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </p>
+            <span onmouseleave="leavingOption('C')" onmouseenter="recordHover('C')" id="paraC" >{{Answer_C}} </span>
 
-        </label>
-        <label onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD_1">
+        </p>
+        <p onmouseleave="leavingOption('D')" onclick= "clickedOption('paraD')" onmouseenter="recordHover('D')" for="Answer_D" id="paraD_1">
             D.)
-            <p onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </p>
+            <span onmouseleave="leavingOption('D')" onmouseenter="recordHover('D')" id="paraD" >{{Answer_D}} </span>
 
-        </label>
-        <label onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE">
+        </p>
+        <p onmouseleave="leavingOption('E')" onclick= "clickedOption('paraE')" onmouseenter="recordHover('E')" for="Answer_E" id="paraE_1">
             E.)
-            <p onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE_1" >{{Answer_E}} </p>
+            <span onmouseleave="leavingOption('E')" onmouseenter="recordHover('E')" id="paraE" >{{Answer_E}} </span>
 
-        </label>
+        </p>
 
         <select onmouseenter="recordHover('sroll_down')" id="combo" name="combo" name="combo">
             <option value="A">A</option>
@@ -94,8 +93,9 @@
         </select>
         <button id="checkanswer" type="button" onclick="checkCorrectAnswer()" >Check if Correct</button>
 
+        <a id="backwards_question" name="backwards_question" onclick="submit_1(-1)" class="previous round">&#8249;</a>
+        <a id="next_question" name="next_question" onclick="submit_1(1)" class="next round">&#8250;</a>
 
-        <button type="button" onmouseenter="recordHover('submit')" id="next_question" name="next_question" onclick="submit_1(1)" class="next">Submit(Next Question)</button>
         <div id="confidence_tool" class="tooltip"  style="display: none;" >
             <span id="confidence_input" class="tooltiptext">Please Select a Confidence Score</span>
         </div>
@@ -140,6 +140,7 @@
     <input type="hidden" id="CheckBox_List" name="CheckBox_List" value="{{CheckBox_List}}"  />
     <input type="hidden" id="Question_Body_Holder" name="Question_Body_Holder" value="{{Question_Body_Holder}}"  />
     <input type="hidden" id="time" name="time" value="{{time}}"  />
+    <input type="hidden" id="Total_Time_Holder" name="Total_Time_Holder" value="{{Total_Time_Holder}}"  />
     <input type="hidden" id="normal_Question_Index" name="normal_Question_Index" value="{{normal_Question_Index}}"  />
     <input type="hidden" id="Question_Length" name="Question_Length" value="{{Question_Length}}"  />
     <input type="hidden" id="tagged_Questions_holder" name="tagged_Questions_holder" value="{{tagged_Questions_holder}}"  />
@@ -182,7 +183,7 @@
 
         var list_of_events=document.getElementById("hover_history").value.split(",");
         //list_of_events.push(argument)
-        if(argument=='A' || argument=='B'|| argument=='C'|| argument=='D'){
+        if(argument=='A' || argument=='B'|| argument=='C'|| argument=='D'|| argument=='E'){
             console.log("inside the highlighting the choice "+argument)
             if(document.getElementById("Eliminate_bool").value=="true"){
                 document.getElementById("para"+argument).style.textDecoration = "line-through";
@@ -257,14 +258,52 @@
         }
 
     }
+    function startTotalTime(){
+       console.log("includes sample "+document.getElementById("Question_Body_Holder").value)
+        if(document.getElementById("Question_Body_Holder").value.includes("Sample")){
+            return;
+        }
+        var duration=document.getElementById("Total_Time_Holder").value.toString()
+        if(parseInt(duration.split(":")[0])==0){
+            return;
+        }
+        console.log("duration "+ parseInt(duration.split(":")[0])+" "+parseInt(duration.split(":")[1]))
+        var countDownDate = new Date(Date.parse(new Date()) +   parseInt(duration.split(":")[0]) * 60*1000+(parseInt(duration.split(":")[1])*1000) );
+
+        console.log("Timer "+countDownDate)
+        var display = document.querySelector('#Total_Time');//Display
+        var time_value=document.querySelector('#Total_Time_Holder')
+        var interval=setInterval(function () {
+           // console.log("Repeating "+document.getElementById("pause_bool").value)
+            if(document.getElementById("pause_bool").value=="false"){
+                var now = new Date().getTime();
+
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
+
+                // Time calculations for days, hours, minutes and seconds
+
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result in the element with id="demo"
+                console.log("finalTime:"+minutes + "m " + seconds + "s ");
+                time_value.value=minutes +":"+seconds
+                display.textContent= minutes + "m " + seconds + "s "
+            }
+        }, 1000);
+
+    }
     function startTimer(duration, display,time) {
         console.log("Duration "+duration)
         if (duration.length==0){
             return;
         }
+
         var timer = duration, minutes, seconds;
+
         var interval=setInterval(function () {
-            console.log("Repeating "+document.getElementById("pause_bool").value)
+            //console.log("Repeating "+document.getElementById("pause_bool").value)
             if(document.getElementById("pause_bool").value=="false"){
                 minutes = parseInt(timer / 60, 10)
                 seconds = parseInt(timer % 60, 10);
@@ -275,9 +314,9 @@
 
                 display.textContent = minutes + ":" + seconds;
                 time.value=minutes + ":" + seconds;
-                console.log("time value "+time.value)
+                //console.log("time value "+time.value)
                 if (--timer < 0) {
-                    console.log("inside a minute")
+                   //console.log("inside a minute")
 
                     if(forceChange()){
                         clearInterval(interval);
@@ -477,35 +516,12 @@
 
         //
     }
-    function Math_Science(argument){
 
-        var final_string="";
-        console.log("inside math_science")
-        if (document.getElementById("checkbox_math_science").checked ) {
-            //document.getElementById('QuestionText').style.height="400px";
-
-            if(document.getElementById(argument).value.charAt(document.getElementById(argument).value.length-1)=="}"){
-                var start=document.getElementById(argument).value.lastIndexOf('{',document.getElementById(argument).value.length-1)
-
-                var final=document.getElementById(argument).value.length-1
-                var math_string=Math_Algo( document.getElementById(argument).value.substring(start))
-                console.log(document.getElementById(argument).value.substring(0,start)+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1))
-                //final_string=document.getElementById("QuestionText").value.substring(0,start)+math_string+document.getElementById("QuestionText").value.substring(final,document.getElementById("QuestionText").value.length-1)
-                final_string=final_string+math_string+document.getElementById(argument).value.substring(final,document.getElementById(argument).value.length-1)
-                document.getElementById("math_text").innerHTML=final_string;
-                document.getElementById("math_science_holder").value=final_string
-                document.getElementById("form").submit()
-            }
-
-
-
-            //appendtoPassageBox();
-        }
-
-    }
     function loadQuestionBody(){
-        //var question=document.getElementById("Question_Body_Holder");
-
+        let temp=Italizise(document.getElementById("Question_Body_Display"));
+        //Question_Body_Display= "placeholder"
+        console.log("innhtml of quesiton body display "+temp);
+       // document.getElementById("Question_Body_Display").innerHTML= document.getElementById("Question_Body_Display")
         //var display=document.getElementById("Question_Body_Display");
         //display.innerHTML=question.value
     }
@@ -712,7 +728,7 @@
             underlined_section=""
         }
 
-        document.getElementById("highlights").innerHTML=temp_text
+        //document.getElementById("highlights").innerHTML=temp_text
         return temp_text
 
     }
@@ -781,22 +797,7 @@
         //console.log("Temp TExt COmplte "+temp_text)
         return temp_text; //should always return a string
     }
-    function applyHighlights_black_underline(text_list,myArr){//The function that underlines all asteriks on the english passage
-        var temp_text="";
-        var underlined_section=""
 
-        for (var i=0;i<myArr.length;++i) {
-            console.log("Highlighting " + text_list[myArr[i]]);
-
-            //underlined_section = underlined_section+" "+text_list[myArr[i]]
-
-        }
-
-        //temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
-
-        return temp_text
-
-    }
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -811,11 +812,160 @@
         document.getElementById("backdrop").scrollTop=document.getElementById("highlights").scrollTop;
         recordHover('scrolling '+document.getElementById("Passage_Box").scrollTop)
     }
+    function reloadMathJax(){
+
+
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src  = "https://polyfill.io/v3/polyfill.min.js?features=es6";
+        document.getElementById("container").appendChild(script);
+    }
+    function replace (Passage,index, replacement) {
+        return Passage.substr(0, index) + replacement+ Passage.substr(index + 1);
+    }
+    function Italizise(Passage){
+        //how many italics are there
+       //console.log("italized passage "+Passage)
+        var counter=0;
+        for (var position = 0; position < Passage.length; position++)
+        {
+            if (Passage.charAt(position) == "@")
+            {
+                counter += 1;
+            }
+        }
+
+        var start=0;
+        var bool=true;
+        var place_holder=0;
+        var end=0;
+        var tally=0;
+        while(tally<counter){
+            start=Passage.indexOf('@',place_holder+1)
+            if(bool){
+                Passage=replace(Passage,start, "<i>")
+                bool=false;
+                place_holder=start;
+                //console.log("first "+Passage)
+            }
+            else{
+                Passage=replace(Passage,start, "</i>")
+
+                bool=true;
+                place_holder=start;
+                //console.log("second "+Passage)
+            }
+
+
+            ++tally;
+            //start=Passage.indexOf('$',place_holder+1)
+        }
+
+        return Passage;
+
+    }
+
+    function showPicturePassage(){//Math only
+        //console.log("inside show Picture passage")
+        var Passage=document.getElementById("Passage_Holder").value
+        console.log(Passage.length+" "+"length")
+        var temp_Passage=""
+        if(Passage.length<10){
+            console.log("tehre is no passage")
+            temp_Passage="Please use the the space below for scratch work"
+            var para = document.createElement("p");
+            para.innerHTML=temp_Passage.replace(/\n/g, '<br>\n');;
+            para.setAttribute("align","left")
+            para.style.marginLeft="55px"
+            document.getElementById("container").appendChild(para)
+            return
+        }
+        Passage=Italizise(Passage)
+
+        var count = (Passage.match(/Picture/g) || []).length;
+
+        var start=0;
+        var end=0;
+
+        for (var i=0;i<count;++i){
+            start=end;
+            end=Passage.indexOf("Picture",start+1);
+            temp_Passage=Passage.substring(start,end)
+            //console.log("passage text "+temp_Passage)
+            var para = document.createElement("p");
+            para.innerHTML=temp_Passage.replace(/\n/g, '<br>\n');;
+            para.setAttribute("align","left")
+            para.style.marginLeft="55px"
+            document.getElementById("container").appendChild(para)
+            var image = document.createElement("img");
+
+            image.src = mapImage(Passage.substring(end,end+20))
+            image.style.marginLeft="55px"
+            //document.getElementById("container").appendChild(image);
+            document.getElementById("container").appendChild(image)
+        }
+        if(Passage.length>end+20){
+            var png_index=Passage.indexOf(".png");
+            temp_Passage=Passage.substring(png_index+4)
+            var para = document.createElement("p");
+            para.innerHTML=temp_Passage.replace(/\n/g, '<br>\n');;
+            para.setAttribute("align","left")
+            para.style.marginLeft="55px"
+            document.getElementById("container").appendChild(para)
+        }
+        reloadMathJax();
+    }
+
+    function showPictureOptions(){
+        var choice_list=['A','B','C','D'];
+
+        for (var i=0;i<choice_list.length;++i){
+            //console.log("Choice PIctures "+document.getElementById("para"+choice_list[i]).innerHTML)
+            if(document.getElementById("para"+choice_list[i]).innerHTML.includes("Picture")){
+                var image=document.createElement("img");
+                image.id="para"+choice_list[i];
+                image.name="para"+choice_list[i];
+                image.src = mapImage(document.getElementById("para"+choice_list[i]).innerHTML)
+                var element = document.getElementById("para"+choice_list[i])
+                element.parentNode.removeChild(element);
+                //image.addEventListener('mouseleave',leavingOption(choice_list[i]));
+                image.addEventListener('mouseenter',function(event){
+                    console.log("recordHover Pictre "+event.target.id.toString())
+                    document.getElementById(event.target.id.toString()).style.border= "1px solid blue";
+                    document.getElementById(event.target.id.toString()).style.background= "1px solid blue";
+                })
+                image.addEventListener("mouseleave", function(event){
+                    console.log("mouse leaving picture "+event.target.id.toString().substring(4))
+                    if(event.target.id.toString().substring(4)!= document.getElementById("combo").value){
+                        document.getElementById(event.target.id.toString()).style.border= "none";
+                    }
+
+                })
+                image.addEventListener("click",function(event){
+                    clickedOption_Picture(event.target.id.toString())
+                })
+
+
+                var parent=document.getElementById("para"+choice_list[i]+"_1");
+                parent.appendChild(image)
+            }
+        }
+    }
+    function mapImage(Passage_Section){
+        var picture_list_objects=document.getElementById("Image_List_Holder").value.split('*');
+        console.log("Passage going in "+Passage_Section)
+        for (var i=0;i<picture_list_objects.length;++i){
+            var filename=picture_list_objects[i].split(" ")[0]
+            var png_index=filename.indexOf(".png");
+            if(Passage_Section.includes(picture_list_objects[i].split(" ")[0].substring(0,png_index))){
+                console.log("Foud the pic")
+                return picture_list_objects[i].split(" ")[1]
+            }
+            //console.log("filename "+picture_list_objects[i].split(" ")[0].substring(0,png_index))
+        }
+    }
     function centerButtons(){
-
-
-
-
+        return;
     }
     window.onload = function () {
 
@@ -849,9 +999,11 @@
         var display = document.querySelector('#time_x');
         var time_value=document.querySelector('#time')
         startTimer(duration, display,time_value);
+        startTotalTime();
         document.getElementById("menu").style.display="block";
         //loadTaggedQuestions();
         //loadWeaknessQuestions();
+        document.getElementById("Passage_Display").innerHTML=document.getElementById("Passage_Display_Holder").value.replace(/\n/g, '<br>\n');;
         loadQuestionBody();
         //loadbuttons();
         loadButtonsBottom();
@@ -872,11 +1024,12 @@
 
 
         document.getElementById("number_checks").value=(0).toString()
-        document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
+      //  document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
         //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)
         showBlackUnderlines();
-
+        showPicturePassage();
+        showPictureOptions();
         //clear the presentaiton holder in order to hold check answers list
         document.getElementById("Presentation_Holder").value="";
 
