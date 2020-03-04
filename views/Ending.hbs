@@ -125,7 +125,7 @@
         else{
             addRow(tbl, 'Number', 'Test Type', 'Test','Time','Tag','Hint Selection','Checked if Correct','Changed Answer','Views');
             for (var i=0;i<FinalList.length;++i){
-                console.log("Inside loadFinalQuestions")
+                console.log("Inside loadFinalQuestions_FinalList")
                 addRow(tbl, FinalList[i].split(";")[0], FinalList[i].split(";")[1], FinalList[i].split(";")[2],FinalList[i].split(";")[3],FinalList[i].split(";")[4],FinalList[i].split(";")[5],FinalList[i].split(";")[6],FinalList[i].split(";")[9],FinalList[i].split(";")[10],FinalList[i].split(";")[7],FinalList[i].split(";")[8]);
 
                 console.log("This is the value its returned"+FinalList[i].split(",")[0]+FinalList[i].split(",")[1]+" "+ FinalList[i].split(",")[2]+" "+FinalList[i].split(",")[3]+" "+FinalList[i].split(",")[4]+" "+FinalList[i].split(",")[5]+" "+FinalList[i].split(";")[6]+" "+FinalList[i].split(";")[9])

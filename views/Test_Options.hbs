@@ -8,6 +8,7 @@
     <input type="hidden" id="Test_Type_Holder" name="Test_Type_Holder" value="{{Test_Type_Holder}}"  />
     <input type="hidden" id="Type_Holder" name="Type_Holder" value="{{Type_Holder}}"  />
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
+    <input type="hidden" id="Load_Tags" name="Load_Tags" value="{{Load_Tags}}"  />
 
 
     <label id="test_type_label" name="test_type_label">
@@ -25,8 +26,23 @@
 
     <label id="test_label" name="test_label">
        Test
-        <select id = "Test" name="Test" for="Test" value="{{Test}}">
+        <select onchange="additionalOptions()" id = "Test" name="Test" for="Test" value="{{Test}}">
             {{#each Test.options}}
+                <option >{{this.text}}</option>
+            {{/each}}
+        </select>
+    </label>
+
+
+    <label style="display: none;" id ="Number_Questions_label" for="Number_Questions">
+        How Many Questions?
+        <input style="display: none;"  name="Number_Questions" id="Number_Questions" value="{{Number_Questions}}" >
+
+    </label>
+    <label style="display: none;" id="Tag_List_label" name="Tag_List_label">
+        What Tags?
+        <select style="display: none;" id = "Tag_List" name="Tag_List"  value="{{Tag_List}}">
+            {{#each Tag_List.options}}
                 <option >{{this.text}}</option>
             {{/each}}
         </select>
@@ -36,13 +52,11 @@
 
     <label for="Time_Limit_Question">
         Time Limit for each question (secs)
-        <input onkeyup="showForce_Time()" placeholder="Leave Blank if None" id="Time_Limit_Question" name="Time_Limit_Question" value="{{Time_Limit_Question}}"  >
+        <input placeholder="Leave Blank if None" id="Time_Limit_Question" name="Time_Limit_Question" value="{{Time_Limit_Question}}"  >
     </label>
-    <label style="display: none;" id ="checkbox_time_label" for="checkbox_time">
-        Force to next Question after time is up?
-        <input style="display: none;" type="checkbox" name="checkbox_time" id="checkbox_time"  value="True">
 
-    </label>
+
+
 
     <label for="Time_Limit_Test">
         Time Limit for the entire Test (mins)
@@ -69,16 +83,21 @@
     </label>
 
 
-    <button  onclick ="WeaknessFunction()" id="submit_button" name="submit_button" type="submit">Start Addressing Weaknesses</button>
     <button   id="exam_button" name="exam_button" type="submit">Start Exam</button>
 
 </form>
 </body>
 <script type="text/javascript">
-    function HomeFunction(){
-        console.log("inside exit bool")
-        document.getElementById("Exit_bool").value="true"
-        document.getElementById("form").submit()
+
+    function additionalOptions(){
+        console.log("inside additionaloptions")
+        if(document.getElementById("Test").value.includes("Set")){
+           console.log("selected the set of 10")
+
+            document.getElementById("Type_Holder").value="LoadTags"
+
+            document.getElementById("form").submit()
+        }
     }
     function loadTests(){
         if(document.getElementById("Type_Holder").value=="Weakness"){
@@ -92,13 +111,13 @@
         console.log("length "+document.getElementById("Time_Limit_Question").value.length)
         if(document.getElementById("Time_Limit_Question").value.length==0){
             console.log("input is empty here")
-            document.getElementById("checkbox_time_label").style.display="none";
-            document.getElementById("checkbox_time").style.display="none";
+            //document.getElementById("checkbox_time_label").style.display="none";
+           // document.getElementById("checkbox_time").style.display="none";
         }
         else{
             console.log("Theres an input ")
-            document.getElementById("checkbox_time_label").style.display="block";
-            document.getElementById("checkbox_time").style.display="block";
+            //document.getElementById("checkbox_time_label").style.display="block";
+           // document.getElementById("checkbox_time").style.display="block";
         }
 
 
@@ -112,7 +131,19 @@
     }
     window.onload = function () {
         console.log("On load windows")
-        //loadTests();
+
+        if(document.getElementById("Load_Tags").value=="true"){
+            console.log("Inside loading Tags")
+            document.getElementById("Number_Questions_label").style.display="block";
+            document.getElementById("Number_Questions").style.display="block";
+            document.getElementById("Tag_List").style.display="block";
+            document.getElementById("Tag_List_label").style.display="block";
+            document.getElementById("Test").value="Set of Questions (Practice Mode)"
+            loadTestTypes();
+
+            return;
+        }
+
         loadTestTypes();
         if(document.getElementById("Type_Holder").value=="Weakness"){
             console.log("Inside Weakness Branch, soo hiding buttons")
@@ -125,7 +156,7 @@
             return;
         }
 
-        document.getElementById("submit_button").style.display="none"
+
 
         //console.log("Passage   being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)

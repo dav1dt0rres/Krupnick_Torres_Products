@@ -9,6 +9,7 @@
     <input type="hidden" id="Type_Holder" name="Type_Holder" value="{{Type_Holder}}"  />
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <input type="hidden" id="get_test" name="get_test" value="{{get_test}}"  />
+    <input type="hidden" id="Load_Tags" name="Load_Tags" value="{{Load_Tags}}"  />
     <label id="test_type_label" name="test_type_label">
         Test Type  <------    Pick me First    <--------
         <select onchange="loadTests()" id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
@@ -24,14 +25,26 @@
 
     <label id="test_label" name="test_label">
         Test
-        <select id = "Test" name="Test" for="Test" value="{{Test}}">
+        <select onchange="additionalOptions()" id = "Test" name="Test" for="Test" value="{{Test}}">
             {{#each Test.options}}
                 <option >{{this.text}}</option>
             {{/each}}
         </select>
     </label>
 
+    <label style="display: none;" id ="Number_Questions_label" for="Number_Questions">
+        How Many Questions?
+        <input style="display: none;"  name="Number_Questions" id="Number_Questions"  >
 
+    </label>
+    <label style="display: none;" id="Tag_List_label" name="Tag_List_label">
+        What Tags?
+        <select style="display: none;" id = "Tag_List" name="Tag_List" for="Tag_List" value="{{Tag_List}}">
+            {{#each Tag_List.options}}
+                <option >{{this.text}}</option>
+            {{/each}}
+        </select>
+    </label>
 
     <label for="Time_Limit_Question">
         Time Limit for each question (secs)
@@ -68,12 +81,22 @@
     </label>
 
 
-    <button  onclick ="WeaknessFunction()" id="submit_button" name="submit_button" type="submit">Start Addressing Weaknesses</button>
+
     <button   id="exam_button" name="exam_button" type="submit">Send reminder to take this Exam</button>
 
 </form>
 </body>
 <script type="text/javascript">
+    function additionalOptions(){
+        console.log("inside additionaloptions")
+        if(document.getElementById("Test").value.includes("Set")){
+            console.log("selected the set of 10")
+
+            document.getElementById("Type_Holder").value="LoadTags"
+
+            document.getElementById("form").submit()
+        }
+    }
     function loadTests(){
         if(document.getElementById("Type_Holder").value=="Weakness"){
             return;
@@ -107,6 +130,17 @@
     }
     window.onload = function () {
         console.log("On load windows")
+        if(document.getElementById("Load_Tags").value=="true"){
+            console.log("Inside loading Tags")
+            document.getElementById("Number_Questions_label").style.display="block";
+            document.getElementById("Number_Questions").style.display="block";
+            document.getElementById("Tag_List").style.display="block";
+            document.getElementById("Tag_List_label").style.display="block";
+            document.getElementById("Test").value="Set of Questions (Practice Mode)"
+            loadTestTypes();
+
+            return;
+        }
         //loadTests();
         loadTestTypes();
         if(document.getElementById("Type_Holder").value=="Weakness"){

@@ -13,7 +13,7 @@
 
 <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
 <input type="hidden" id="pause_bool" name="pause_bool" value="{{pause_bool}}"  />
-
+<input type="hidden" id="hover_history" name="hover_history" value="{{hover_history}}"  />
 
 <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
 <div class="Correct_Answer" align="left" style="margin-left: 55px;" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
@@ -40,7 +40,7 @@
     <input type="hidden" id="Tag" name="Tag" value="{{Tag}}"  />
     <input type="hidden" id="Right_Answer" name="Right_Answer" value="{{Right_Answer}}"  />
     <input type="hidden" id="number_checks" name="number_checks" value="{{number_checks}}"  />
-    <input type="hidden" id="hover_history" name="hover_history" value="{{hover_history}}"  />
+
 
     <input type="hidden" id="Question_Number" name="Question_Number" value="{{Question_Number}}"  />
     <div id="container_1" class="container_1">
@@ -157,6 +157,17 @@
     }
     function submit_1(argument){
         //console.log("Inside submit" + document.getElementById("CheckBox_List").value)
+
+
+
+
+        var xhr = new window.XMLHttpRequest();
+        xhr.open('POST', '/dashboard/Question_Loop_1',true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log("inititation the json object "+document.getElementById("normal_Question_Index").value );
+
+        var data = JSON.stringify({'Hover_history':document.getElementById("hover_history").value,"Database_Index":document.getElementById("Database_Index").value});
+        xhr.send(data);
         document.getElementById("normal_Question_Index").value=(parseInt(document.getElementById("normal_Question_Index").value)+argument).toString()
         var x = document.getElementById("confidence_tool");
         if (x.style.display === "none") {
@@ -180,7 +191,7 @@
     function recordHover(argument){
 
         var list_of_events=document.getElementById("hover_history").value.split(",");
-        //list_of_events.push(argument)
+        list_of_events.push(argument)
         if(argument=='A' || argument=='B'|| argument=='C'|| argument=='D'){
             console.log("inside the highlighting the choice "+argument)
             if(document.getElementById("Eliminate_bool").value=="true"){
@@ -457,9 +468,11 @@
             }
 
             if(document.getElementById("Time_Limit_Holder").value.length==0){
-
+                console.log("exiting ")
                 return;
             }
+            console.log("Coloring the responses "+"para"+document.getElementById("Time_Limit_Holder").value)
+            console.log("Coloring the responses "+"para"+document.getElementById("Right_Answer").value)
             var e = document.getElementById("para"+document.getElementById("Time_Limit_Holder").value);
             e.style.backgroundColor="#CB5C56";
             var correct=document.getElementById("para"+document.getElementById("Right_Answer").value);

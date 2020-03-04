@@ -18,9 +18,17 @@ var ResponseSchema = new Schema( {
 
         ref: 'EnglishQuestion'
     },
+    Math_Question:{
+        type:Schema.Types.ObjectId,
+        ref:'MathQuestion'
+    },
+    Science_Question:{
+        type:Schema.Types.ObjectId,
+        ref:'ScienceQuestion'
+    },
     Model_Name:String,
     time_stamp : { type : Date, default: Date.now },
-    Session:Number,
+    Session:String,
     Hint_Selection: Boolean,
     Check_Answer:Number,
     Checked_Answers:[String],

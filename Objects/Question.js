@@ -35,10 +35,11 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
 }
 
     Question.prototype.setHover_History=function (hover_history){
+
         this.Hover_History=hover_history;
     }
     Question.prototype.setResponse=function(response){
-        console.log("setting response short")
+
         this.Response=response;
     }
     Question.prototype.setRepeats=function(repeats){
@@ -90,9 +91,9 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         this.Confidence=parseInt(confidence)
         this.Checked_Answers=this.Checked_Answers+checked_answers.split(",");
         this.Response=response;
-        console.log("Eliminated Answers split: "+eliminated_answers.split(","))
+        //console.log("Eliminated Answers split: "+eliminated_answers.split(","))
         this.Eliminated_Answers=eliminated_answers.split(",")
-        console.log("Eliminated Answers joined: "+this.Eliminated_Answers.join(","))
+        //console.log("Eliminated Answers joined: "+this.Eliminated_Answers.join(","))
     }
     Question.prototype.setTime=function (time){
         //console.log("INside Setting Time"+time)
@@ -104,7 +105,7 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
     }
     Question.prototype.setTime_Stamp=function(time_stamp){
 
-        console.log("setting time stamp "+time_stamp.toString().split("-")[0])
+        //console.log("setting time stamp "+time_stamp.toString().split("-")[0])
         //console.log("setting time stamp "+" "+time_stamp.getDay()+" "+time_stamp.getMonth()+" "+time_stamp.getDate()+" "+time_stamp.getFullYear())
 
 
@@ -134,6 +135,15 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         }
         else if(this.Test_Type=="ACT-Math"){
             return this.getMathOptions();
+        }
+        return this.OptionList;
+    }
+    Question.prototype.getOptions_Display=function(){
+        if (this.Test_Type=="ACT-Science"){
+            return this.getScienceDisplayOptions();
+        }
+        else if(this.Test_Type=="ACT-Math"){
+            return this.getMathDisplayOptions();
         }
         return this.OptionList;
     }
@@ -196,8 +206,10 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
     }
     Question.prototype.getPicture_png_Objects=function(){
     var temp_list=[];
+
     this.Picture_png_Objects.forEach(function(object){
         temp_list.push(object.filename+" "+object.data);
+
     })
     return temp_list.join("*")
 }
@@ -206,7 +218,7 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         //console.log("inside math_science algo "+section)
         var math_string=section
         //document.getElementById('QuestionText').style.height="400px";
-        var command_list=["ne","frac","sqrt","gt","lt","ge","le","theta","pi","log","div","overline","angle","matrix","cr","times"]
+        var command_list=["ne","frac","sqrt","gt","lt","ge","le","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle"]
 
         math_string=math_string.replace(/</g,"(");
 
@@ -229,12 +241,17 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
                     var c_start=math_string_final.indexOf(command_list[i])
                     math_string_final=math_string_final.substring(0,c_start)+"\\"+math_string_final.substring(c_start)
                 }
-                else if(command_list[i] == "le" && math_string_final.indexOf("angle") == -1){
+                else if(command_list[i] == "le" && math_string_final.indexOf("angle") == -1 && math_string_final.indexOf("overleftrightarrow")==-1 ){
                     console.log("its a legitame le")
                     var c_start = math_string_final.indexOf(command_list[i])
                     math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
                 }
-                else if(command_list[i]!="le" && command_list[i]!="ne" ){
+                else if(command_list[i] == "angle" && math_string_final.indexOf("triangle") == -1){
+                    console.log("its a legitame angle")
+                    var c_start = math_string_final.indexOf(command_list[i])
+                    math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
+                }
+                else if(command_list[i]!="le" && command_list[i]!="ne" && command_list[i]!="angle" ){
                     //console.log("command "+command_list[i])
                     var c_start = math_string_final.indexOf(command_list[i])
                     math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)

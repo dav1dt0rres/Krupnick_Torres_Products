@@ -98,6 +98,14 @@ Science_Question.prototype.eliminateCommas=function(science_option){
     // console.log("returning "+option_list.join(" "))
     return option_list.join(" ")
 }
+Science_Question.prototype.getScienceDisplayOptions=function(){
+    console.log("get display Science options");
+    var temp_list=[]
+    for (var i=0;i<this.OptionList.length;++i){
+        temp_list.push(this.eliminateCommas(this.OptionList[i]));
+    }
+    return temp_list
+}
 Science_Question.prototype.getScienceOptions=function(){//returns a list of the math-formatted options
     var final_string=""
     var final_list=[];

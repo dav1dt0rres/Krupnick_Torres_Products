@@ -14,7 +14,7 @@
 <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
 <input type="hidden" id="pause_bool" name="pause_bool" value="{{pause_bool}}"  />
 <input type="hidden" id="Passage_Display_Holder" name="Passage_Display_Holder" value="{{Passage_Display_Holder}}"  />
-
+<input type="hidden" id="hover_history" name="hover_history" value="{{hover_history}}"  />
 <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
 
 <div class="Correct_Answer" align="left" style="margin-left: 55px;" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
@@ -40,7 +40,7 @@
     <input type="hidden" id="Tag" name="Tag" value="{{Tag}}"  />
     <input type="hidden" id="Right_Answer" name="Right_Answer" value="{{Right_Answer}}"  />
     <input type="hidden" id="number_checks" name="number_checks" value="{{number_checks}}"  />
-    <input type="hidden" id="hover_history" name="hover_history" value="{{hover_history}}"  />
+
 
     <input type="hidden" id="Question_Number" name="Question_Number" value="{{Question_Number}}"  />
     <div id="container_1" class="container_1">
@@ -82,6 +82,7 @@
             <option value="B">B</option>
             <option value="C">C</option>
             <option value="D">D</option>
+            <option value="E">E</option>
             <option disabled selected value> -- select an option -- </option>
         </select>
         <select  onchange="finalsubmit()" style="display: none;" id="confidence" name="confidence">
@@ -160,6 +161,14 @@
     function submit_1(argument){
         //console.log("Inside submit" + document.getElementById("CheckBox_List").value)
         document.getElementById("normal_Question_Index").value=(parseInt(document.getElementById("normal_Question_Index").value)+argument).toString()
+
+        var xhr = new window.XMLHttpRequest();
+        xhr.open('POST', '/dashboard/Question_Loop_Math_1',true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log("inititation the json object "+document.getElementById("normal_Question_Index").value );
+
+        var data = JSON.stringify({'Hover_history':document.getElementById("hover_history").value,"Database_Index":document.getElementById("Database_Index").value});
+        xhr.send(data);
         var x = document.getElementById("confidence_tool");
         if (x.style.display === "none") {
             x.style.display = "block";
@@ -182,7 +191,7 @@
     function recordHover(argument){
 
         var list_of_events=document.getElementById("hover_history").value.split(",");
-        //list_of_events.push(argument)
+        list_of_events.push(argument)
         if(argument=='A' || argument=='B'|| argument=='C'|| argument=='D'|| argument=='E'){
             console.log("inside the highlighting the choice "+argument)
             if(document.getElementById("Eliminate_bool").value=="true"){
@@ -820,6 +829,34 @@
         script.src  = "https://polyfill.io/v3/polyfill.min.js?features=es6";
         document.getElementById("container").appendChild(script);
     }
+    function clickedOption_Picture(element){
+        console.log("inside clicked option picture")
+        var list=["paraA","paraB","paraC","paraD","paraE"]
+        if(document.getElementById("Eliminate_bool").value=="true"){
+            document.getElementById(element).style.textDecoration ="line-through";
+            document.getElementById("Eliminated_Answers").value=document.getElementById("Eliminated_Answers").value+","+element;
+            document.getElementById("html").style.cursor = "default";
+            document.getElementById("Eliminate_bool").value="false"
+            return;
+        }
+        else if(document.getElementById("Masked_bool").value=="true"){
+            console.log("Para print out "+"para"+element)
+            document.getElementById(element).style.visibility="visible"
+
+        }
+        for(var i=0;i<list.length;++i){
+            console.log("comparing "+list[i].localeCompare(element))
+            if (list[i].localeCompare(element)==0){
+                //document.getElementById(element).style.color = "DodgerBlue";
+                document.getElementById(element).style.border= "1px solid blue";
+            }
+            else{
+                document.getElementById(list[i]).style.border = "none";
+            }
+        }
+        console.log("Choosing "+element[element.length-1])
+        document.getElementById("combo").value = element[element.length-1];
+    }
     function replace (Passage,index, replacement) {
         return Passage.substr(0, index) + replacement+ Passage.substr(index + 1);
     }
@@ -917,7 +954,7 @@
     }
 
     function showPictureOptions(){
-        var choice_list=['A','B','C','D'];
+        var choice_list=['A','B','C','D','E'];
 
         for (var i=0;i<choice_list.length;++i){
             //console.log("Choice PIctures "+document.getElementById("para"+choice_list[i]).innerHTML)
@@ -952,7 +989,8 @@
         }
     }
     function mapImage(Passage_Section){
-        var picture_list_objects=document.getElementById("Image_List_Holder").value.split('*');
+        var picture_list_objects=document.getElementById("Image_List_Holder").value.replace(/^\s+|\s+$/g, '').split('*');
+        console.log("picture objects "+picture_list_objects)
         console.log("Passage going in "+Passage_Section)
         for (var i=0;i<picture_list_objects.length;++i){
             var filename=picture_list_objects[i].split(" ")[0]

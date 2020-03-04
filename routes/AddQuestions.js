@@ -85,7 +85,7 @@ router.post('/Search_Question',async (req, res, next) => {
         await Database_Object.SearchQuestion(req.body.Enter_Text,req.body.Number,req.body.Test_Type,req.body.Test )
         var commandList=""
         var Math_Text;
-
+        var picture_list=[];
         var title=""
 
         Question_object=Database_Object.Last_Question
@@ -96,10 +96,14 @@ router.post('/Search_Question',async (req, res, next) => {
             for (var i=0;i<Question_object.Picture_png_Objects.length;++i){
                 Question_object.Picture_png_Objects[i]="data:image/png;base64,"+Question_object.Picture_png_Objects[i];
             }
-
+            picture_list=Question_object.getPicture_png_Objects()
             Math_Text="placeholder";
             commandList="not equal = 'ne'  \nexponent = ^ \n" +
                 "fraction='frac{}{}'\n"+
+                "arc='overparen'\n"+
+                "multiplication dot='cdot'\n"+
+                "congruent sign= 'cong'\n"+
+                "line symbol above='overleftrightarrow'\n"+
                 "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
                 "absolute value='|   |'\n"+
                 "Scientific Notation X='times'\n"+
@@ -123,10 +127,14 @@ router.post('/Search_Question',async (req, res, next) => {
             for (var i=0;i<Question_object.Picture_png_Objects.length;++i){
                 Question_object.Picture_png_Objects[i]="data:image/png;base64,"+Question_object.Picture_png_Objects[i];
             }
-
+            picture_list=Question_object.getPicture_png_Objects()
             Math_Text="placeholder";
             commandList="not equal = 'ne'  \nexponent = ^ \n" +
                 "fraction='frac{}{}'\n"+
+                "arc='overparen'\n"+
+                "multiplication dot='cdot'\n"+
+                "congruent sign= 'cong'\n"+
+                "line symbol above='overleftrightarrow'\n"+
                 "square root='sqrt{}'\n"+
                 "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
                 "absolute value='|   |'\n"+
@@ -145,12 +153,13 @@ router.post('/Search_Question',async (req, res, next) => {
                 "DO NOT LEAVE ANY SPACES BETWEEN THE BRACKETS: '<   >'\n"+
                 "---------------------------------------------------------------------------------->end\n"
         }
+        //console.log("Options being recalled "+ Question_object.getOptions())
         res.render('AddQuestions',{ title,QuestionText:Question_object.Question_text,Passage_Holder:commandList+Question_object.Passage,Test_Holder:Question_object.Test,Test_Type_Holder:Question_object.Test_Type,Question_Number:Question_object.Number,
-            AnswerA:Question_object.getOptions()[0],
-            AnswerB:Question_object.getOptions()[1],AnswerC:Question_object.getOptions()[2],
-            AnswerD: Question_object.getOptions()[3], AnswerE:Question_object.getOptions()[4],Right_Answer_Holder:Question_object.Right_Answer,Tag:Question_object.Tag,
+            AnswerA:Question_object.getOptions_Display()[0],
+            AnswerB:Question_object.getOptions_Display()[1],AnswerC:Question_object.getOptions_Display()[2],
+            AnswerD: Question_object.getOptions_Display()[3], AnswerE:Question_object.getOptions_Display()[4],Right_Answer_Holder:Question_object.Right_Answer,Tag:Question_object.Tag,
 
-            Image_List_Holder:Question_object.getPicture_png_Objects(),
+            Image_List_Holder:picture_list,
             Database_Index: req.body.Database_Index, normal_Question_Index:Question_object.Number,checkbox_math_science:box_bool,math_text:Math_Text,
             First_Hint:Question_object.First_Hint.join(" "), Presentation:Question_object.Presentation_Highlight.join(" ")
         })
@@ -179,9 +188,13 @@ router.post('/ScrollEditQuestions',upload.array("file",8), async (req, res, next
         if(req.body.Test_Type=="ACT-Math"){
             var files = [];
             var fileKeys = Object.keys(req.files);
-            clean_Passage=cleanPassage(req.body.Passage);
+            clean_Passage=cleanPassage(req.body.Passage)
+           // console.log("Clean passage going in "+clean_Passage)
             console.log("saving a math question")
+            var questiontext_list=ParseText([req.body.QuestionText])
+            var choice_list=[req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE]
 
+            var Body_List=questiontext_list.concat(choice_list).concat(ParseText([req.body.Tag,req.body.Test.toString(),req.body.Test_Type.toString(),req.body.RightAnswer,clean_Passage,req.body.Question_Number,req.body.First_Hint,req.body.Presentation]))
             fileKeys.forEach(function(key) {
                 console.log("file keys "+req.files[key].path+" "+req.files[key].filename)
                 var record={
@@ -192,13 +205,17 @@ router.post('/ScrollEditQuestions',upload.array("file",8), async (req, res, next
                 files.push(record);
             });
             Database_Object.setPNGfiles(files)
-
+            await Database_Object.addMathQuestion(Body_List);
         }
         else if(req.body.Test_Type=="ACT-Science"){
             var files = [];
             var fileKeys = Object.keys(req.files);
-            clean_Passage=cleanPassage(req.body.Passage);
+            clean_Passage=cleanPassage(req.body.Passage)
+            console.log("saving a SCIENCE question")
+            var questiontext_list=ParseText([req.body.QuestionText])
+            var choice_list=[req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE]
 
+            var Body_List=questiontext_list.concat(choice_list).concat(ParseText([req.body.Tag,req.body.Test.toString(),req.body.Test_Type.toString(),req.body.RightAnswer,clean_Passage,req.body.Question_Number,req.body.First_Hint,req.body.Presentation]))
             fileKeys.forEach(function(key) {
                 console.log("file keys "+req.files[key].path+" "+req.files[key].filename)
                 var record={
@@ -211,18 +228,18 @@ router.post('/ScrollEditQuestions',upload.array("file",8), async (req, res, next
                 files.push(record);
             });
             Database_Object.setPNGfiles(files)
-
+            await Database_Object.addScienceQuestion(Body_List);
         }
-        console.log("Going in-Save Button: "+" "+req.body.QuestionText+req.body.AnswerA+req.body.AnswerB+req.body.AnswerC+req.body.AnswerD+" "+req.body.Tag+" "+req.body.RightAnswer+" "+"THIS IS THE PASSAGE"+" "+clean_Passage,
+        else{//reading and english
+            var Body_List=ParseText([req.body.QuestionText,req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE,
+                req.body.Tag,req.body.Test.toString(),req.body.Test_Type.toString(),req.body.RightAnswer,clean_Passage,req.body.Question_Number,req.body.First_Hint,req.body.Presentation])
+            await Database_Object.addNewQuestion(Body_List);
+        }
+        console.log("Going in-Save Button: "+" "+Body_List+" "+"THIS IS THE PASSAGE"+" "+clean_Passage,
             "THIS IS THE QUESTION NUMBER"+" " +req.body.Question_Number+" "+req.body.Test_Type+" "+req.body.Test)
 
-        var Body_List=ParseText([req.body.QuestionText,req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE,
-            req.body.Tag,req.body.Test.toString(),req.body.Test_Type.toString(),req.body.RightAnswer,clean_Passage,req.body.Question_Number,req.body.First_Hint,req.body.Presentation])
-
-        console.log('Body List new'+req.body.First_Hint+" "+req.body.Presentation)
 
 
-        await Database_Object.addNewQuestion(Body_List);
         Current_Sessions[req.body.Database_Index]=Database_Object;
         const title='Successful Entry of Question, if you would like to Edit any more Questions you can..'
 

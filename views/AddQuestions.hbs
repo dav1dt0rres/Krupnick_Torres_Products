@@ -211,7 +211,11 @@
         var command_list="not equal = 'ne'  \nexponent = ^ \n" +
                 "angle ='angle'\n"+
                 "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
+                "arc='overparen'\n"+
                 "fraction='frac{}{}'\n"+
+                "multiplication dot='cdot'\n"+
+                "congruent sign= 'cong'\n"+
+                "line symbol above='overleftrightarrow{}'\n"+
                 "Scientific Notation X='times'\n"+
                 "square root='sqrt{}'\n"+
                 "absolute value='|   |'\n"+
@@ -236,7 +240,11 @@
             console.log("commands: ");
         var command_list="not equal = 'ne'  \nexponent = ^ \n" +
                 "angle ='angle'\n"+
+                "arc='overparen'\n"+
                 "fraction='frac{}{}'\n"+
+                "multiplication dot='cdot'\n"+
+                "congruent sign= 'cong'\n"+
+                "line symbol above='overleftrightarrow{}'\n"+
                 "square root='sqrt{}'\n"+
                 "absolute value='|   |'\n"+
                 "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
@@ -287,7 +295,7 @@
     }
 
     function Math_Algo(math_string){
-        var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline","angle","matrix","cr","times"]
+        var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle"]
         console.log("Math Algo "+math_string)
         math_string=math_string.replace("<","(");
         math_string=math_string.replace(">",")");
@@ -302,13 +310,18 @@
                     var c_start=math_string_final.indexOf(command_list[i])
                     math_string_final=math_string_final.substring(0,c_start)+"\\"+math_string_final.substring(c_start)
                 }
-                else if(command_list[i] == "le" && math_string_final.indexOf("angle") == -1){
+                else if(command_list[i] == "le" && math_string_final.indexOf("angle") == -1 && math_string_final.indexOf("overleftrightarrow")==-1 ){
                     console.log("its a legitame le")
                     var c_start = math_string_final.indexOf(command_list[i])
                     math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
                 }
-                else if(command_list[i]!="le" && command_list[i]!="ne" ){
-                    console.log("command "+command_list[i])
+                else if(command_list[i] == "angle" && math_string_final.indexOf("triangle")==-1 ){
+                    console.log("its a legitame angle")
+                    var c_start = math_string_final.indexOf(command_list[i])
+                    math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
+                }
+                else if(command_list[i]!="le" && command_list[i]!="ne" && command_list[i] != "angle"){
+                    console.log("command "+command_list[i]+" "+math_string_final.indexOf("triangle"))
                     var c_start = math_string_final.indexOf(command_list[i])
                     math_string_final = math_string_final.substring(0, c_start) + "\\" + math_string_final.substring(c_start)
                 }

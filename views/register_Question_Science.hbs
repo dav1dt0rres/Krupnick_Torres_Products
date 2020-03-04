@@ -158,6 +158,15 @@
     function submit_1(argument){
         //console.log("Inside submit" + document.getElementById("CheckBox_List").value)
         document.getElementById("normal_Question_Index").value=(parseInt(document.getElementById("normal_Question_Index").value)+argument).toString()
+
+        var xhr = new window.XMLHttpRequest();
+        xhr.open('POST', '/dashboard/Question_Loop_Science_1',true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log("inititation the json object "+document.getElementById("normal_Question_Index").value );
+
+        var data = JSON.stringify({'Hover_history':document.getElementById("hover_history").value,"Database_Index":document.getElementById("Database_Index").value});
+        xhr.send(data);
+
         var x = document.getElementById("confidence_tool");
         if (x.style.display === "none") {
             x.style.display = "block";

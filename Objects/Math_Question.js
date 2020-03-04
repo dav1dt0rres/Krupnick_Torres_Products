@@ -33,6 +33,7 @@ function Math_Question(question_text, optionList,right_answer,tag,number,passage
     this.Second_Hint_Text=[];
     this.Total_Time;
     this.Hover_History=[]
+
     this.Confidence;
     //this.punctuationChoices();
 }
@@ -59,7 +60,7 @@ Math_Question.prototype.setPNGPictures=function (picture_objects){
         }
         temp_list.push(tuple);
     });
-
+    //console.log("final picture list: "+temp_list)
     this.Picture_png_Objects=temp_list;
     //console.log("picture length "+this.Picture_png_Objects.length)
 }
@@ -110,10 +111,16 @@ Math_Question.prototype.getMathQuestionText=function(){
 }
 Math_Question.prototype.getPicture_png_Objects=function(){
     var temp_list=[];
-    this.Picture_png_Objects.forEach(function(object){
-        temp_list.push(object.filename+" "+object.data);
-    })
+    for (var i=0;i<this.Picture_png_Objects.length;++i){
+        temp_list.push(this.Picture_png_Objects[i].filename+" "+this.Picture_png_Objects[i].data);
+        console.log("temp list so far_PNG "+temp_list)
+    }
+
     return temp_list.join("*")
+}
+Math_Question.prototype.getMathDisplayOptions=function(){
+    console.log("get display math options")
+    return this.OptionList;
 }
 Math_Question.prototype.punctuationChoices=function(){
 
