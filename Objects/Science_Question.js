@@ -76,7 +76,7 @@ Science_Question.prototype.eliminateCommas=function(science_option){
     var notvalid=0;
     var valid=0;
     for (var i=0;i<option_list.length;++i){
-        if (isNaN(parseInt(option_list[i])) && option_list[i].includes("$")==false && option_list[i].includes("(")==false){
+        if (isNaN(parseInt(option_list[i])) && option_list[i].includes("@")==false && option_list[i].includes("(")==false){
 
             //console.log("its nota valid number "+option_list[i])
             ++notvalid;
@@ -90,16 +90,16 @@ Science_Question.prototype.eliminateCommas=function(science_option){
 
         }
     }
-    //console.log("Valid: "+valid+" "+"Not valid: "+notvalid)
-    if(valid>notvalid){
-        //console.log("returning...."+  math_option)
+
+
+       // console.log("returning....(valid)"+  science_option)
         return science_option;
-    }
-    // console.log("returning "+option_list.join(" "))
-    return option_list.join(" ")
+
+   // console.log("returning "+option_list.join(","))
+   // return option_list.join(",")
 }
 Science_Question.prototype.getScienceDisplayOptions=function(){
-    console.log("get display Science options");
+   // console.log("get display Science options");
     var temp_list=[]
     for (var i=0;i<this.OptionList.length;++i){
         temp_list.push(this.eliminateCommas(this.OptionList[i]));

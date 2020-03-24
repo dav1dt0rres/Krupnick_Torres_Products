@@ -210,8 +210,13 @@
         console.log("commands: ");
         var command_list="not equal = 'ne'  \nexponent = ^ \n" +
                 "angle ='angle'\n"+
-                "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
+                "triangle shape='triangle{}'\n"+
+                "infinity symbol='infty'\n"+
+                "downarrow='downarrow'\n"+
+                "matrix_one column='begin{bmatrix}x&y&zend{bmatrix}'\n"+
+                "matrix_one row='begin{bmatrix}x\\y\\zend{bmatrix}'\n"+
                 "arc='overparen'\n"+
+                "perpendicular symbol= 'perp'\n"+
                 "fraction='frac{}{}'\n"+
                 "multiplication dot='cdot'\n"+
                 "congruent sign= 'cong'\n"+
@@ -239,7 +244,11 @@
         document.getElementById("checkbox_science").checked = false;
             console.log("commands: ");
         var command_list="not equal = 'ne'  \nexponent = ^ \n" +
+                "triangle shape='triangle{}'\n"+
                 "angle ='angle'\n"+
+                "perpendicular symbol= 'perp'\n"+
+                "downarrow='downarrow'\n"+
+                "infinity symbol='infty'\n"+
                 "arc='overparen'\n"+
                 "fraction='frac{}{}'\n"+
                 "multiplication dot='cdot'\n"+
@@ -247,7 +256,8 @@
                 "line symbol above='overleftrightarrow{}'\n"+
                 "square root='sqrt{}'\n"+
                 "absolute value='|   |'\n"+
-                "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
+                "matrix_one column='begin{bmatrix}x&y&zend{bmatrix}'+\n"+
+                "matrix_one row='begin{bmatrix}x\\y\\zend{bmatrix}'+\n"+
                 "Scientific Notation X='times'\n"+
         "pi='pi'\n"+
         "theta = 'theta'\n"+
@@ -295,7 +305,7 @@
     }
 
     function Math_Algo(math_string){
-        var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle"]
+        var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle","infty","perp","downarrow"]
         console.log("Math Algo "+math_string)
         math_string=math_string.replace("<","(");
         math_string=math_string.replace(">",")");

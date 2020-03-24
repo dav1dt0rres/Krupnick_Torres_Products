@@ -72,7 +72,7 @@
         addCell(tr, views,'A','A');
         tr.onclick=async function(event) {
 
-            document.getElementById("Final_Questions_holder").value=val_1
+            document.getElementById("Final_Questions_holder").value=val_1+' '+val_3;
             console.log('clicked!!!! '+document.getElementById("form").submit());
 
         }
@@ -96,7 +96,8 @@
         addCell(tr,checked_answers,'A','A');
         tr.onclick=async function(event) {
 
-            document.getElementById("Final_Questions_holder").value=val_1
+            document.getElementById("Final_Questions_holder").value=val_1+' '+val_3;
+
             console.log('clicked!!!! '+document.getElementById("form").submit());
 
         }
@@ -137,7 +138,7 @@
     function HomeFunction(){
         console.log("inside exit bool")
         document.getElementById("Exit_bool").value="true"
-        document.getElementById("form").submit()
+        //document.getElementById("form").submit()
     }
     function loadQuestionBody(){
         var question=document.getElementById("Question_Body_Holder");

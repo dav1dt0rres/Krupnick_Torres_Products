@@ -23,7 +23,7 @@ function English_Question(question_text, optionList,right_answer,tag,number,pass
     this.Right_Answer=right_answer;
     this.StudentAnswer=null;
     this.Repititions=0;
-
+    this.SetNumber;//this is to display results(Review module)  properly so that the program knows which index to call to display when Reviewing
     this.Time_Stamp;
 
     this.First_Hint=[];

@@ -73,16 +73,117 @@ router.post(
 
     }
 )
+router.get('/ShowQuestions',async (req,res,next)=>{
+    console.log("inside ShowQuesitons "+req.query.Database_Index+" "+req.query.Final_Questions_holder+" "+req.query.Test_Type_Holder+" "+req.query.Test_Holder);
+    var Database_Object=Current_Sessions[req.query.Database_Index]
+    var title="this is the recalled question";
+    if(req.query.Exit_bool=="true"){
+        console.log("Entering Exit")
+        console.log("Length before"+Current_Sessions.length)
+
+        //Current_Sessions.splice(req.query.Database_Index,1)
+
+        title="Welcome to your Dashboard, "+Database_Object.Student.firstName;
+        console.log("Length after+Current_Sessions.length"+Current_Sessions.length)
+        res.render('dashboard', {title,FirstName:Database_Object.Student.firstName,LastName:Database_Object.Student.lastName, Email:Database_Object.Student.email })
+
+        return
+    }
+
+    var box_bool=false;
+    var commandList=""
+    await Database_Object.SearchQuestion("",req.query.Final_Questions_holder,req.query.Test_Type_Holder,req.query.Test_Holder )
+    var Question_object=Database_Object.Last_Question;
+    if(req.query.Test_Type_Holder=="ACT-Math"){
+        title="This is the Recalled Question, (Math)"
+        for (var i=0;i<Question_object.Picture_png_Objects.length;++i){
+            Question_object.Picture_png_Objects[i]="data:image/png;base64,"+Question_object.Picture_png_Objects[i];
+        }
+
+        var Math_Text="placeholder";
+        var commandList="not equal = 'ne'  \nexponent = ^ \n" +
+            "fraction='frac{}{}'\n"+
+            "triangle shape='triangle{}'\n"+
+            "perpendicular symbol= 'perp'\n"+
+            "downarrow='downarrow'\n"+
+            "infinity symbol='infty'\n"+
+            "arc='overparen'\n"+
+            "multiplication dot='cdot'\n"+
+            "congruent sign= 'cong'\n"+
+            "line symbol above='overleftrightarrow'\n"+
+            "matrix_one column='begin{bmatrix}x&y&zend{bmatrix}'\n"+
+            "matrix_one row='begin{bmatrix}x\\y\\zend{bmatrix}'\n"+
+            "absolute value='|   |'\n"+
+            "Scientific Notation X='times'\n"+
+            "square root='sqrt{}'\n"+
+            "angle ='angle'\n"+
+            "pi='pi'\n"+
+            "theta = 'theta'\n"+
+            "subscript = '_'\n"+
+            "repeating decimal= 'overline{}'\n"+
+            "division symbol = 'div'\n"+
+            "logarithmic='log_y x'\n"+
+            "greater than='gt'\n"+
+            "greater than or equal='ge'\n"+
+            "less than ='lt'\n"+
+            "less than or equal='le'\n"+
+            "DO NOT LEAVE ANY SPACES BETWEEN THE BRACKETS: '<   >'\n"+
+            "---------------------------------------------------------------------------------->end\n"
+    }
+    else if(req.query.Test_Type_Holder=="ACT-Science" ){
+        title="This is the Recalled Question, (Science)"
+
+        var Math_Text="placeholder";
+        var commandList="not equal = 'ne'  \nexponent = ^ \n" +
+            "triangle shape='triangle{}'\n"+
+            "fraction='frac{}{}'\n"+
+            "infinity symbol='infty'\n"+
+            "perpendicular symbol='perp'\n"+
+            "arc='overparen'\n"+
+            "downarrow='downarrow'\n"+
+            "multiplication dot='cdot'\n"+
+            "congruent sign= 'cong'\n"+
+            "line symbol above='overleftrightarrow'\n"+
+            "square root='sqrt{}'\n"+
+            "matrix_one column='begin{bmatrix}x&y&zend{bmatrix}'+\n"+
+            "matrix_one row='begin{bmatrix}x\\y\\zend{bmatrix}'+\n"+
+            "absolute value='|   |'\n"+
+            "Scientific Notation X='times'\n"+
+            "angle ='angle'\n"+
+            "pi='pi'\n"+
+            "theta = 'theta'\n"+
+            "subscript = '_'\n"+
+            "repeating decimal= 'overline{}'\n"+
+            "division symbol = 'div'\n"+
+            "logarithmic='log_y x'\n"+
+            "greater than='gt'\n"+
+            "greater than or equal='ge'\n"+
+            "less than ='lt'\n"+
+            "less than or equal='le'\n"+
+            "DO NOT LEAVE ANY SPACES BETWEEN THE BRACKETS: '<   >'\n"+
+            "---------------------------------------------------------------------------------->end\n"
+    }
+    res.render('AddQuestions',{ title,QuestionText:Question_object.Question_text,Passage_Holder:commandList+Question_object.Passage,Test_Holder:Question_object.Test,Test_Type_Holder:Question_object.Test_Type,Question_Number:Question_object.Number,
+        AnswerA:Question_object.getOptions_Display()[0],
+        AnswerB:Question_object.getOptions_Display()[1],AnswerC:Question_object.getOptions_Display()[2],
+        AnswerD: Question_object.getOptions_Display()[3], AnswerE:Question_object.getOptions_Display()[4],Right_Answer_Holder:Question_object.Right_Answer,Tag:Question_object.Tag,
+
+        Database_Index: req.query.Database_Index, normal_Question_Index:Question_object.Number,checkbox_math_science:box_bool,math_text:Math_Text,
+        First_Hint:Question_object.First_Hint.join(" "), Presentation:Question_object.Presentation_Highlight.join(" ")
+    })
+
+})
+
 router.post('/Search_Question',async (req, res, next) => {
-    console.log("inside Search QUestion (AddQUestions)")
-    var Database_Object=Current_Sessions[req.body.Database_Index]
-    console.log("Databse index"+" "+req.body.Database_Index+" "+Current_Sessions.length)
+        console.log("inside Search QUestion (AddQUestions)")
+        var Database_Object=Current_Sessions[req.body.Database_Index]
+        console.log("Databse index"+" "+req.body.Database_Index+" "+Current_Sessions.length)
 
 
-    console.log(req.body.Enter_Text+" "+req.body.Number+" "+req.body.Test_Type+" "+req.body.Test+" "+req.body.Database_Index )
+        console.log(req.body.Enter_Text+" "+req.body.Number+" "+req.body.Test_Type+" "+req.body.Test+" "+req.body.Database_Index )
         var Question_object;
         var box_bool=false;
-        await Database_Object.SearchQuestion(req.body.Enter_Text,req.body.Number,req.body.Test_Type,req.body.Test )
+        var question_list=await Database_Object.SearchQuestion(req.body.Enter_Text,req.body.Number,req.body.Test_Type,req.body.Test )
         var commandList=""
         var Math_Text;
         var picture_list=[];
@@ -90,8 +191,21 @@ router.post('/Search_Question',async (req, res, next) => {
 
         Question_object=Database_Object.Last_Question
 
-        console.log("Hints and PResentation "+Question_object.First_Hint.join(" "));
-        if(req.body.Test_Type=="ACT-Math"){
+        if(question_list.length>0){
+            console.log("insisde Show Questions")
+            var title="Here are the Questions"
+
+            res.render('Show_Questions', {title:title,
+                Database_Index: req.body.Database_Index,
+                    Final_Questions_holder:question_list,
+                    Test_Type_Holder:req.body.Test_Type,
+                    Test_Holder:req.body.Test
+
+            })
+            Current_Sessions[req.body.Database_Index]=Database_Object;
+            return;
+        }
+        else if(req.body.Test_Type=="ACT-Math"){
             title="This is the Recalled Question, (Math)"
             for (var i=0;i<Question_object.Picture_png_Objects.length;++i){
                 Question_object.Picture_png_Objects[i]="data:image/png;base64,"+Question_object.Picture_png_Objects[i];
@@ -100,11 +214,16 @@ router.post('/Search_Question',async (req, res, next) => {
             Math_Text="placeholder";
             commandList="not equal = 'ne'  \nexponent = ^ \n" +
                 "fraction='frac{}{}'\n"+
+                "triangle shape='triangle{}'\n"+
+                "perpendicular symbol= 'perp'\n"+
+                "downarrow='downarrow'\n"+
+                "infinity symbol='infty'\n"+
                 "arc='overparen'\n"+
                 "multiplication dot='cdot'\n"+
                 "congruent sign= 'cong'\n"+
                 "line symbol above='overleftrightarrow'\n"+
-                "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
+                "matrix_one column='begin{bmatrix}x&y&zend{bmatrix}'\n"+
+                "matrix_one row='begin{bmatrix}x\\y\\zend{bmatrix}'\n"+
                 "absolute value='|   |'\n"+
                 "Scientific Notation X='times'\n"+
                 "square root='sqrt{}'\n"+
@@ -130,13 +249,18 @@ router.post('/Search_Question',async (req, res, next) => {
             picture_list=Question_object.getPicture_png_Objects()
             Math_Text="placeholder";
             commandList="not equal = 'ne'  \nexponent = ^ \n" +
+                "triangle shape='triangle{}'\n"+
                 "fraction='frac{}{}'\n"+
+                "infinity symbol='infty'\n"+
+                "perpendicular symbol='perp'\n"+
                 "arc='overparen'\n"+
+                "downarrow='downarrow'\n"+
                 "multiplication dot='cdot'\n"+
                 "congruent sign= 'cong'\n"+
                 "line symbol above='overleftrightarrow'\n"+
                 "square root='sqrt{}'\n"+
-                "matrix='matrix{1st row cr 2nd row cr 3rd row.......cr..... }'+\n"+
+                "matrix_one column='begin{bmatrix}x&y&zend{bmatrix}'+\n"+
+                "matrix_one row='begin{bmatrix}x\\y\\zend{bmatrix}'+\n"+
                 "absolute value='|   |'\n"+
                 "Scientific Notation X='times'\n"+
                 "angle ='angle'\n"+
@@ -189,7 +313,7 @@ router.post('/ScrollEditQuestions',upload.array("file",8), async (req, res, next
             var files = [];
             var fileKeys = Object.keys(req.files);
             clean_Passage=cleanPassage(req.body.Passage)
-           // console.log("Clean passage going in "+clean_Passage)
+
             console.log("saving a math question")
             var questiontext_list=ParseText([req.body.QuestionText])
             var choice_list=[req.body.AnswerA,req.body.AnswerB,req.body.AnswerC,req.body.AnswerD,req.body.AnswerE]
@@ -291,13 +415,13 @@ router.post('/ScrollEditQuestions',upload.array("file",8), async (req, res, next
 function cleanPassage(Passage){
 
 
-    var index=Passage.indexOf("end");
+    var index=Passage.indexOf(">end");
     console.log("clean index "+index)
     if(index==-1){
         return Passage;
     }
 
-    return Passage.substring(index+3);
+    return Passage.substring(index+4);
 
 }
 function ParseText(List){

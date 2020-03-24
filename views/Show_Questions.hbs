@@ -1,0 +1,126 @@
+
+
+
+<head>
+
+    <h4 class="Question_Body_Display" id="Question_Body_Display" name="Question_Body_Display"  ></h4>
+</head>
+
+<body>
+
+
+
+<form id ="form" action="/AddQuestions/ShowQuestions"  method="get">
+    <input type="hidden" id="Exit_bool" name="Exit_bool" value="{{Exit_bool}}"  />
+    <input type="hidden" id="Final_Questions_holder" name="Final_Questions_holder" value="{{Final_Questions_holder}}"  />
+    <input type="hidden" id="Question_Body_Holder" name="Question_Body_Holder" value="{{Question_Body_Holder}}"  />
+    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
+    <input type="hidden" id="normal_Question_Index" name="normal_Question_Index" value="{{normal_Question_Index}}"  />
+    <input type="hidden" id="tutor_boolean" name="tutor_boolean" value="{{tutor_boolean}}"  />
+    <input type="hidden" id="Test_Type_Holder" name="Test_Type_Holder" value="{{Test_Type_Holder}}"  />
+    <input type="hidden" id="Test_Holder" name="Test_Holder" value="{{Test_Holder}}"  />
+
+    <label class="" for="Final_Questions">
+        List of Questions that were in incorrect
+        (Select One if you want to go back to the problem)
+        <table id='tbl' border=1></table>
+        <ul type="submit" name="Final_Questions" id ="Final_Questions" name="Final_Questions" >
+
+
+        </ul>
+    </label>
+
+
+
+
+</form>
+
+</body>
+
+
+
+<script type="text/javascript">
+    function HomeFunction(){
+        console.log("Go back home function")
+        window.location.href = '/register'
+    }
+    function addCell(tr, val,response,right_answer) {
+        //console.log("response and right answer"+" "+response+" "+right_answer+" "+val);
+        if (response!=right_answer){
+            // console.log("incorrect")
+            var td = document.createElement('td');
+            td.style.color='red'
+            td.innerHTML = val;
+
+        }
+        else{
+            //console.log("correct")
+            var td = document.createElement('td');
+            td.style.color='black'
+            td.innerHTML = val;
+            //td.value=val;
+        }
+
+        tr.appendChild(td)
+    }
+    function addRow(tbl, val_1, val_2, val_3,val_4){
+        var tr = document.createElement('tr');
+
+        addCell(tr, val_1);
+        addCell(tr, val_2);
+        addCell(tr, val_3);
+        addCell(tr, val_4);
+
+        tr.onclick=async function(event) {
+
+            document.getElementById("Final_Questions_holder").value=val_1
+            console.log('clicked!!!! '+document.getElementById("form").submit());
+
+        }
+        tbl.appendChild(tr)
+    }
+
+    function loadFinalQuestions(){
+        console.log("Inside loadFinalQuestions "+document.getElementById("Final_Questions_holder").value)
+        var FinalList=document.getElementById("Final_Questions_holder").value.split(",")
+        console.log(FinalList)
+        //var ul=document.getElementById("Final_Questions");
+        var tbl = document.getElementById('tbl');
+
+            addRow(tbl, 'Number', 'Test Type', 'Test','Tag');
+            //console.log("Final List "+" "+FinalList)
+            for (var i=0;i<FinalList.length;++i){
+                //console.log("Length "+FinalList[i].split(";").length)
+                console.log("Final List "+FinalList[i])
+                //console.log("Inside loading Tutor View Questions "+ FinalList[i].split(";")[0]+" "+FinalList[i].split(";")[11]+" "+FinalList[i].split(";")[12].split("/").length)
+
+                addRow(tbl, FinalList[i].split(";")[0],  FinalList[i].split(";")[1],  FinalList[i].split(";")[2], FinalList[i].split(";")[3]);
+
+                //console.log("This is the value its returned"+FinalList[i].split(",")[0]+FinalList[i].split(",")[1]+" "+ FinalList[i].split(",")[2]+" "+FinalList[i].split(",")[3]+" "+FinalList[i].split(",")[4]+" "+FinalList[i].split(",")[5]+" "+FinalList[i].split(";")[6]+" "+FinalList[i].split(";")[9]+" "+
+                ///FinalList[i].split(";")[10]+" "+FinalList[i].split(";")[11]+" "+FinalList[i].split(";")[12]+" "+FinalList[i].split(";")[7]+" "+FinalList[i].split(";")[8])
+            }
+
+
+    }
+    function HomeFunction(){
+        console.log("inside exit bool")
+        document.getElementById("Exit_bool").value="true"
+        document.getElementById("form").submit()
+    }
+    function loadQuestionBody(){
+        var question=document.getElementById("Question_Body_Holder");
+
+        var display=document.getElementById("Question_Body_Display");
+        display.innerHTML=question.value
+    }
+    window.onload = function () {
+
+        loadFinalQuestions();
+        //loadQuestionBody()
+        // console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
+        //console.log("Print First"+" "+y)
+
+
+
+    };
+</script>

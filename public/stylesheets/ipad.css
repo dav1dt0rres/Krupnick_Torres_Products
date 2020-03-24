@@ -525,14 +525,15 @@ circle{
 }
 
 .Passage_Box{
-    width: 470px;
-    height: 950px;
+    width: 600px;
+    height: 750px;
     color:transparent;
+    border: white;
 
 }
 .container, .backdrop, textarea {
-    width: 470px;
-    height: 950px;
+    width: 600px;
+    height: 800px;
     left:55px;
     position:absolute;
 }
@@ -603,7 +604,7 @@ underline_black{
     left: 10px;
 }
 .container_1{
-    width: 400px;
+    width: 350px;
     height: 800px;
     float: right;
     display: block;
@@ -611,7 +612,7 @@ underline_black{
     transform: translateZ(0);
     -webkit-text-size-adjust: none;
     position: relative;
-    left: 10px;
+    left: 0px;
 }
 mark {
     color: transparent;

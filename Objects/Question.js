@@ -33,9 +33,16 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
 
 
 }
-
+    Question.prototype.setNumber=function(index){
+        this.SetNumber=index;
+    }
     Question.prototype.setHover_History=function (hover_history){
-
+    if( hover_history[0] ==undefined){
+        //console.log("hover history setting, empty "+hover_history[0])
+        this.Hover_History=["No History"]
+        return;
+    }
+        //console.log("hover history "+hover_history)
         this.Hover_History=hover_history;
     }
     Question.prototype.setResponse=function(response){
@@ -218,7 +225,7 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
         //console.log("inside math_science algo "+section)
         var math_string=section
         //document.getElementById('QuestionText').style.height="400px";
-        var command_list=["ne","frac","sqrt","gt","lt","ge","le","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle"]
+        var command_list=["ne","frac","sqrt","gt","lt","ge","le","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle","infty","perp","downarrow"]
 
         math_string=math_string.replace(/</g,"(");
 

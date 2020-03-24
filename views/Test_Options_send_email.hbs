@@ -10,6 +10,8 @@
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <input type="hidden" id="get_test" name="get_test" value="{{get_test}}"  />
     <input type="hidden" id="Load_Tags" name="Load_Tags" value="{{Load_Tags}}"  />
+    <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
+
     <label id="test_type_label" name="test_type_label">
         Test Type  <------    Pick me First    <--------
         <select onchange="loadTests()" id="Test_Type"  name="Test_Type" value="{{Test_Type}}" >
@@ -32,30 +34,42 @@
         </select>
     </label>
 
-    <label style="display: none;" id ="Number_Questions_label" for="Number_Questions">
-        How Many Questions?
-        <input style="display: none;"  name="Number_Questions" id="Number_Questions"  >
 
-    </label>
     <label style="display: none;" id="Tag_List_label" name="Tag_List_label">
         What Tags?
-        <select style="display: none;" id = "Tag_List" name="Tag_List" for="Tag_List" value="{{Tag_List}}">
+        <select style="display: none;" onchange="load_sub_tags()" id = "Tag_List" name="Tag_List" for="Tag_List" value="{{Tag_List}}">
             {{#each Tag_List.options}}
                 <option >{{this.text}}</option>
             {{/each}}
         </select>
     </label>
+    <label style="display: none;" id="Semi_Tags_Label" name="Semi_Tags_Label">
+        What Semi Tag?
+        <select style="display: none;" id = "Semi_Tags" name="Semi_Tags"  value="{{Semi_Tags}}">
+            {{#each Semi_Tags.options}}
+                <option >{{this.text}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label style="display: none;" id ="Number_Questions_label" for="Number_Questions">
+        How Many Questions?
+        <input style="display: none;"  name="Number_Questions" id="Number_Questions"  >
 
+    </label>
+    <label style="display: none;" id ="checkbox_historical_label" for="checkbox_historical">
+        Eliminate past Questions that were already answered?
+        <input style="display: none;" type="checkbox" name="checkbox_historical" id="checkbox_historical"  value="True">
+
+    </label>
     <label for="Time_Limit_Question">
         Time Limit for each question (secs)
         <input onkeyup="showForce_Time()" placeholder="Leave Blank if None" id="Time_Limit_Question" name="Time_Limit_Question" value="{{Time_Limit_Question}}"  >
     </label>
-    <label style="display: none;" id ="checkbox_time_label" for="checkbox_time">
-        Force to next Question after time?
-        <input style="display: none;" type="checkbox" name="checkbox_time" id="checkbox_time"  value="True">
+    <label style="display: none;" id ="checkbox_historical_label" for="checkbox_historical">
+        Eliminate past Questions that were already answered?
+        <input style="display: none;" type="checkbox" name="checkbox_historical" id="checkbox_historical"  value="True">
 
     </label>
-
     <label for="Time_Limit_Test">
         Time Limit for the entire Test (mins)
         <input placeholder="Leave Blank if None" id="Time_Limit_Test" name="Time_Limit_Test" value="{{Time_Limit_Test}}"  >
@@ -97,6 +111,11 @@
             document.getElementById("form").submit()
         }
     }
+    function load_sub_tags(){
+        document.getElementById("Type_Holder").value="Load_Sub_Tags"
+
+        document.getElementById("form").submit()
+    }
     function loadTests(){
         if(document.getElementById("Type_Holder").value=="Weakness"){
             return;
@@ -110,13 +129,13 @@
         console.log("length "+document.getElementById("Time_Limit_Question").value.length)
         if(document.getElementById("Time_Limit_Question").value.length==0){
             console.log("input is empty here")
-            document.getElementById("checkbox_time_label").style.display="none";
-            document.getElementById("checkbox_time").style.display="none";
+            //document.getElementById("checkbox_time_label").style.display="none";
+            //document.getElementById("checkbox_time").style.display="none";
         }
         else{
             console.log("Theres an input ")
-            document.getElementById("checkbox_time_label").style.display="block";
-            document.getElementById("checkbox_time").style.display="block";
+            //.getElementById("checkbox_time_label").style.display="block";
+            //document.getElementById("checkbox_time").style.display="block";
         }
 
 
@@ -128,6 +147,13 @@
         }
 
     }
+    function loadTags(){
+        if (document.getElementById("Tag_Holder").value.length>0){
+            console.log("Inside because defualt value for Tag Holder "+document.getElementById("Tag_Holder").value)
+            document.getElementById("Tag_List").value = document.getElementById("Tag_Holder").value
+        }
+
+    }
     window.onload = function () {
         console.log("On load windows")
         if(document.getElementById("Load_Tags").value=="true"){
@@ -136,23 +162,18 @@
             document.getElementById("Number_Questions").style.display="block";
             document.getElementById("Tag_List").style.display="block";
             document.getElementById("Tag_List_label").style.display="block";
+            document.getElementById("checkbox_historical_label").style.display="block";
+            document.getElementById("checkbox_historical").style.display="block";
             document.getElementById("Test").value="Set of Questions (Practice Mode)"
             loadTestTypes();
+            loadTags();
+            document.getElementById("Semi_Tags_Label").style.display="block";
+            document.getElementById("Semi_Tags").style.display="block";
 
             return;
         }
         //loadTests();
         loadTestTypes();
-        if(document.getElementById("Type_Holder").value=="Weakness"){
-            console.log("Inside Weakness Branch, soo hiding buttons")
-            document.getElementById("Test").style.display="none"
-            document.getElementById("exam_button").style.display="none"
-
-            //document.getElementById("Test_Type").style.display="none"
-            //document.getElementById("test_type_label").style.display="none"
-            document.getElementById("test_label").style.display="none"
-            return;
-        }
 
         document.getElementById("submit_button").style.display="none"
 

@@ -1,10 +1,10 @@
 
 <body>
 
-<form action="/AddQuestions/Search_Question"  method="post">
+<form id="form" action="/AddQuestions/Search_Question"  method="post">
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <input type="hidden" id="normal_Question_Index" name="normal_Question_Index" value="{{normal_Question_Index}}"  />
-
+    <input type="hidden" id="Show_Questions" name="Show_Questions" value="{{Show_Questions}}"  />
     <div class="col-3">
         <input id="Enter_Text" class="effect-10" type="text" placeholder="Enter Question Text">
         <span class="focus-bg"></span>
@@ -54,8 +54,19 @@
         <input id="Number"  name="Number" value="{{Number}}"  />
 
     </label>
-    <button id="Search" name="Search" type="submit">Search Question</button>
+    <button type="button" onclick="onSubmit()" id="Search" name="Search" type="submit">Search Question</button>
 
 
 </form>
+<script type="text/javascript">
+    function onSubmit(){
+        console.log("inside on Submit")
+        document.getElementById("Show_Questions").value="true"
+        document.getElementById("form").submit()
+    }
+    window.onload = function () {
+
+    }
+
+</script>
 </body>

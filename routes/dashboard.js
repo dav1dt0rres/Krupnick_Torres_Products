@@ -74,6 +74,57 @@ router.get('/', async function (req, res, next) {
         //Current_Sessions.push(Database_Object);
         return;
     }
+    else if(req.query.Type_Holder=="Load_Sub_Tags"){
+        console.log("inside loadSemiTags "+req.query.Tag_List)
+        var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
+        //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+        var test_list=await Database_Object.getTests();
+        var tag_list=await Database_Object.getTags();
+        var Semi_Tags=await Database_Object.getSemiTags(req.query.Tag_List);
+        var tests=document.createElement('select')
+        title="Are you ready? "+req.query.FirstName+", to take the ACT?"
+        for(var i =0; i<test_list.length;++i){
+
+            var option=document.createElement('option')
+            option.value=test_list[i]
+            option.text=test_list[i];
+            tests.add(option)
+        }
+        var option=document.createElement('option')
+        option.value='Set'
+        option.text="Set of Questions (Practice Mode)"
+        tests.add(option)
+
+
+        var tags=document.createElement('select')
+        for(var i =0; i<tag_list.length;++i){
+
+            var option=document.createElement('option')
+            option.value=tag_list[i]
+            option.text=tag_list[i];
+
+            tags.add(option)
+        }
+
+        var semi_tags=document.createElement('select');
+        var option=document.createElement('option')
+        option.value="Please Choose One"
+        option.text="Please Choose One";
+        semi_tags.add(option)
+        for(var i =0; i<Semi_Tags.length;++i){
+
+            var option=document.createElement('option')
+            option.value=Semi_Tags[i]
+            option.text=Semi_Tags[i];
+
+            semi_tags.add(option)
+        }
+
+        res.render('Test_Options',{title,Semi_Tags:semi_tags,Tag_Holder:req.query.Tag_List, Load_Tags:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests,Tag_List:tags})
+        //Current_Sessions.push(Database_Object);
+        return;
+
+    }
     else if(req.query.Type_Holder=="LoadTags"){//
         console.log("inside loadTags")
         var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
@@ -106,12 +157,16 @@ router.get('/', async function (req, res, next) {
 
             tags.add(option)
         }
-
-        res.render('Test_Options',{title, Load_Tags:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests,Tag_List:tags})
+        var semi_tags=document.createElement('select');
+        var option=document.createElement('option')
+        option.value="Please Choose One"
+        option.text="Please Choose One";
+        semi_tags.add(option)
+        res.render('Test_Options',{title, Semi_Tags:semi_tags,Load_Tags:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests,Tag_List:tags})
         //Current_Sessions.push(Database_Object);
         return;
     }
-    console.log("inside get Dashboard TO Start the TEst"+req.query.Test+" "+req.query.checkbox_time)
+    console.log("inside get Dashboard TO Start the TEst"+req.query.Test+" "+req.query.checkbox_historical)
 
     var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);//keeping record of the index in Current_Session
 
@@ -119,7 +174,7 @@ router.get('/', async function (req, res, next) {
 
     var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also
     Database_Object.send_email("started")
-    await Database_Object.InitializeQuestions(req.query.Tag_List,req.query.Number_Questions);
+    await Database_Object.InitializeQuestions(req.query.Tag_List,req.query.Semi_Tags,req.query.Number_Questions,req.query.checkbox_historical);
 
 
     title="This is a Sample Question, please press Submit(Next Question)"
@@ -155,100 +210,9 @@ router.get('/', async function (req, res, next) {
 
     Current_Sessions.push(Database_Object);
 })
-router.get('/Weakness',async function(req, res, next){
-    console.log("Inside weakness"+req.query.FirstName);
-    //var Database_Object=new Database(null,null,Current_Sessions.length,[]);
-    //
-    //await Database_Object.initializeWeakness_List();
 
 
-    title=req.query.FirstName+", "+"Are you ready to address your Weaknesses?"
-    res.render('Test_Options', {title:title, FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,
-        Type_Holder:"Weakness"
 
-    })
-
-    //Current_Sessions.push(Database_Object)
-
-})
-
-
-router.get('/Question_Loop_Weakness',async function(req,res,next){
-    console.log("Inside Question Loop weakness"+" "+req.query.Database_Index);
-
-    var Database_Object=Current_Sessions[req.query.Database_Index]
-
-    console.log("How many answered Questions?"+" "+req.query.normal_Question_Index)
-    if (Database_Object.Count==0){
-
-        ++Database_Object.Count;
-        Question_object=Database_Object.Last_Question
-
-        await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
-        await Database_Object.initializeTagged_List();//erasing past ones
-        Database_Object.orderTagged_List();//Usually means shuffling
-    }
-    else if(parseInt(req.query.normal_Question_Index)!=parseInt(Database_Object.Normal_Index) ){//He switched to a another question number from the buttons
-        console.log("Inside get next question at an index")
-        console.log("req.time "+req.query.time)
-
-        await Database_Object.saveResponse(req.query.combo,req.query.time,req.query.First_Hint_holder,req.query.number_checks)
-        await Database_Object.getNextWeakQuestion(parseInt(req.query.normal_Question_Index));
-        Question_object=Database_Object.Last_Question
-        await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
-        await Database_Object.initializeTagged_List();//erasing past ones
-        Database_Object.orderTagged_List();//Usually means shuffling
-
-    }
-    else if (req.query.hasOwnProperty("next_question")){
-        ++Database_Object.Count;
-        console.log("Inside next Weakness Question")
-        await Database_Object.saveResponse(req.query.combo,req.query.time,req.query.First_Hint_holder,req.query.number_checks)
-        await Database_Object.getNextWeakQuestion(parseInt(req.query.normal_Question_Index)+1);
-        Question_object=Database_Object.Last_Question
-        await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
-        await Database_Object.initializeTagged_List();//erasing past ones
-        Database_Object.orderTagged_List();//Usually means shuffling
-    }
-    else if(parseInt(req.query.tagged_Questions_holder)>=0){
-        console.log("INside tagged question(weakness branch)"+" "+req.query.combo,req.query.First_Hint_holder,req.query.Right_Answer)
-        await Database_Object.saveResponse(req.query.combo,req.query.time,req.query.First_Hint_holder,req.query.number_checks) //its important you always save response BEFORE getSameTag because it updates history in this function
-        await Database_Object.getSame_TagQuestion(parseInt(req.query.tagged_Questions_holder));
-        Question_object=Database_Object.Last_Tagged_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
-
-    }
-
-
-    title=Question_object.Question_text;
-
-    var {JSDOM} = require("jsdom");
-    var jsdom=require("jsdom")
-    var data = fs.readFileSync('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\views\\register_Question.hbs','utf-8');
-    var document = new JSDOM(data).window.document;
-
-    var element=document.createElement("textarea");
-    //console.log("Passage Outside"+" "+Question_object.getPassage())
-    element.value=Question_object.getPassage()
-    //console.log("Choices eing rendered"+" "+Question_object.getOptions()[0]);
-    //console.log("Choices eing rendered"+" "+Question_object.getOptions()[0].replace(/,/g,' '));
-    res.render('register_Question_Weakness', {Question_Body_Holder:title, Passage_Holder:element.value, Answer_A:Question_object.getOptions()[0].replace(/,/g,' '),
-        Answer_B:Question_object.getOptions()[1].replace(/,/g,' '),Answer_C:Question_object.getOptions()[2].replace(/,/g,' '),
-        Answer_D: Question_object.getOptions()[3].replace(/,/g,' '), Answer_E:Question_object.getOptions()[4].replace(/,/g,' '),
-        Database_Index: req.query.Database_Index, tagged_Questions_holder:Database_Object.DisplayTaggedList(),
-        Right_Answer:Question_object.Right_Answer,normal_Question_Index:Database_Object.Normal_Index,Tag_Holder:Question_object.Tag,
-        Question_Length:Database_Object.List_WeaknessQuestions.length,
-        Test_Both: "Weakness Stream"+" "+Database_Object.Last_Question.Test_Type,
-        First_Hint_holder:Question_object.First_Hint.join(" "),Time_Limit_Holder:Database_Object.Question_Time_Limit
-})
-
-
-    //Current_Sessions[req.query.Database_Index]=Question_object;
-
-    console.log(JSON.stringify(req.body))
-
-    ++counter;
-
-})
 router.post('/Question_Loop_1',async function(req,res,next) {
     //console.log("Database index for hover histroy "+req.body.Database_Index)
     //console.log("REq query Database Hover_History" + req.body.Hover_history);
@@ -266,7 +230,7 @@ router.get('/Question_Loop',async function (req, res, next) {
 
     var Database_Object=Current_Sessions[req.query.Database_Index]
 
-    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+req.query.Database_Index)
+    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+Database_Object.Test)
     //console.log("argument passed"+" "+req.query.tagged_Questions_holder);//brings back the index for the tagged question
     if (Database_Object.Count==0){
 
@@ -290,10 +254,10 @@ router.get('/Question_Loop',async function (req, res, next) {
 
         return
     }
-    else if(parseInt(req.query.Final_Questions_holder)>=0){//the question is begin rendered for review purposes
-        console.log("INside Final Review question ")
+    else if(parseInt(req.query.Final_Questions_holder.split(" ")[0])>=0){//the question is begin rendered for review purposes
+        console.log("INside Final Review question "+req.query.Final_Questions_holder.split(" ")[0]+" "+req.query.Final_Questions_holder.split(" ")[1])
 
-        await Database_Object.getNextQuestion_Final_Review(parseInt(req.query.Final_Questions_holder)-1);
+        await Database_Object.getNextQuestion_Final_Review(req.query.Final_Questions_holder);
         Question_object=Database_Object.Last_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
         var scaled=readScaledScore(Database_Object)
         var element=document.createElement("textarea");
@@ -304,7 +268,7 @@ router.get('/Question_Loop',async function (req, res, next) {
             Answer_B:Question_object.getOptions()[1],Answer_C:Question_object.getOptions()[2],
             Answer_D: Question_object.getOptions()[3], Answer_E:Question_object.getOptions()[4],
             Database_Index: req.query.Database_Index,Final_Questions_holder:await Database_Object.DisplayResultList(scaled),
-            Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder,Tag_Holder:Question_object.Tag,
+            Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder.split(" ")[0],Tag_Holder:Question_object.Tag,
             Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
             First_Hint_holder:Question_object.First_Hint.join(" "),Time_Limit_Holder:Question_object.Response,
             Question_Length:Database_Object.List_Questions.length,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
@@ -335,7 +299,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         //Database_Object.orderTagged_List();//Usually means shuffling
 
     }
-    else if(parseInt(req.query.normal_Question_Index)==parseInt(Database_Object.Normal_Index)-1 ){///This is for problem sets
+    else if(Database_Object.Test.includes("Set") ){///This is for problem sets
         console.log("Inside get next question at an index (Problem_Sets)")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
         Database_Object.setTest_Time_Current(req.query.Total_Time_Holder)
@@ -399,6 +363,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         Eliminated_Answers:Question_object.Eliminated_Answers.join(","),Masked_bool:req.query.Masked_bool,
         Right_Answer:Question_object.Right_Answer,normal_Question_Index:Database_Object.Normal_Index,Tag_Holder:Question_object.Tag,
         Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
+        Test_Both_Holder:Database_Object.Test+";"+Question_object.Number,
         Total_Time_Holder:req.query.Total_Time_Holder,
         First_Hint_holder:Question_object.First_Hint.join(" "),Final_Questions_holder:[],Time_Limit_Holder:Database_Object.Question_Time_Limit,
         Question_Length:Database_Object.List_Questions.length,
@@ -438,7 +403,7 @@ router.get('/Question_Loop_Math',async function(req,res,next){
 
     var Database_Object=Current_Sessions[req.query.Database_Index]
 
-    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+req.query.Database_Index)
+    console.log("Index being requested"+" "+req.query.normal_Question_Index)
     //console.log("argument passed"+" "+req.query.tagged_Questions_holder);//brings back the index for the tagged question
     if (Database_Object.Count==0){
 
@@ -463,9 +428,9 @@ router.get('/Question_Loop_Math',async function(req,res,next){
         return
     }
     else if(parseInt(req.query.Final_Questions_holder)>=0){//the question is begin rendered for review purposes
-        console.log("INside Final Review question ")
+        console.log("INside Final Review question "+req.query.Final_Questions_holder.split(" ")[0]+" "+req.query.Final_Questions_holder.split(" ")[1])
 
-        await Database_Object.getNextQuestion_Final_Review(parseInt(req.query.Final_Questions_holder)-1);
+        await Database_Object.getNextQuestion_Final_Review(req.query.Final_Questions_holder);
         Question_object=Database_Object.Last_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
         var scaled=readScaledScore(Database_Object)
         var element=document.createElement("textarea");
@@ -479,7 +444,7 @@ router.get('/Question_Loop_Math',async function(req,res,next){
             Answer_B:optionsList[1],Answer_C:optionsList[2],
             Answer_D: optionsList[3], Answer_E:optionsList[4],
             Database_Index: req.query.Database_Index,Final_Questions_holder:await Database_Object.DisplayResultList(scaled),
-            Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder,Tag_Holder:Question_object.Tag,
+            Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder.split(" ")[0],Tag_Holder:Question_object.Tag,
             Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
             First_Hint_holder:Question_object.First_Hint.join(" "),Time_Limit_Holder:Question_object.Response,
             Question_Length:Database_Object.List_Questions.length,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
@@ -510,7 +475,7 @@ router.get('/Question_Loop_Math',async function(req,res,next){
         //Database_Object.orderTagged_List();//Usually means shuffling
 
     }
-    else if(parseInt(req.query.normal_Question_Index)==parseInt(Database_Object.Normal_Index)-1 ){///This is for problem sets
+    else if(Database_Object.Test.includes("Set")){///This is for problem sets
         console.log("Inside get next question at an index (Next Question)")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
         Database_Object.setTest_Time_Current(req.query.Total_Time_Holder)
@@ -614,7 +579,7 @@ router.get('/Question_Loop_Science',async function(req,res,next){
 
     var Database_Object=Current_Sessions[req.query.Database_Index]
 
-    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+req.query.Masked_bool+" "+req.query.Database_Index)
+    console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+req.query.Masked_bool+' '+Database_Object.Normal_Index)
     //console.log("argument passed"+" "+req.query.tagged_Questions_holder);//brings back the index for the tagged question
     if (Database_Object.Count==0){
 
@@ -639,9 +604,9 @@ router.get('/Question_Loop_Science',async function(req,res,next){
         return
     }
     else if(parseInt(req.query.Final_Questions_holder)>=0){//the question is begin rendered for review purposes
-        console.log("INside Final Review question ")
+        console.log("INside Final Review question "+req.query.Final_Questions_holder.split(" ")[0]+" "+req.query.Final_Questions_holder.split(" ")[1])
 
-        await Database_Object.getNextQuestion_Final_Review(parseInt(req.query.Final_Questions_holder)-1);
+        await Database_Object.getNextQuestion_Final_Review(req.query.Final_Questions_holder);
         Question_object=Database_Object.Last_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
 
         var element=document.createElement("textarea");
@@ -655,7 +620,7 @@ router.get('/Question_Loop_Science',async function(req,res,next){
             Answer_B:optionsList[1],Answer_C:optionsList[2],
             Answer_D: optionsList[3], Answer_E:optionsList[4],
             Database_Index: req.query.Database_Index,Final_Questions_holder:await Database_Object.DisplayResultList(scaled),
-            Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder,Tag_Holder:Question_object.Tag,
+            Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder.split(" ")[0],Tag_Holder:Question_object.Tag,
             Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
             First_Hint_holder:Question_object.First_Hint.join(" "),Time_Limit_Holder:Question_object.Response,
             Question_Length:Database_Object.List_Questions.length,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
@@ -686,7 +651,7 @@ router.get('/Question_Loop_Science',async function(req,res,next){
         //Database_Object.orderTagged_List();//Usually means shuffling
 
     }
-    else if(parseInt(req.query.normal_Question_Index)==parseInt(Database_Object.Normal_Index)-1 ){///This is for problem sets
+    else if(Database_Object.Test.includes("Set") ){///This is for problem sets
         console.log("Inside get next question at an index (Next Question)")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
         Database_Object.setTest_Time_Current(req.query.Total_Time_Holder)
@@ -818,7 +783,7 @@ function Math_Algo(section){
     //console.log("inside math_science algo "+section)
     var math_string=section
                 //document.getElementById('QuestionText').style.height="400px";
-    var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle"]
+    var command_list=["ne","frac","sqrt","gt","ge","le","lt","theta","pi","log","div","overline","angle","begin","end","cr","times","cong","cdot","overleftrightarrow","overparen","triangle","infty","perp","downarrow"]
 
     math_string=math_string.replace(/</g,"(");
 
@@ -926,7 +891,8 @@ router.get('/automatedEmail',async function (req,res,next){
 
 })
 router.get('/automatedEmail_Student', async function(req,res,next){
-    console.log("inside automated Email for students "+req.query.firstName+" "+req.query.lastName+" "+req.query.email+" "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test+" "+req.query.Number_Questions+" "+req.query.Tag_List);
+    console.log("inside automated Email for students "+req.query.firstName+" "+req.query.lastName+" "+req.query.email+" "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test+" "+req.query.Number_Questions+" "+req.query.Tag_List+
+    req.query.Semi_Tag);
 
    // var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
     //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
@@ -946,14 +912,24 @@ router.get('/automatedEmail_Student', async function(req,res,next){
     option.text="Set of Questions (Practice Mode)"
     tests.add(option)
 
-    var tag_list=document.createElement('select');
-    option=document.createElement('option')
-    option.value=req.query.Tag_List.toString().replace(/_/g,' ')
-    option.text=req.query.Tag_List.toString().replace(/_/g,' ')
-    tag_list.add(option)
+
+
+
 
     if(req.query.Test.includes("Set")){
-        res.render('Test_Options',{title,Load_Tags:"true",Number_Questions:req.query.Number_Questions,Tag_List:tag_list, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.firstName,LastName:req.query.lastName,Time_Limit_Test:req.query.Time_Limit_Test,Time_Limit_Question:req.query.Time_Limit_Question,Email:req.query.email,Test:tests})
+        var tag_list=document.createElement('select');
+        option=document.createElement('option')
+        option.value=req.query.Tag_List.toString().replace(/_/g,' ')
+        option.text=req.query.Tag_List.toString().replace(/_/g,' ')
+        tag_list.add(option)
+
+        var semi_tag=document.createElement('select');
+        option=document.createElement('option')
+        option.value=req.query.Semi_Tag.toString().replace(/_/g,' ')
+        option.text=req.query.Semi_Tag.toString().replace(/_/g,' ')
+        semi_tag.add(option)
+        res.render('Test_Options',{title,Load_Tags:"true",Number_Questions:req.query.Number_Questions,Tag_List:tag_list, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.firstName,LastName:req.query.lastName,Time_Limit_Test:req.query.Time_Limit_Test,Time_Limit_Question:req.query.Time_Limit_Question,Email:req.query.email,Test:tests,
+        Semi_Tags:semi_tag})
 
     }
     else{
@@ -963,7 +939,58 @@ router.get('/automatedEmail_Student', async function(req,res,next){
     //Current_Sessions.push(Database_Object);
 })
 router.get('/automatedEmail_Student_Send',async function(req,res,next){
-    if(req.query.Type_Holder=="LoadTags"){
+    if(req.query.Type_Holder=="Load_Sub_Tags"){
+        console.log("inside loadSemiTags_autmated email "+req.query.Tag_List)
+        var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
+        //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
+        var test_list=await Database_Object.getTests();
+        var tag_list=await Database_Object.getTags();
+        var Semi_Tags=await Database_Object.getSemiTags(req.query.Tag_List);
+        var tests=document.createElement('select')
+        title="Are you ready? "+req.query.FirstName+", to take the ACT?"
+        for(var i =0; i<test_list.length;++i){
+
+            var option=document.createElement('option')
+            option.value=test_list[i]
+            option.text=test_list[i];
+            tests.add(option)
+        }
+        var option=document.createElement('option')
+        option.value='Set'
+        option.text="Set of Questions (Practice Mode)"
+        tests.add(option)
+
+
+        var tags=document.createElement('select')
+        for(var i =0; i<tag_list.length;++i){
+
+            var option=document.createElement('option')
+            option.value=tag_list[i]
+            option.text=tag_list[i];
+
+            tags.add(option)
+        }
+
+        var semi_tags=document.createElement('select');
+        var option=document.createElement('option')
+        option.value="Please Choose One"
+        option.text="Please Choose One";
+        semi_tags.add(option)
+        for(var i =0; i<Semi_Tags.length;++i){
+
+            var option=document.createElement('option')
+            option.value=Semi_Tags[i]
+            option.text=Semi_Tags[i];
+
+            semi_tags.add(option)
+        }
+
+        res.render('Test_Options_send_email',{title,Semi_Tags:semi_tags,Tag_Holder:req.query.Tag_List, Load_Tags:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests,Tag_List:tags})
+        //Current_Sessions.push(Database_Object);
+        return;
+
+    }
+    else if(req.query.Type_Holder=="LoadTags"){
         console.log("inside loadTags_Send email")
         var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
         //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
@@ -1087,6 +1114,28 @@ router.get('/SearchStudent',async function (req,res,next){
 
         //res.render('Test_Options',{title, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests})
         res.render('Test_Options_send_email',{title, FirstName:req.query.firstName,LastName:req.query.lastName,Email:req.query.email})
+        return;
+    }
+    else if(req.query.Exit_bool=="true"){
+
+        var Database_Object=Current_Sessions[req.query.Database_Index]
+        var test_list=await Database_Object.SearchStudent_Tests(req.query.firstName_holder,req.query.lastName_holder,req.query.email_holder);
+
+        var tests=document.createElement('select')
+        var option=document.createElement('option')
+        option.value="None"
+        option.text="Please Select a Test";
+        tests.add(option)
+        title="Now Select a Test the Student has done"
+        for(var i =0; i<test_list.length;++i){
+
+            var option=document.createElement('option')
+            option.value=test_list[i]
+            option.text=test_list[i];
+            tests.add(option)
+        }
+        res.render('SearchStudent',{title, Database_Index:Current_Sessions.length, Tests_Returned:"true",Test_Type_Holder:req.query.Test_Type,FirstName_Holder:req.query.firstName,LastName_Holder:req.query.lastName,email_Holder:req.query.email,Test:tests,get_test:"true"})
+
         return;
     }
     console.log("looking for this studenets name: "+req.query.lastName+" "+req.query.firstName+" "+req.query.email);

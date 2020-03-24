@@ -822,7 +822,7 @@
         recordHover('scrolling '+document.getElementById("Passage_Box").scrollTop)
     }
     function reloadMathJax(){
-
+        console.log("reloading MathJax...")
 
         var script = document.createElement("script");
         script.type = "text/javascript";
@@ -942,6 +942,7 @@
             document.getElementById("container").appendChild(image)
         }
         if(Passage.length>end+20){
+            console.log("Turning the passage into a para element")
             var png_index=Passage.indexOf(".png");
             temp_Passage=Passage.substring(png_index+4)
             var para = document.createElement("p");

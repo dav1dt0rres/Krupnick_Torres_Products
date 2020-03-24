@@ -17,6 +17,13 @@ var dict = {
     "ACT-Science":Science_table
     // etc.
 };
+var dict_tags={
+    "ACT-Reading":"" ,
+    "ACT-Math": [],
+    "ACT-English": ["Commas","Agreement","Economy","Context","Vocab","Cat 2","Cat 3"],
+    "ACT-Science":""
+
+}
 var nodemailer = require('nodemailer');
 const Student = require('./Student.js')
 const Question = require('./Question.js');
@@ -233,7 +240,7 @@ module.exports= class Database {
             var mailOptions = {
                 from: 'bot@gmail.com',
                 //to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com,cameronmarshall.gong@gmail.com',
-                to: 'davidtorres7888@gmail.com',
+                to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com',
                 subject: this.Student.firstName+" "+this.Student.lastName+" just finished: "+this.Test+" "+this.Test_Type,
                 text: 'That was easy!',
 
@@ -244,21 +251,24 @@ module.exports= class Database {
         else if(argument=="registered") {
             var mailOptions = {
                 from: 'bot@gmail.com',
-                to:'davidtorres7888@gmail.com',
+                to:'davidtorres7888@gmail.com,',
                 subject: this.Student.firstName+" "+this.Student.lastName+" was just registered on the system: ",
                 text: 'That was easy!'
             };
         }
         else if(argument=="send_reminder"){
             var tag_list=""
+            var semi_tag=""
             this.Test=this.Test.replace(/ /g, '_')
             if(req.query.Tag_List!=undefined){
                 tag_list=req.query.Tag_List.replace(/ /g, '_')
+                semi_tag=req.query.Semi_Tags.replace(/ /g,'_')
             }
 
-            console.log("Sending Time LImits: "+this.Question_Time_Limit+" "+this.Test_Time_Limit+" "+this.Test_Type+" "+this.Test+" "+tag_list)
+            console.log("Sending Time LImits: "+this.Question_Time_Limit+" "+this.Test_Time_Limit+" "+this.Test_Type+" "+this.Test+" "+tag_list+" "+semi_tag)
             var string="http://krupnickapproach.ngrok.io/dashboard/automatedEmail_Student?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
-                "Test_Type="+this.Test_Type+"&"+"Time_Limit_Question="+this.Question_Time_Limit+"&"+"Time_Limit_Test="+this.Test_Time_Limit+"&"+"Tag_List="+tag_list+"&"+"Number_Questions="+req.query.Number_Questions
+                "Test_Type="+this.Test_Type+"&"+"Time_Limit_Question="+this.Question_Time_Limit+"&"+"Time_Limit_Test="+this.Test_Time_Limit+"&"+"Tag_List="+tag_list+"&"+"Number_Questions="+req.query.Number_Questions+"&"+
+                "Semi_Tag="+semi_tag
             console.log("The complete string "+string)
             var mailOptions = {
                 from: 'bot@gmail.com',
@@ -336,12 +346,24 @@ module.exports= class Database {
         console.log("Total Test Time Current "+this.Test_Time_Current);
         return this.Test_Time_Current
     }
-   async InitializeQuestions(given_tag,number_of_questions){
+   async InitializeQuestions(given_tag,semi_tag,number_of_questions,erase_history){
         if (given_tag!=undefined){
-            await this.initialize_Tag_history(given_tag)//this doesnt really take in considereation the tag given, just recalls from the response table and aggragrates on right constraints
-            console.log("done initalizing tagged history")
+            if(erase_history=="True"){
+                await this.initialize_Tag_history(given_tag)//this doesnt really take in considereation the tag given, just recalls from the response table and aggragrates on right constraints
+            }
+
+            console.log("done initalizing tagged history "+semi_tag)
             this.Number_Of_Questions=number_of_questions;
-            await this.initializeTagged_List(given_tag,number_of_questions);
+            if(semi_tag.includes("Please")==false){
+                console.log("Semi tag inputted")
+                given_tag=semi_tag;
+                await this.initializeTagged_List(given_tag,number_of_questions);
+            }
+            else{
+                console.log("Semi tag NOT inputted")
+                await this.initializeTagged_List_regex(given_tag,number_of_questions);//this collects all questions that have tags with regex
+            }
+
             if(this.List_Questions.length==0){
                 return;
             }
@@ -363,12 +385,9 @@ module.exports= class Database {
         this.Last_Question=this.List_Questions[0]
 
         this.Normal_Index=this.Last_Question.Number
-        var question_length;
-        if(this.set_boolean){
-            question_length=10;
-            console.log("shortening the question length")
-        }
-        this.List_Questions=this.List_Questions.slice(0,question_length)
+        //var question_length;
+
+        //this.List_Questions=this.List_Questions.slice(0,question_length)
         console.log("size of normal list "+this.List_Questions.length)
     }
     async initialize_Tag_history(tag_selected){//this doesnt really take in considereation the tag given, just recalls from the response table and aggragrates on right constraints
@@ -537,9 +556,10 @@ module.exports= class Database {
 
     }
     async initializeTagged_List(tag_requested,number_of_problems){
-        console.log("initializing Tagged_List")
+        console.log("initializing Tagged_List "+number_of_problems)
 
         var keywords = [];
+
         var temp_History_List=this.List_Tagged_History;
         //console.log("Tag its looking for "+" "+this.Last_Question.Tag)
         //var last_question_id=this.Last_Question._id
@@ -550,7 +570,7 @@ module.exports= class Database {
             var Question_object=null;
 
                 for  (var i=0;i<Questions.length;++i){
-
+                   // console.log("Questions "+Questions[i].Test_Type+" "+Questions[i].Test+" "+Questions[i].Number)
                     if(temp_History_List.indexOf(Questions[i]._id.toString())==-1){
 
                         for(var j=0;j<Questions[i].Choices.length;++j){
@@ -567,6 +587,11 @@ module.exports= class Database {
                 }
 
         });
+        if(number_of_problems.length==0){
+            this.List_Questions=keywords;
+            console.log("Size of List Tagged Quesstion (minus the history)_no number of problems"+this.List_Questions.length);
+            return;
+        }
         this.List_Questions=keywords.slice(0, number_of_problems);
         console.log("Size of List Tagged Quesstion (minus the history)"+this.List_Questions.length);
     }
@@ -664,25 +689,27 @@ module.exports= class Database {
         this.initializeDifficulty_List();
         return;
     }
-    async getNextQuestion_Final_Review(current_index){
+    async getNextQuestion_Final_Review(string_package){
+        var current_index=parseInt(string_package.split(" ")[0]);
+
         if (this.Test.includes("Set")){///the final review navigation should work differenttely
-            console.log("Set Problem Review current index "+current_index)
+            var test_requested=string_package.split(" ")[1]
+            console.log("Set Problem Review  "+string_package)
+
             for (var i=0;i<this.List_Questions.length;++i){
-                if(parseInt(this.List_Questions[i].Number)==parseInt(current_index)+1){
+                if((parseInt(this.List_Questions[i].Number)==parseInt(current_index)) && this.List_Questions[i].Test==test_requested){
 
                     this.Last_Question=this.List_Questions[i];
-                    console.log("FOUND the same problem to set Last Question "+this.Last_Question.Question_text+' '+this.Last_Question.Number)
+                    console.log("FOUND the same problem to set Last Question "+this.Last_Question.Test+' '+this.Last_Question.Number)
                     return;
                 }
             }
 
 
         }
-        if (current_index>=this.List_Questions.length){
-            console.log("Youve reached the end of the line!");
-            return false;
-        }
 
+
+        current_index=current_index-1;
         ++this.Count;
         var Choice_List=[]
         //populate difficulty list (if any change in difficulty occured)
@@ -691,7 +718,7 @@ module.exports= class Database {
         //console.log("Length of Normal History"+" "+this.Normal_History.length);
         console.log("current_Final_Review"+" "+current_index);
         this.Last_Question=this.List_Questions[current_index];
-
+        //this.Last_Question=this.Normal_History[current_index]
         this.Normal_Index=current_index
         return true;
     }
@@ -723,8 +750,22 @@ module.exports= class Database {
         var Question_object;
         var keywords=[]
         var counter=0;
+        var display_list=[]
         console.log("Number outside "+number)
-       temp_Object= dict[Test_Type].findOne({Test:Test,Number:number}).populate("Passage_ID").lean()
+        if(number.length==0){
+            //console.log("inside no number")
+            temp_Object= dict[Test_Type].find({Test:Test});
+            await temp_Object.exec(function(err,Questions) {
+                for(var i=0;i<Questions.length;++i){
+                    //console.log("Questions being retuned _noNumber "+" "+Questions[i].Number+" "+Questions[i].Tag.replace(/, /g,"_"))
+
+                    display_list.push(Questions[i].Number+";"+Questions[i].Test_Type+";"+Questions[i].Test+";"+Questions[i].Tag.replace(/, /g,"_"))
+                }
+
+            })
+            return display_list;
+        }
+        temp_Object= dict[Test_Type].findOne({Test:Test,Number:number}).populate("Passage_ID").lean()
         await temp_Object.exec(function(err,Question_re) {
 
                 if (Question_re==null){
@@ -940,7 +981,7 @@ module.exports= class Database {
         //Checks to see if the new Passage exists already in the database
         if(BodyList[10].length>3){
             for(var i=0;i<temp_objects.length;++i){
-                //console.log("Passage being returned" + " " + temp_objects[i].Passage);
+                console.log("Passage being returned" + " "+i+ + temp_objects[i]._id);
                 if (temp_objects[i].Passage.length>1 ){
 
                     if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
@@ -1062,7 +1103,7 @@ module.exports= class Database {
         }
         console.log("its a new question"+" "+BodyList[12])
         var global=true;
-
+        var count=0;
         var temp_objects=await Passage_table.find({});
         console.log("length of passages being returned"+" "+temp_objects.length)
         //Checks to see if the new Passage exists already in the database
@@ -1070,7 +1111,7 @@ module.exports= class Database {
             for(var i=0;i<temp_objects.length;++i){
                 //console.log("Passage being returned" + " " + temp_objects[i].Passage);
                 if (temp_objects[i].Passage.length>1 ){
-                    //console.log("its DEFINED "+temp_objects[i].Passage.length)
+                    console.log("its DEFINED "+temp_objects[i].Passage+" "+temp_objects[i]._id+temp_objects[i].Passage)
                     if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
                         console.log("Passage already in database" + " " +temp_objects[i].id);
                         new_passageId=temp_objects[i].id
@@ -1078,7 +1119,8 @@ module.exports= class Database {
                         break;
                     }
                 }
-
+                ++count;
+                console.log("count "+count)
             }
         }
 
@@ -1372,11 +1414,20 @@ module.exports= class Database {
     }
     async getTags(){
         var set = new Set();
-        var temp_Object= dict[this.Test_Type].find({}).lean()
+        var temp_Object= dict[this.Test_Type].find({}).lean();
+
+        var main_tag_list=dict_tags[this.Test_Type]
         await temp_Object.exec(function(err,Objects) {
             for (var i=0;i<Objects.length ;++i){
-                //console.log("Tags being returned "+Objects[i].Tag)
-                set.add(Objects[i].Tag)
+               // console.log("Tags being returned "+Objects[i].Tag);
+                for (var word in main_tag_list){
+                    //console.log("Word "+main_tag_list[word]);
+                    if(Objects[i].Tag.includes(main_tag_list[word].toLowerCase())){
+                        set.add(main_tag_list[word])
+                    }
+                }
+
+
             }
 
             //Object.Questions[i].Test
@@ -1395,6 +1446,59 @@ module.exports= class Database {
 
             //Object.Questions[i].Test
         });
+        return Array.from(set)
+    }
+    async initializeTagged_List_regex(Main_Tag,number_of_problems){//collects all questions whose tag contains the regular expression of the main tag
+        var string=".*"+Main_Tag.toLowerCase()+".*"
+        var temp_History_List=this.List_Tagged_History;
+
+        var Question_object;
+        var keywords=[];
+        var counter=0;
+        var temp_Object= dict[this.Test_Type].find({Tag:{$regex:string}}).populate("Passage_ID").lean();
+        await temp_Object.exec(function(err,Questions) {
+            for (var i=0;i<Questions.length ;++i){
+                if(temp_History_List.indexOf(Questions[i]._id.toString())==-1){
+
+                    for(var j=0;j<Questions[i].Choices.length;++j){
+                        Questions[i].Choices[j]=Questions[i].Choices[j].replace(/,/g, ' ');
+                    }
+                    Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
+                    Question_object.setFirstHint(Questions[i].Hint_1);
+                    Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
+                    keywords[counter]=Question_object;
+                    ++counter;
+
+                }
+            }
+
+        });
+        if(number_of_problems.length==0){
+            this.List_Questions=keywords;
+            console.log("Size of List Tagged Quesstion (minus the history)_no number of problems"+this.List_Questions.length);
+            return;
+        }
+        this.List_Questions=keywords.slice(0, number_of_problems);
+        console.log("Size of List Tagged Quesstion (minus the history)"+this.List_Questions.length);
+
+    }
+    async getSemiTags(Main_Tag){
+
+        var set = new Set();
+        var string=".*"+Main_Tag.toLowerCase()+".*"
+        console.log("inside getSemiTags "+string);
+        var temp_Object= dict[this.Test_Type].find({Tag:{$regex:string}}).lean();
+
+        await temp_Object.exec(function(err,Objects) {
+            for (var i=0;i<Objects.length ;++i){
+                //console.log("Tags being returned "+Objects[i].Tag);
+                set.add(Objects[i].Tag)
+                    //console.log("Word "+main_tag_list[word]);
+
+                }
+
+        });
+        //console.log("length of tagged list "+Array.from(set).length)
         return Array.from(set)
     }
     async saveNewStudent(first,last,email){
@@ -1447,7 +1551,12 @@ module.exports= class Database {
             "ACT-English": "English_Question",
             "ACT-Science": "Science_Question"
         }
-        var temp_Object =  Response_table.find({Student_ID:this.Student.ID,Model_Name:dict_schema_1[list[0]],Session:list[1]}).populate(dict_schema_2[list[0]])
+        //var temp_Object =  Response_table.find({Student_ID:this.Student.ID,Model_Name:dict_schema_1[list[0]],Session:list[1]}).populate(dict_schema_2[list[0]])
+        var temp_Object =  Response_table.find({Student_ID:this.Student.ID,Model_Name:dict_schema_1[list[0]],Session:list[1]}).populate({
+            path:dict_schema_2[list[0]],
+            populate:{path:'Passage_ID'}
+
+        })
         var keywords=[]
 
         await temp_Object.exec(function(err,questions){
@@ -1462,7 +1571,8 @@ module.exports= class Database {
                     console.log(questions[i].English_Question.Test.toString()+" "+questions[i].English_Question.Test_Type.toString()+" "+questions[i].English_Question.Tag);
 
                     var Question_object=new Question(questions[i].English_Question.Question_body.join(" "),questions[i].English_Question.Choices,questions[i].English_Question.Right_Answer,questions[i].English_Question.Tag,questions[i].English_Question.Number,
-                        " ",questions[i].English_Question.Test_Type,questions[i].English_Question.Test,-1);
+                        questions[i].English_Question.Passage_ID.Passage.join(" "),questions[i].English_Question.Test_Type,questions[i].English_Question.Test,-1);
+
                     Question_object.setHover_History(questions[i].Hover_History);
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
@@ -1482,7 +1592,8 @@ module.exports= class Database {
                     console.log(questions[i].Reading_Question.Test.toString()+" "+questions[i].Reading_Question.Test_Type.toString()+" "+questions[i].Reading_Question.Tag);
 
                     var Question_object=new Question(questions[i].Reading_Question.Question_body.join(" "),questions[i].Reading_Question.Choices,questions[i].Reading_Question.Right_Answer,questions[i].Reading_Question.Tag,questions[i].Reading_Question.Number,
-                        " ",questions[i].Reading_Question.Test_Type,questions[i].Reading_Question.Test,-1);
+                        questions[i].Reading_Question.Passage_ID.Passage.join(" "),questions[i].Reading_Question.Test_Type,questions[i].Reading_Question.Test,-1);
+
                     Question_object.setHover_History(questions[i].Hover_History);
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
@@ -1505,6 +1616,7 @@ module.exports= class Database {
                         " ",questions[i].Math_Question.Test_Type,questions[i].Math_Question.Test,-1);
 
                     Question_object.setHover_History(questions[i].Hover_History);
+
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
                     Question_object.setResponse(questions[i].Response);
@@ -1526,6 +1638,7 @@ module.exports= class Database {
                     var Question_object=new Question(questions[i].Science_Question.Question_body.join(" "),questions[i].Science_Question.Choices,questions[i].Science_Question.Right_Answer,questions[i].Science_Question.Tag,questions[i].Science_Question.Number,
                         " ",questions[i].Science_Question.Test_Type,questions[i].Science_Question.Test,-1);
                     Question_object.setHover_History(questions[i].Hover_History);
+
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
                     Question_object.setResponse(questions[i].Response);
@@ -1542,6 +1655,9 @@ module.exports= class Database {
 
         });
         this.Normal_History=keywords;
+
+
+
         this.List_Questions=keywords;
         console.log("Successfully recalled the Set of Questions "+this.Normal_History.length)
     }
@@ -1709,7 +1825,7 @@ module.exports= class Database {
                 for(var j=0;j<Questions[i].Choices.length;++j){
                     Questions[i].Choices[j]=Questions[i].Choices[j].replace(/,/g, ' ');
                 }
-
+                //console.log("Questions also being returedn  "+Questions[i].Number+" "+Questions[i].Test_Type+" "+Questions[i].Test)
                 Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                 Question_object.setFirstHint(Questions[i].Hint_1);
                 Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
@@ -1721,6 +1837,7 @@ module.exports= class Database {
         });
 
         this.List_Questions=keywords;
+        this.orderNormal_List()
 
     }
     async SearchAllStudents(){
@@ -2259,7 +2376,7 @@ module.exports= class Database {
         for  (var i=0;i<this.Normal_History.length;++i){
 
             if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
-                console.log("tag replace "+this.Normal_History[i].Tag.replace(",","-").replace(",","-"))
+                console.log("tag replace "+this.Normal_History[i].Hover_History[0]+" ")
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
                     this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
                     ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence+";"+this.Normal_History[i].Checked_Answers.join("/")
@@ -2271,6 +2388,7 @@ module.exports= class Database {
             }
             else{
                 console.log("Displaying Results Got it Right_Tutor "+ this.Normal_History[i].Tag+" "+ this.Normal_History[i].Number+" "+this.Normal_History[i].Test)
+                console.log("tag replace "+this.Normal_History[i].Hover_History)
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
                     this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
                     ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence+";"+this.Normal_History[i].Checked_Answers.join("/")

@@ -590,7 +590,7 @@ underline_black{
   width: 500px;
   height: 600px;
   position: absolute;
-  top:500px;
+  top:560px;
   left: 10px;
 }
 
@@ -603,7 +603,7 @@ underline_black{
   transform: translateZ(0);
   -webkit-text-size-adjust: none;
   position: relative;
-  left: 10px;
+  left: 0px;
 }
 
 .menu {

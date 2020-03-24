@@ -12,8 +12,10 @@
 
 
 <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
+<input type="hidden" id="Passage_Expand_bool" name="Passage_Expand_bool" value="{{Passage_Expand_bool}}"  />
 <input type="hidden" id="pause_bool" name="pause_bool" value="{{pause_bool}}"  />
 <input type="hidden" id="hover_history" name="hover_history" value="{{hover_history}}"  />
+<input type="hidden" id="Test_Both_Holder" name="Test_Both_Holder" value="{{Test_Both_Holder}}"  />
 
 <input type="hidden" id="Passage_Holder" name="Passage_Holder" value="{{Passage_Holder}}"  />
 <div class="Correct_Answer" align="left" style="margin-left: 55px;" id="Correct_Answer" name="Correct_Answer" value="{{Correct_Answer}}"></div>
@@ -24,7 +26,7 @@
         <div id ="highlights" name="highlights" class="highlights"></div>
 
     </div>
-    <textarea onmouseenter="recordHover('passage_box_enter')" onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
+    <textarea onmouseenter="recordHover('passage_box_enter')"  onscroll="scrollFunction()" id ="Passage_Box" name="Passage_Box" class="Passage_Box" ></textarea>
 
 
 </div>
@@ -40,7 +42,6 @@
     <input type="hidden" id="Tag" name="Tag" value="{{Tag}}"  />
     <input type="hidden" id="Right_Answer" name="Right_Answer" value="{{Right_Answer}}"  />
     <input type="hidden" id="number_checks" name="number_checks" value="{{number_checks}}"  />
-
 
     <input type="hidden" id="Question_Number" name="Question_Number" value="{{Question_Number}}"  />
     <div id="container_1" class="container_1">
@@ -160,7 +161,9 @@
 
 
 
-
+        if(parseInt(document.getElementById("normal_Question_Index").value)+argument<0){
+            return;
+        }
         var xhr = new window.XMLHttpRequest();
         xhr.open('POST', '/dashboard/Question_Loop_1',true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -168,7 +171,9 @@
 
         var data = JSON.stringify({'Hover_history':document.getElementById("hover_history").value,"Database_Index":document.getElementById("Database_Index").value});
         xhr.send(data);
+        console.log("normal question "+document.getElementById("normal_Question_Index").value)
         document.getElementById("normal_Question_Index").value=(parseInt(document.getElementById("normal_Question_Index").value)+argument).toString()
+        console.log("normal question "+document.getElementById("normal_Question_Index").value)
         var x = document.getElementById("confidence_tool");
         if (x.style.display === "none") {
             x.style.display = "block";
@@ -187,6 +192,25 @@
         else{
             document.getElementById("form").submit()
         }
+    }
+    function passage_box_expand(){
+        if(document.getElementById("Passage_Expand_bool").value=="true"){
+            document.getElementById("container_1").style.display="block";
+            document.getElementById("Passage_Box").style.width = "600px"
+            document.getElementById("backdrop").style.width = "600px"
+            document.getElementById("Passage_Expand_bool").value="false"
+        }
+        else{
+            document.getElementById("Passage_Box").value=document.getElementById("Passage_Box").value.replace( /[\r\n]+/gm, "" );
+            document.getElementById("highlights").innerHTML=document.getElementById("highlights").innerHTML.replace( /[\r\n]+/gm, "" )
+            document.getElementById("container_1").style.display="none";
+            document.getElementById("Passage_Box").style.width = "1100px"
+            document.getElementById("backdrop").style.width = "1100px"
+            document.getElementById("backdrop").style.height = "605px"
+            document.getElementById("Passage_Box").style.height = "590px"
+            document.getElementById("Passage_Expand_bool").value="true"
+        }
+
     }
     function recordHover(argument){
 
@@ -476,7 +500,10 @@
             var e = document.getElementById("para"+document.getElementById("Time_Limit_Holder").value);
             e.style.backgroundColor="#CB5C56";
             var correct=document.getElementById("para"+document.getElementById("Right_Answer").value);
-            correct.style.backgroundColor="#75E17A"
+            if(correct!=undefined){
+                correct.style.backgroundColor="#75E17A"
+            }
+
           //this actually contains the response the User submitted
 
             return;
@@ -761,24 +788,34 @@
         document.getElementById("highlights").innerHTML=applyHighlights(document.getElementById("Passage_Holder").value.split(" "),myArr)
 
     }
+
     function showBlackUnderlines(){
         var text_list=document.getElementById("Passage_Holder").value.split(" ")
-        console.log("show black underlines "+text_list.length)
+        console.log("show black underlines "+document.getElementById("Test_Both_Holder").value)
         var i=0;
         var myArr=[]
         var highlighted_text=document.getElementById("Presentation_Holder").value.split(" ")
         var temp_text=text_list.join(" ")
         var underlined_section=""
-        var question_number=(parseInt(document.getElementById("normal_Question_Index").value)+1).toString()
+        var question_number;
+        if (document.getElementById("Test_Both_Holder").value.includes('Set')){
+            //console.log("the test is set of problems, so setting number different "+document.getElementById("Test_Both_Holder").value.split(";"))
+            question_number=(parseInt(document.getElementById("Test_Both_Holder").value.split(";")[1])).toString()
+        }
+        else{
+            question_number=(parseInt(document.getElementById("normal_Question_Index").value)+1).toString()
+        }
+
         for(var i=0;i<highlighted_text.length;++i){
             highlighted_text[i]=highlighted_text[i].replace("*","").replace("*","")
         }
+        i=0;
         console.log("highlighted Text "+highlighted_text)
        while(i<text_list.length){
 
-            //console.log(text_list[i].replace(/\n/g, '').includes('*'))
+            console.log(text_list[i].replace(/\n/g, ''))
            if(text_list[i].replace(/\n/g, '')=='['+question_number+']'){//the red underlined, looks for the present [number]
-               console.log("Highlighted Text_Red: "+highlighted_text)
+                console.log("Found the Red Number ")
                for (var j=1;j<highlighted_text.length;++j){
                    var text_word=text_list[i-j].replace(/\n/g, '').replace(/\*/g, '').replace(/\s/g, '')
                    console.log("comparing_Red "+text_word)
@@ -802,7 +839,7 @@
 
            }
            else if (text_list[i].replace('*', '').includes('*')){///if the asteriks are only one word
-               console.log("Found ONLY one: "+text_list[i].replace(/\n/g, ''))
+               //console.log("Found ONLY one: "+text_list[i].replace(/\n/g, ''))
                if(text_list[i+1].replace(/\n/g, '')=='['+question_number+']'){
                    underlined_section=""
                }
@@ -815,7 +852,7 @@
            }
            else if(text_list[i].replace(/\n/g, '').includes('*')){
 
-                console.log("Found first one: "+text_list[i].replace(/\n/g, ''))
+                //console.log("Found first one: "+text_list[i].replace(/\n/g, ''))
                 underlined_section = text_list[i].replace(/\n/g, '')
                 var j=1;
                 while(text_list[i+j].replace(/\n/g, '').includes('*')==false){
@@ -828,7 +865,7 @@
                         break;
                     }
                 }
-               console.log("Found second one: "+text_list[i+j].replace(/\n/g, ''))
+              // console.log("Found second one: "+text_list[i+j].replace(/\n/g, ''))
                 if(text_list[i+j+1].replace(/\n/g, '')=='['+question_number+']'){
                     underlined_section=""
                 }
@@ -836,7 +873,7 @@
                     underlined_section = underlined_section+" "+text_list[i+j].replace(/\n/g, '')
                 }
 
-               console.log("underlined "+underlined_section)
+               //console.log("underlined "+underlined_section)
                temp_text=temp_text.replace(/\n$/g, '\n\n').replace(underlined_section, '<underline_black>$&</underline_black>')
 
 
@@ -1011,6 +1048,7 @@
         document.getElementById("Passage_Box").value=document.getElementById("Passage_Holder").value
         //console.log("Passage being copied"+" "+document.getElementById("Passage_Box").value)
         //console.log("after"+" "+document.getElementById("Passage_Box").value)
+
         showBlackUnderlines();
 
         //clear the presentaiton holder in order to hold check answers list
