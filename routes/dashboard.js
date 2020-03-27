@@ -742,7 +742,7 @@ function readScaledScore_Tutor_Review(Database_Object){
     }
     const lineByLine = require('n-readlines');
 
-    const liner = new lineByLine('C:\\Users\\david\\Downloads\\Krupnick_Approach-dev\\Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
+    const liner = new lineByLine('./Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
     var line;
     var raw_score=Database_Object.getRawScore();
     //console.log("raw_score "+raw_score)

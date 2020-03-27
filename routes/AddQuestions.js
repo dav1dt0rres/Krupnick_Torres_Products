@@ -73,6 +73,40 @@ router.post(
 
     }
 )
+router.post('/Long_List',async  (req,res,next)=>{
+    console.log("inside SavingLong list "+req.body.Database_Index);
+    var Database_Object=Current_Sessions[req.body.Database_Index]
+    //console.log("Number array"+req.body.numbers)
+    //console.log("tags array" + req.body.tags);
+
+    var tags=req.body.tags;
+
+    for(var i=0;i<tags.length-1;++i){
+        var question=Database_Object.List_Questions[i];
+        var clean_Passage=question.Passage;
+        //console.log("Passage "+clean_Passage)
+
+        var new_tag=tags[i+1].replace(/_/g, ", ")
+        //console.log(question.Number+" "+question.Test+" "+question.Test_Type+" " +question.Tag+" "+"newtag: "+tags[i+1])
+        //console.log("Number" +question.Number+"New Tag: "+new_tag+" "+"old tag: "+question.Tag)
+        if(new_tag==question.Tag){
+            //console.log("Its the same");
+        }
+        else{
+            //console.log("its NOT THE SAME, SO EDITING THIS QUESTION");
+            var Body_List=ParseText([question.Question_text,question.OptionList[0],question.OptionList[1],question.OptionList[2],question.OptionList[3],question.OptionList[4],
+                new_tag,question.Test.toString(),question.Test_Type.toString(),question.Right_Answer,clean_Passage,question.Number,question.First_Hint.join(" "),question.Presentation_Highlight.join(" ")])
+            Database_Object.Last_Question=Database_Object.List_Questions[i];
+            await Database_Object.addNewQuestion(Body_List)
+        }
+
+
+    }
+
+
+    return;
+})
+
 router.get('/ShowQuestions',async (req,res,next)=>{
     console.log("inside ShowQuesitons "+req.query.Database_Index+" "+req.query.Final_Questions_holder+" "+req.query.Test_Type_Holder+" "+req.query.Test_Holder);
     var Database_Object=Current_Sessions[req.query.Database_Index]
@@ -88,6 +122,12 @@ router.get('/ShowQuestions',async (req,res,next)=>{
         res.render('dashboard', {title,FirstName:Database_Object.Student.firstName,LastName:Database_Object.Student.lastName, Email:Database_Object.Student.email })
 
         return
+    }
+    if(req.query.Final_Questions_holder=="MISC"){
+        console.log("redirecting MISC"+req.query.Database_Index)
+        const title='Successful Entry of all the Question(s), if you would like to Edit any more Questions you can..'
+        res.render('AddQuestions',{ title,Database_Index:req.query.Database_Index})
+        return;
     }
 
     var box_bool=false;
@@ -430,8 +470,9 @@ function ParseText(List){
 
     for (var i = 0; i < List.length; i++) {
         var object=[]
+
         object=List[i].split(' ')
-       // console.log("OBject"+object)
+
         Temp[i]=object
         //console.log("returning Parsed"+Temp)
     }

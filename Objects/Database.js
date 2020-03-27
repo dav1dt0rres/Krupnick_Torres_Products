@@ -754,15 +754,25 @@ module.exports= class Database {
         console.log("Number outside "+number)
         if(number.length==0){
             //console.log("inside no number")
-            temp_Object= dict[Test_Type].find({Test:Test});
+            temp_Object= dict[Test_Type].find({Test:Test}).populate("Passage_ID").lean();
             await temp_Object.exec(function(err,Questions) {
                 for(var i=0;i<Questions.length;++i){
-                    //console.log("Questions being retuned _noNumber "+" "+Questions[i].Number+" "+Questions[i].Tag.replace(/, /g,"_"))
+                    //console.log("Questions being established while its searching "+" "+Questions[i].Choices)
+                    Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
 
-                    display_list.push(Questions[i].Number+";"+Questions[i].Test_Type+";"+Questions[i].Test+";"+Questions[i].Tag.replace(/, /g,"_"))
+                    Question_object.setFirstHint(Questions[i].Hint_1);
+                    Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
+                    keywords[counter]=Question_object;
+                    ++counter;
+
                 }
 
             })
+            this.List_Questions=keywords;
+            this.orderNormal_List();
+            for(var i=0;i<this.List_Questions.length;++i){
+                display_list.push(this.List_Questions[i].Number+";"+this.List_Questions[i].Test_Type+";"+this.List_Questions[i].Test+";"+this.List_Questions[i].Tag.replace(/, /g,"_"))
+            }
             return display_list;
         }
         temp_Object= dict[Test_Type].findOne({Test:Test,Number:number}).populate("Passage_ID").lean()
@@ -1111,7 +1121,7 @@ module.exports= class Database {
             for(var i=0;i<temp_objects.length;++i){
                 //console.log("Passage being returned" + " " + temp_objects[i].Passage);
                 if (temp_objects[i].Passage.length>1 ){
-                    console.log("its DEFINED "+temp_objects[i].Passage+" "+temp_objects[i]._id+temp_objects[i].Passage)
+                    //console.log("its DEFINED "+temp_objects[i].Passage+" "+temp_objects[i]._id+temp_objects[i].Passage)
                     if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
                         console.log("Passage already in database" + " " +temp_objects[i].id);
                         new_passageId=temp_objects[i].id
@@ -1222,7 +1232,7 @@ module.exports= class Database {
         var Object_ID=-1;
         var global=true;
         console.log("inside Edit Question"+" "+ BodyList)
-        console.log("Question you are editing ",this.Last_Question._id);
+        console.log("Question you are editing ",this.Last_Question._id+" "+this.Last_Question.Number+" "+BodyList[6]);
         console.log("Passage you are Editing ",this.Last_Question.Passage_ID);
 
 

@@ -29,7 +29,7 @@
 
         </ul>
     </label>
-
+    <button name="butt" id="butt" type="button" onclick="submitFinal()" value="save_question">Save Questions</button>
 
 
 
@@ -54,11 +54,23 @@
 
         }
         else{
-            //console.log("correct")
+            console.log("correct ")
             var td = document.createElement('td');
+            td.contentEditable="true";
             td.style.color='black'
             td.innerHTML = val;
             //td.value=val;
+            console.log("Testing this cell is a ingteger! "+val)
+            if(!isNaN(val) && val.length>0){
+                console.log("this cell is a ingteger! "+val)
+                td.onclick=async function(event) {
+
+                    document.getElementById("Final_Questions_holder").value=val;
+                    console.log('clicked!!!! '+document.getElementById("form").submit());
+
+                }
+            }
+
         }
 
         tr.appendChild(td)
@@ -71,15 +83,30 @@
         addCell(tr, val_3);
         addCell(tr, val_4);
 
-        tr.onclick=async function(event) {
 
-            document.getElementById("Final_Questions_holder").value=val_1
-            console.log('clicked!!!! '+document.getElementById("form").submit());
-
-        }
         tbl.appendChild(tr)
     }
+    function submitFinal(){
+        console.log("inside final submit")
+        var xhr = new window.XMLHttpRequest();
+        xhr.open('POST', '/AddQuestions/Long_List',true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        var table=document.getElementById("tbl");
+        console.log("table rows "+table.rows.length)
+        var number_array=[]
+        var tag_array=[]
+        for (var i = 0;i<table.rows.length; i++) {
+            var row=table.rows[i];
+            number_array.push(row.cells[0].innerHTML);
+            tag_array.push(row.cells[3].innerHTML);
+            console.log("cells "+row.cells[3].innerHTML)
+        }
+        var data = JSON.stringify({'numbers':number_array,"tags":tag_array, 'Database_Index':document.getElementById("Database_Index").value});
+        xhr.send(data);
+        document.getElementById("Final_Questions_holder").value="MISC";
+        console.log('clicked!!!! '+document.getElementById("form").submit());
 
+    }
     function loadFinalQuestions(){
         console.log("Inside loadFinalQuestions "+document.getElementById("Final_Questions_holder").value)
         var FinalList=document.getElementById("Final_Questions_holder").value.split(",")
