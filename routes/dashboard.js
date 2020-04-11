@@ -148,7 +148,12 @@ router.get('/', async function (req, res, next) {
         tests.add(option)
 
 
-        var tags=document.createElement('select')
+        var tags=document.createElement('select');
+        var option=document.createElement('option')
+        option.value=""
+        option.text="Please Select Tag";
+
+        tags.add(option)
         for(var i =0; i<tag_list.length;++i){
 
             var option=document.createElement('option')
@@ -217,6 +222,8 @@ router.post('/Question_Loop_1',async function(req,res,next) {
     //console.log("Database index for hover histroy "+req.body.Database_Index)
     //console.log("REq query Database Hover_History" + req.body.Hover_history);
     var Database_Object=Current_Sessions[req.body.Database_Index];
+
+    Database_Object.saveDrawHistory(req.body.Draw_Object);
     Database_Object.saveHoverHistory(req.body.Hover_history);
     return;
 })
@@ -258,7 +265,8 @@ router.get('/Question_Loop',async function (req, res, next) {
         console.log("INside Final Review question "+req.query.Final_Questions_holder.split(" ")[0]+" "+req.query.Final_Questions_holder.split(" ")[1])
 
         await Database_Object.getNextQuestion_Final_Review(req.query.Final_Questions_holder);
-        Question_object=Database_Object.Last_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch)
+        Question_object=Database_Object.Last_Question //this means that database.LastQuestion remains the same as when you left the main branch (test taking branch);
+
         var scaled=readScaledScore(Database_Object)
         var element=document.createElement("textarea");
         //console.log("Passage Outside"+" "+Question_object.getPassage())
@@ -271,6 +279,7 @@ router.get('/Question_Loop',async function (req, res, next) {
             Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder.split(" ")[0],Tag_Holder:Question_object.Tag,
             Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
             First_Hint_holder:Question_object.First_Hint.join(" "),Time_Limit_Holder:Question_object.Response,
+            draw_history:Database_Object.getNormalLast_Question(req.query.Final_Questions_holder).getDrawHistory().join(" "),
             Question_Length:Database_Object.List_Questions.length,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
         })
         return;
@@ -368,6 +377,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         First_Hint_holder:Question_object.First_Hint.join(" "),Final_Questions_holder:[],Time_Limit_Holder:Database_Object.Question_Time_Limit,
         Question_Length:Database_Object.List_Questions.length,
         Combo_Holder:Question_object.Response,
+        draw_history:Question_object.getDrawHistory().join(" "),
         CheckBox_List:Database_Object.CheckBox_List,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
     })
 
@@ -386,6 +396,8 @@ router.post('/Question_Loop_Math_1',function(req,res,next){
     //console.log("REq query Database INdesx");
     console.log("REq query Database Hover_History_Math"+req.body.Hover_history+" "+req.body.Database_Index);
     var Database_Object=Current_Sessions[req.body.Database_Index];
+
+    Database_Object.saveDrawHistory(req.body.Draw_Object);
     Database_Object.saveHoverHistory(req.body.Hover_history);
     return;
 
@@ -447,6 +459,7 @@ router.get('/Question_Loop_Math',async function(req,res,next){
             Right_Answer:Question_object.Right_Answer,normal_Question_Index:req.query.Final_Questions_holder.split(" ")[0],Tag_Holder:Question_object.Tag,
             Test_Both:Database_Object.Last_Question.Test+" "+Database_Object.Last_Question.Test_Type,
             First_Hint_holder:Question_object.First_Hint.join(" "),Time_Limit_Holder:Question_object.Response,
+            draw_history:Question_object.getDrawHistory().join(" "),
             Question_Length:Database_Object.List_Questions.length,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
         })
         return;
@@ -547,6 +560,7 @@ router.get('/Question_Loop_Math',async function(req,res,next){
         Question_Length:Database_Object.List_Questions.length,
         Image_List_Holder:Question_object.getPicture_png_Objects(),//this list is a list of tuples (filename,data)
         Combo_Holder:Question_object.Response,
+        draw_history:Question_object.getDrawHistory().join(" "),
         CheckBox_List:Database_Object.CheckBox_List,Presentation_Holder:Question_object.Presentation_Highlight.join(" ")
     })
 
@@ -835,7 +849,7 @@ function  readScaledScore(Database_Object){
         return -1;
     }
         const lineByLine = require('n-readlines');
-        const liner = new lineByLine('./Scaled_Scores_'+Database_Object.Test+'_'+Database_Object.Test_Type+'.txt');
+        const liner = new lineByLine('./Scaled_Scores_A09_ACT-English.txt');
         var line;
         var raw_score=Database_Object.getRawScore();
         console.log("raw_score "+raw_score)
@@ -1069,6 +1083,27 @@ router.get('/automatedEmail_Student_Send',async function(req,res,next){
     })
 
 })
+router.get('/Refresh',async function (req,res,next){
+    var Database_Object=Current_Sessions[req.query.Index]
+
+
+        console.log("inside REfresh_1 "+req.query.Index+" "+Database_Object.Test+" "+Database_Object.Test_Type+" "+Database_Object.Session);
+        title="Test: "+Database_Object.Test+" "+Database_Object.Test_Type+" "+Database_Object.Session+"    ---->>    "
+        await Database_Object.getFinishedTest(Database_Object.Test+" "+Database_Object.Test_Type+" "+Database_Object.Session);
+        console.log("outside of get finishin test");
+        res.render('Ending_1', {title:title,
+            Database_Index: req.query.Index,
+            Test:req.query.Test,
+            normal_Question_Index:req.query.normal_Question_Index,
+            tutor_boolean:"false",show_final:"true"
+        })
+
+
+
+
+
+
+})
 router.get('/SearchStudent',async function (req,res,next){
     var title="     "
     console.log("/SearchStudent "+req.query.get_test)
@@ -1077,7 +1112,7 @@ router.get('/SearchStudent',async function (req,res,next){
         Database_Object.Student.firstName=req.query.firstName;
         Database_Object.Student.lastName=req.query.lastName;
         Database_Object.Student.email=req.query.email;
-
+        //console.log("/SearchStudent package look like:"+req.query.Test)
         title="Test: "+req.query.Test+"    ---->>    "+req.query.lastName+", "+req.query.firstName+", "+req.query.email
 
         await Database_Object.getFinishedTest(req.query.Test)

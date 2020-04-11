@@ -20,6 +20,7 @@
 
 
 <label class="" for="Final_Questions">
+
     List of Questions that were in incorrect
     (Select One if you want to go back to the problem)
     <table id='tbl' border=1></table>
@@ -27,9 +28,10 @@
 
 
     </ul>
+
 </label>
 
-
+    <button id="Refresh" type="button" onclick="refresh_1()" name="Refresh" >REFRESH</button>
 
 
 </form>
@@ -39,6 +41,7 @@
 
 
 <script type="text/javascript">
+
     function addCell(tr, val,response,right_answer) {
         //console.log("response and right answer"+" "+response+" "+right_answer+" "+val);
         if (response!=right_answer){
@@ -139,6 +142,11 @@
         console.log("inside exit bool")
         document.getElementById("Exit_bool").value="true"
         //document.getElementById("form").submit()
+    }
+    function refresh_1(){
+        console.log("inside refresh")
+        window.location.href = "/dashboard/Refresh?Index="+document.getElementById("Database_Index").value
+
     }
     function loadQuestionBody(){
         var question=document.getElementById("Question_Body_Holder");

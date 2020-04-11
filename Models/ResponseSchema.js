@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
+var point_schema = new Schema({ x: Number, y: Number });
 var ResponseSchema = new Schema( {
     Response:String,
     Time:String,
@@ -36,6 +37,7 @@ var ResponseSchema = new Schema( {
     Views:Number,
     Total_Time:String,
     Hover_History:[String],
+    Draw_History:[point_schema],
     Confidence:Number,
 });
 

@@ -13,7 +13,7 @@ function Math_Question(question_text, optionList,right_answer,tag,number,passage
 
     this.Time='Nan';
     this.Number=number;
-
+    this.Draw_History=[]
     this.Tag=tag;
     this.Repititions=0;
     this.Test=test;

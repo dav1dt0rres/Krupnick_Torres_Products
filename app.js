@@ -20,7 +20,7 @@ const EditQuestionRouter = require('./routes/EditQuestion');
 const profileRouter = require('./routes/profile');
 const registrationRouter = require('./routes/register');
 const AddQuestionsRouter = require('./routes/AddQuestions');
-const ModelPredictorRouter=require('./routes/ModelPredictor');
+//const ModelPredictorRouter=require('./routes/ModelPredictor');
 const ReadWriteSheetsRouter=require('./routes/ReadWriteSheets');
 const resetPassword = require('./routes/reset-password');
 var bodyParser = require('body-parser');
@@ -56,7 +56,7 @@ app.use('/EditQuestion', EditQuestionRouter)
 app.use('/profile', oidc.ensureAuthenticated(), profileRouter)
 app.use('/register', registrationRouter)
 app.use('/AddQuestions', AddQuestionsRouter)
-app.use('/ModelPredictor',ModelPredictorRouter)
+//app.use('/ModelPredictor',ModelPredictorRouter)
 app.use('/reset-password', resetPassword)
 app.use('/ReadWriteSheets',ReadWriteSheetsRouter)
 

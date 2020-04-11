@@ -560,12 +560,20 @@ textarea {
   pointer-events: none;
   transition: transform 1s;
 }
-
+.highlight {
+  background-color: yellow;
+}
 .highlights {
   white-space: pre-wrap;
   word-wrap: break-word;
  color:black;
 }
+canvas {
+
+  left:55px;
+  position:absolute;
+
+  }
 .highlights, textarea {
   padding: 10px;
   font: 15px/22px 'Open Sans', sans-serif;
@@ -582,7 +590,7 @@ underline{
     text-decoration-color: red;
 }
 
-underline_black{
+.underline_black{
   text-decoration: underline;
   text-decoration-color: black;
 }

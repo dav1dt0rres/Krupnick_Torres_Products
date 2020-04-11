@@ -32,7 +32,8 @@ function Reading_Question(question_text, optionList,right_answer,tag,number,pass
     this.Views=0;
     this.Second_Hint_Text=[];
     this.Total_Time;
-    this.Hover_History=[]
+    this.Hover_History=[];
+    this.Draw_History=[];
     this.Confidence;
     this.punctuationChoices();
 }

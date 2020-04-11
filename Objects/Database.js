@@ -19,7 +19,7 @@ var dict = {
 };
 var dict_tags={
     "ACT-Reading":"" ,
-    "ACT-Math": [],
+    "ACT-Math": ["Algebra","Geometry","Probability","Trigonometry"],
     "ACT-English": ["Commas","Agreement","Economy","Context","Vocab","Cat 2","Cat 3"],
     "ACT-Science":""
 
@@ -689,6 +689,17 @@ module.exports= class Database {
         this.initializeDifficulty_List();
         return;
     }
+    getNormalLast_Question(string_package){//This is so that higlights can actually show when tutor is looking back (or student)
+        var current_index=parseInt(string_package.split(" ")[0]);
+        for (var i=0;i<this.Normal_History.length;++i){
+            if((parseInt(this.Normal_History[i].Number)==parseInt(current_index))){
+                console.log("normal history last "+parseInt(this.Normal_History[i].Number));
+                console.log("getting normal last question "+this.Normal_History[i].getDrawHistory().join(" "))
+                return this.Normal_History[i];
+            }
+        }
+
+    }
     async getNextQuestion_Final_Review(string_package){
         var current_index=parseInt(string_package.split(" ")[0]);
 
@@ -718,6 +729,7 @@ module.exports= class Database {
         //console.log("Length of Normal History"+" "+this.Normal_History.length);
         console.log("current_Final_Review"+" "+current_index);
         this.Last_Question=this.List_Questions[current_index];
+
         //this.Last_Question=this.Normal_History[current_index]
         this.Normal_Index=current_index
         return true;
@@ -1266,8 +1278,19 @@ module.exports= class Database {
 
     }
     saveHoverHistory(hover_history){
+        if(hover_history==undefined){
+            return;
+        }
         console.log("Setting hover history "+hover_history)
         this.Last_Question.setHover_History(hover_history);
+    }
+    saveDrawHistory(draw_object){
+        if(draw_object==undefined){
+            return;
+        }
+        console.log("draw_object"+draw_object.length );
+        //console.log("draw_object"+draw_object.x +" "+draw_object.y );
+        this.Last_Question.addDraw_History(draw_object);
     }
     async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history,eliminated_answers,checked_answers){
         console.log("saving response "+response+" "+time+" "+check_answer)
@@ -1327,6 +1350,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
+                Draw_History:this.Last_Question.Draw_History,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1339,6 +1363,7 @@ module.exports= class Database {
             });
         }
         else if(this.Test_Type=="ACT-English"){
+
             var newReponse = new Response_table({
                 Response:response,
                 Student_ID:this.Student.ID,
@@ -1353,6 +1378,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
+                Draw_History:this.Last_Question.Draw_History,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1380,6 +1406,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
+                Draw_History:this.Last_Question.Draw_History,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1407,6 +1434,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
+                Draw_History:this.Last_Question.Draw_History,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1681,7 +1709,9 @@ module.exports= class Database {
 
         var test_list=test_package.split(" ");
         var temp_list=[]
+
         var temp_session=parseInt(test_list[2])
+        this.Session=temp_session
         console.log("test package "+test_package)
         if(test_list[1].includes("Set")){//If the Tutor selects a Set of problems the Student did.
             await this.getFinishedTest_Set(test_list)
@@ -1689,14 +1719,14 @@ module.exports= class Database {
         }
         async.waterfall(
             [
-                function(callback) {
+                await function(callback) {
                 console.log("calllback "+test_list[1])
 
                 dict[test_list[1]].find({ "Test":test_list[0]}).select("_id").exec(callback);
                     console.log("inside reading table");
                 },
-                function(questions_1,callback) {
-                    console.log("inside Response table "+questions_1.length);
+                await function(questions_1,callback) {
+
                     if  (test_list[1]=="ACT-English"){
                         Response_table.find({
                             "English_Question": { "$in": questions_1.map((current) => { return current._id }) },
@@ -1705,6 +1735,7 @@ module.exports= class Database {
                     }).populate("English_Question").exec(callback);
                     }
                     else if(test_list[1]=="ACT-Reading"){
+
                         Response_table.find({
                             "Reading_Question": { "$in": questions_1.map((current) => { return current._id }) },
                             "Session": temp_session,
@@ -1727,7 +1758,7 @@ module.exports= class Database {
                     }
 
                 }
-            ],function(err,questions) {
+            ],await function(err,questions) {
                 // filter and populated
 
                 var counter=0;
@@ -1742,6 +1773,7 @@ module.exports= class Database {
                         var Question_object=new Question(" ",[" "],questions[i].English_Question.Right_Answer,questions[i].English_Question.Tag,questions[i].English_Question.Number,
                             " ",questions[i].English_Question.Test_Type,questions[i].English_Question.Test,-1);
                         Question_object.setHover_History(questions[i].Hover_History);
+                        Question_object.setDraw_History(questions[i].Draw_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                         Question_object.setCheckAnswer(questions[i].Check_Answer)
                         Question_object.setResponse(questions[i].Response);
@@ -1757,12 +1789,14 @@ module.exports= class Database {
                     }
                 }
                 else if(test_list[1]=="ACT-Reading"){
+
                     for(var i=0;i<questions.length;++i){
                         //console.log(  questions[i].Reading_Question)
                         console.log("responses being returned reading"+" "+questions[i].Reading_Question.Number+" "+questions[i].Reading_Question.Test+" "+questions[i].Reading_Question.Tag+" "+questions[i].Reading_Question.Right_Answer+" -->"+questions[i].Checked_Answers[0]);
                         var Question_object=new Question(" ",[" "],questions[i].Reading_Question.Right_Answer,questions[i].Reading_Question.Tag,questions[i].Reading_Question.Number,
                             " ",questions[i].Reading_Question.Test_Type,questions[i].Reading_Question.Test,-1);
                         Question_object.setHover_History(questions[i].Hover_History);
+                        Question_object.setDraw_History(questions[i].Draw_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                         Question_object.setCheckAnswer(questions[i].Check_Answer)
                         Question_object.setResponse(questions[i].Response);
@@ -1784,6 +1818,7 @@ module.exports= class Database {
                         var Question_object=new Question(" ",[" "],questions[i].Math_Question.Right_Answer,questions[i].Math_Question.Tag,questions[i].Math_Question.Number,
                             " ",questions[i].Math_Question.Test_Type,questions[i].Math_Question.Test,-1);
                         Question_object.setHover_History(questions[i].Hover_History);
+                        Question_object.setDraw_History(questions[i].Draw_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                         Question_object.setCheckAnswer(questions[i].Check_Answer)
                         Question_object.setResponse(questions[i].Response);
@@ -1804,6 +1839,7 @@ module.exports= class Database {
                         console.log("responses being returned Science"+" "+questions[i].Science_Question.Number+" "+questions[i].Science_Question.Test+" "+questions[i].Science_Question.Tag+" "+questions[i].Science_Question.Right_Answer+" -->"+questions[i].Checked_Answers[0]);
                         var Question_object=new Question(" ",[" "],questions[i].Science_Question.Right_Answer,questions[i].Science_Question.Tag,questions[i].Science_Question.Number,
                             " ",questions[i].Science_Question.Test_Type,questions[i].Science_Question.Test,-1);
+                        Question_object.setDraw_History(questions[i].Draw_History);
                         Question_object.setHover_History(questions[i].Hover_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                         Question_object.setCheckAnswer(questions[i].Check_Answer)
@@ -1838,6 +1874,8 @@ module.exports= class Database {
                 //console.log("Questions also being returedn  "+Questions[i].Number+" "+Questions[i].Test_Type+" "+Questions[i].Test)
                 Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                 Question_object.setFirstHint(Questions[i].Hint_1);
+
+
                 Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
                 keywords[counter]=Question_object;
                 //console.log("keywords "+counter)
@@ -1888,8 +1926,9 @@ module.exports= class Database {
                 return ["This Student had No Tests"];
             }
             for  (var i=0;i<Responses.length;++i){
-                        //console.log("Response ID_SearchTests "+Responses[i]._id)
+
                         if(Responses[i].Model_Name=="EnglishQuestion"){
+                            console.log("Response ID_SearchTests "+Responses[i].English_Question.Test+" "+Responses[i].English_Question.Test_Type)
                             if(Responses[i].Session.includes("Set")){
                                 set.add(Responses[i].English_Question.Test_Type.toString()+" "+Responses[i].Session);
                             }
@@ -2222,7 +2261,7 @@ module.exports= class Database {
                // console.log("He did answer this question" + this.List_Questions[i].Number)
             }
             else{
-               console.log("NEver answered "+this.List_Questions[i].Number)
+               //console.log("NEver answered "+this.List_Questions[i].Number)
                 ++wrong_count;
             }
 
@@ -2332,7 +2371,7 @@ module.exports= class Database {
                 var temp=this.List_Questions[i].Number+";"+this.List_Questions[i].Test_Type+";"+this.List_Questions[i].Test+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+this.List_Questions[i].Views;
                 //temp_list.push(temp);
                 temp_list.splice(parseInt(this.List_Questions[i].Number)-1, 1, temp)
-                console.log("Never Answered regular "+temp)
+                //console.log("Never Answered regular "+temp)
             }
 
         }
@@ -2424,7 +2463,7 @@ module.exports= class Database {
                 var temp=this.List_Questions[i].Number+";"+this.List_Questions[i].Test_Type+";"+this.List_Questions[i].Test+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+"NEVER ANSWERED"+";"+this.List_Questions[i].Check_Answer+";"+"Never Answered"+";"+this.List_Questions[i].Right_Answer+";"+ (this.List_Questions[i].Repeats-1)+";"+"Never Answered"+";"+"Never Answered"+";"+"Never/Answered";
 
                 temp_list.push(temp)
-                console.log("Never Answered_tutor_view "+temp)
+                //console.log("Never Answered_tutor_view "+temp)
             }
 
         }

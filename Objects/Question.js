@@ -36,12 +36,62 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
     Question.prototype.setNumber=function(index){
         this.SetNumber=index;
     }
+Question.prototype.addDraw_History=function (draw_object){
+
+    //console.log("setting draw histroy"+draw_history);
+
+    for(var i=1;i< draw_object.length;++i){
+
+        const tuple = {
+            x: draw_object[i].x,
+            y: draw_object[i].y
+        }
+
+        this.Draw_History.push(tuple);
+    }
+    //console.log("Completed draw histroy "+this.Draw_History)
+    }
+    Question.prototype.setDraw_History=function(draw_history){
+
+        this.Draw_History=draw_history;
+        console.log("setting draw histroy");
+
+    }
+    Question.prototype.getDrawHistory=function (){
+        var temp=[];
+        if(this.Draw_History.length==0){
+            console.log("no draw histroy")
+            return [];
+        }
+
+
+        for(var i=0;i<this.Draw_History.length;++i){
+            //console.log("tehre is draw history"+this.Draw_History[i].x+" "+this.Draw_History[i].y);
+            temp.push(this.Draw_History[i].x+"*"+this.Draw_History[i].y)
+        }
+        return temp
+    }
+    Question.prototype.getDrawHistory_Database=function(){
+        var temp=[];
+        if(this.Draw_History.length==0){
+            console.log("no draw histroy")
+            return;
+        }
+        console.log("there is draw histroy")
+
+        for(var i=0;i<this.Draw_History.length;++i){
+            //console.log(this.Draw_History[i].x+" "+this.Draw_History[i].y);
+            temp.push({x:this.Draw_History[i].x,y:this.Draw_History[i].y})
+        }
+        return temp
+    }
+
     Question.prototype.setHover_History=function (hover_history){
-    if( hover_history[0] ==undefined){
+        if( hover_history[0] ==undefined){
         //console.log("hover history setting, empty "+hover_history[0])
         this.Hover_History=["No History"]
         return;
-    }
+        }
         //console.log("hover history "+hover_history)
         this.Hover_History=hover_history;
     }
