@@ -4234,68 +4234,12 @@
       <change afterPath="$PROJECT_DIR$/../vcpkg-master/triplets/x86-windows-static.cmake" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../vcpkg-master/triplets/x86-windows.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Database.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Question.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/QuestionSchema.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/ResponseSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Models/ResponseSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Student.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Student_Schema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Student_Schema.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Objects/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Database.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Objects/English_Question.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/English_Question.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Objects/Math_Question.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Math_Question.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Objects/Question.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Question.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Objects/Reading_Question.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Reading_Question.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Objects/Science_Question.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Science_Question.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuestionsDatabaseKrupnick_4_3_2019.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Scaled_Scores.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_70G_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_70G_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_71E_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_71G_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_71H.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_72E_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_72E_English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_A09.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_A09_ACT-English.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Scaled_Scores_A09_ACT-English.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_A09_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_A10.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_A10_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_A10_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_A11_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_B02_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_B02_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_B04.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_B04_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_B04_ACT-Math.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_B04_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_B05_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_C03_ACT-English.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_C03_ACT-Math.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_C03_ACT-Science.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_Z15.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scaled_Scores_Z15_ACT-Reading.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" afterPath="$PROJECT_DIR$/bin/www" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/biotech cos ipo_1.xlsm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/past_searches.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/AddQuestions.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/AddQuestions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/EditQuestion.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/EditQuestion.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/Test_Options.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/Test_Options.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/AddQuestions.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/AddQuestions.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/EditQuestion.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/EditQuestion.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Ending.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Ending.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Ending_1.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Ending_1.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Test_Options.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Test_Options.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/dashboard.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/dashboard.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/layout.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/register.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register.hbs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/register_Question.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register_Question.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/register_Question_Math.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register_Question_Math.hbs" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -4326,8 +4270,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="79">
-              <caret line="852" column="17" lean-forward="true" selection-start-line="852" selection-start-column="17" selection-end-line="852" selection-end-column="17" />
+            <state relative-caret-position="122">
+              <caret line="759" column="13" lean-forward="true" selection-start-line="759" selection-start-column="13" selection-end-line="759" selection-end-column="13" />
               <folding>
                 <element signature="e#3852#5911#0" />
               </folding>
@@ -4338,17 +4282,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Objects/Database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="2370" column="37" selection-start-line="2370" selection-start-column="37" selection-end-line="2370" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Models/EnglishSchema.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+            <state relative-caret-position="-1654">
+              <caret line="1296" column="83" selection-start-line="1296" selection-start-column="83" selection-end-line="1296" selection-end-column="83" />
             </state>
           </provider>
         </entry>
@@ -4356,17 +4291,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Objects/Question.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-210">
-              <caret line="68" column="14" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/n-readlines/readlines.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="78">
-              <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+            <state relative-caret-position="364">
+              <caret line="79" column="26" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -4374,8 +4300,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Models/ResponseSchema.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="40" column="22" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
+            <state relative-caret-position="1">
+              <caret line="40" column="22" lean-forward="true" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -4392,11 +4318,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/register_Question.hbs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="1299" column="43" selection-start-line="1299" selection-start-column="21" selection-end-line="1299" selection-end-column="43" />
+            <state relative-caret-position="60">
+              <caret line="888" column="230" selection-start-line="888" selection-start-column="230" selection-end-line="888" selection-end-column="230" />
               <folding>
-                <element signature="e#9647#10753#0#HTML" />
+                <element signature="e#53493#54294#0#HTML" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/n-readlines/readlines.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="70">
+              <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/register_Question_Math.hbs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="73">
+              <caret line="1099" column="37" lean-forward="true" selection-start-line="1099" selection-start-column="37" selection-end-line="1099" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -4432,36 +4376,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>onmouse</find>
-      <find>xhr</find>
-      <find>submit_1</find>
-      <find>question_loop</find>
-      <find>aveDrawHistory(</find>
-      <find>pencil</find>
-      <find>addDraw_History</find>
-      <find>getDrawHistory_Database</find>
-      <find>there is draw histroy</find>
-      <find>drawHighlighter</find>
-      <find>saveDrawHistory</find>
-      <find>drawing the</find>
-      <find>points coming in from d</find>
-      <find>saveres</find>
-      <find>ddDraw_History</find>
-      <find>NEver answered</find>
-      <find>display</find>
       <find>no draw his</find>
-      <find>getDrawHistory</find>
       <find>responses being returned</find>
       <find>INside Final Review question</find>
       <find>esponses being returned Englis</find>
       <find>setting draw histro</find>
       <find>setDraw_History</find>
       <find>getNextQuestion_Final_Revi</find>
-      <find>INside Final Review question</find>
       <find>no draw</find>
       <find>last q</find>
-      <find>NEver answered</find>
       <find>tehre is draw history</find>
+      <find>display</find>
+      <find>pencil</find>
+      <find>pen</find>
+      <find>container</find>
+      <find>canvas</find>
+      <find>draw</find>
+      <find>draw_history</find>
+      <find>json</find>
+      <find>xhr</find>
+      <find>question_loop</find>
+      <find>saveDrawHistory</find>
+      <find>saveres</find>
+      <find>draw_object</find>
+      <find>addDraw_History</find>
+      <find>Question_Loop_</find>
+      <find>getDrawHistory</find>
+      <find>displayhi</find>
+      <find>saving responses' highlight</find>
+      <find>cursor</find>
+      <find>underlined section</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -4502,7 +4446,6 @@
         <option value="$PROJECT_DIR$/public/stylesheets/mobile.css" />
         <option value="$PROJECT_DIR$/views/register_Question_Science.hbs" />
         <option value="$PROJECT_DIR$/views/AddQuestions.hbs" />
-        <option value="$PROJECT_DIR$/views/register_Question_Math.hbs" />
         <option value="$PROJECT_DIR$/views/EditQuestion.hbs" />
         <option value="$PROJECT_DIR$/views/Test_Options.hbs" />
         <option value="$PROJECT_DIR$/views/dashboard.hbs" />
@@ -4517,11 +4460,12 @@
         <option value="$PROJECT_DIR$/Objects/Science_Question.js" />
         <option value="$PROJECT_DIR$/Objects/Reading_Question.js" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
-        <option value="$PROJECT_DIR$/Models/ResponseSchema.js" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/views/register_Question.hbs" />
+        <option value="$PROJECT_DIR$/views/register_Question_Math.hbs" />
+        <option value="$PROJECT_DIR$/Models/ResponseSchema.js" />
         <option value="$PROJECT_DIR$/Objects/Database.js" />
         <option value="$PROJECT_DIR$/Objects/Question.js" />
+        <option value="$PROJECT_DIR$/views/register_Question.hbs" />
         <option value="$PROJECT_DIR$/routes/dashboard.js" />
       </list>
     </option>
@@ -4533,10 +4477,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
-    <option name="width" value="2578" />
-    <option name="height" value="1048" />
+    <option name="x" value="-192" />
+    <option name="y" value="120" />
+    <option name="width" value="2579" />
+    <option name="height" value="918" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -4544,7 +4488,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -4597,6 +4540,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -4824,7 +4768,8 @@
       <workItem from="1586452041771" duration="5105000" />
       <workItem from="1586544387623" duration="716000" />
       <workItem from="1586545136085" duration="1400000" />
-      <workItem from="1586547177933" duration="17356000" />
+      <workItem from="1586547177933" duration="18393000" />
+      <workItem from="1586642043529" duration="10002000" />
     </task>
     <task id="LOCAL-00001" summary="lenovo yoga">
       <created>1550904201748</created>
@@ -4844,7 +4789,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3208250000" />
+    <option name="totallyTimeSpent" value="3219289000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -4859,7 +4804,7 @@
     <frame x="-7" y="-7" width="2062" height="838" extended-state="6" />
     <layout>
       <window_info id="Structure" order="0" sideWeight="0.08659794" side_tool="true" weight="0.14385614" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.7185185" side_tool="true" visible="true" weight="0.11238761" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.7185185" side_tool="true" visible="true" weight="0.11038961" />
       <window_info id="npm" order="2" sideWeight="0.094017096" side_tool="true" weight="0.1757085" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -4868,7 +4813,7 @@
       <window_info id="Favorites" order="7" sideWeight="0.28148147" side_tool="true" weight="0.2680162" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.23024523" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.497003" visible="true" weight="0.51907355" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4965035" visible="true" weight="0.5667575" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4995005" weight="0.28746593" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -4877,7 +4822,7 @@
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.4995005" weight="0.32833788" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4995005" weight="0.32833788" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.502997" side_tool="true" weight="0.21525885" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5032451" side_tool="true" weight="0.6085578" />
       <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24920508" />
@@ -4919,9 +4864,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/college_list.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -5159,34 +5101,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/register_Question_Math.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3296">
-          <caret line="755" column="61" selection-start-line="755" selection-start-column="47" selection-end-line="755" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/ResponseSchema.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" column="22" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15045">
-          <caret line="885" column="5" selection-start-line="885" selection-start-column="1" selection-end-line="885" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/AddQuestions.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2567">
-          <caret line="151" column="33" selection-start-line="151" selection-start-column="33" selection-end-line="151" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -5208,16 +5122,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/register_Question.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="1299" column="43" selection-start-line="1299" selection-start-column="21" selection-end-line="1299" selection-end-column="43" />
-          <folding>
-            <element signature="e#9647#10753#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/EditQuestion.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -5225,31 +5129,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Objects/Database.js">
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2370" column="37" selection-start-line="2370" selection-start-column="37" selection-end-line="2370" selection-end-column="37" />
+        <state relative-caret-position="15045">
+          <caret line="885" column="5" selection-start-line="885" selection-start-column="1" selection-end-line="885" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/AddQuestions.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2567">
+          <caret line="151" column="33" selection-start-line="151" selection-start-column="33" selection-end-line="151" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/register_Question_Math.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="1099" column="37" lean-forward="true" selection-start-line="1099" selection-start-column="37" selection-end-line="1099" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/mongoose/lib/schema/array.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="56" column="18" selection-start-line="56" selection-start-column="18" selection-end-line="56" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/ResponseSchema.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1">
+          <caret line="40" column="22" lean-forward="true" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Objects/Question.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-210">
-          <caret line="68" column="14" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
+        <state relative-caret-position="364">
+          <caret line="79" column="26" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Objects/Database.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1654">
+          <caret line="1296" column="83" selection-start-line="1296" selection-start-column="83" selection-end-line="1296" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/register_Question.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="888" column="230" selection-start-line="888" selection-start-column="230" selection-end-line="888" selection-end-column="230" />
+          <folding>
+            <element signature="e#53493#54294#0#HTML" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/n-readlines/readlines.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
+        <state relative-caret-position="70">
           <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="79">
-          <caret line="852" column="17" lean-forward="true" selection-start-line="852" selection-start-column="17" selection-end-line="852" selection-end-column="17" />
+        <state relative-caret-position="122">
+          <caret line="759" column="13" lean-forward="true" selection-start-line="759" selection-start-column="13" selection-end-line="759" selection-end-column="13" />
           <folding>
             <element signature="e#3852#5911#0" />
           </folding>

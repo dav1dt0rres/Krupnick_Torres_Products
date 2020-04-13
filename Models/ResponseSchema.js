@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-var point_schema = new Schema({ x: Number, y: Number });
+var point_schema = new Schema([{ x: Number, y: Number }]);
 var ResponseSchema = new Schema( {
     Response:String,
     Time:String,

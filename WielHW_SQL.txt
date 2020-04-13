@@ -1,0 +1,82 @@
+1.) Select pizza 
+FROM Eats
+WHERE name="Amy";
+
+2.) SELECT Count(pizza)
+FROM Eats
+Where name="Amy";
+
+
+3.) SELECT Count(*),name
+From Eats
+GROUP BY name;
+
+4.) SELECT Person.name, Eats.pizza
+FROM Eats
+INNER JOIN Person
+on Person.name=Eats.name
+Where Person.age>20;
+
+5.)SELECT name
+From Eats
+Where pizza IN ("supreme","cheese");
+
+6.) SELECT name
+From Eats
+Where pizza="supreme" and pizza="cheese";
+
+7.)Select name
+FROM Eats
+WHere pizza IN (SELECT pizza
+			FROM Serves
+			WHERE pizzeria="Dominos")
+INNER JOIN Frequents ON
+Frequents.name=Eats.name
+WHERE pizzeria NOT IN ("Dominos");
+
+11.) SELECT Fname,Lname
+FROM Employee
+WHERE Dno IN (Select Dnumber
+		FROM Dept_Locations
+		WHERE Dlocation="Houston")
+12.) Select Fname, Lname
+FROM Employee
+INNER JOIN Dependent
+ON Employee.Ssn=Dependent.Essn
+Where Dependent.Dependent_name=Employee.Fname;
+
+13.)SELECT Fname,Lname
+FROM Employee
+INNER JOIN DEpendent
+ON Employee.Ssn=Dependent.Essn
+WHERE Dependent.Relationship="Spouse" AND Dependent.Relationship<> "Son"
+
+14.) SELECT Employee.Fname,Employee.Lname,Department.Mgr_start_date,Department.Dname
+FROM Employee
+INNER JOIN Department ON
+Deparment.Mgr_ssn= Employee.Ssn
+
+16.) SELECT Employee.Fname, Employee.Lname, Dependent.Dependent_name
+From Employee
+LEFT JOIN Dependent ON
+Dependent.Essn=Employee.Ssn
+WHERE Dependent.Relations=Spouse
+
+17.)SELECT Employee.Fname, Employee.Lname
+FROM Employee
+Inner Join ON
+Department.Mgr_ssn=Employee.Ssn
+WHERE Department.Mfr_ssn NOT IN (SELECT Dependent.Essn
+				FROM Dependent;)
+ 
+20.)SELECT Fname, Lname
+FROM Employee 
+INNER JOIN (Select Essn,Count(Disctinct(Pno) as Count
+	     FROM Works_ON
+	     Group by Essn; 
+
+) AS Temp_table ON 
+Temp_table.Essn=Employee.Fname
+WHERE Temp_table.Count=(Select Count(*) as Total_Projects
+                        FROM Project;)
+

@@ -885,7 +885,10 @@
 
                     var index=temp_text.indexOf(join_underlined_section)
                     console.log("UNDERLINED SECTION "+join_underlined_section+" index: "+index)
-                    temp_text=temp_text.substring(0,index)+"<span class='underline_black'>" + temp_text.substring(index,index+join_underlined_section.length)+ "</span>"+temp_text.substring(index+join_underlined_section.length)
+                    if(index>=0){
+                        temp_text=temp_text.substring(0,index)+"<span class='underline_black'>" + temp_text.substring(index,index+join_underlined_section.length)+ "</span>"+temp_text.substring(index+join_underlined_section.length)
+                    }
+
                     join_underlined_section="";
 
                 }
@@ -1237,12 +1240,15 @@
                 tool.started = false;
                 // When the pen is done, save the resulting context
                 // to the in-memory canvas
-                var data = JSON.stringify({'Draw_Object':tool.final_points,"Database_Index":document.getElementById("Database_Index").value});
-                var xhr = new window.XMLHttpRequest();
-                xhr.open('POST', '/dashboard/Question_Loop_1',true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                console.log("length of poitns bein sent: "+tool.final_points.length);
-                xhr.send(data);
+                if(tool.Off==1){
+                    var data = JSON.stringify({'Draw_Object':tool.final_points,"Database_Index":document.getElementById("Database_Index").value});
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.open('POST', '/dashboard/Question_Loop_1',true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    console.log("length of poitns bein sent: "+tool.final_points.length);
+                    xhr.send(data);
+                }
+
                 memCtx.clearRect(0, 0, 900, 900);
                 memCtx.drawImage(canvas, 0, 0);
                 tool.points = [];
@@ -1257,10 +1263,12 @@
             }
             else if(tool.Off==1){
                 tool.Off=2;//pencil
-                document.getElementById("html").style.cursor = "initial";
+                document.getElementById("html").style.cursor = "cell";
+
             }
             else{
                 tool.Off = 0;//OFF
+                document.getElementById("html").style.cursor = "initial";
             }
 
         }
@@ -1296,20 +1304,24 @@
     }
     function displayHighlighter(ctx){//Calls the element by ID draw history from string to list of tuples and passes the points list
         var temp_list=document.getElementById("draw_history").value.split(" ");
-        var  points=[];
-        console.log("length of draw history "+temp_list.length)
-        for(var i=0;i<temp_list.length;++i){
-            points.push({x:temp_list[i].split("*")[0],y:temp_list[i].split("*")[1]});
+        for (var i=0;i<temp_list.length;++i){
+            var final_list=temp_list[i].split(",")
+            var  points=[];
+            console.log("length of draw history "+final_list.length)
+            for(var j=0;j<final_list.length;++j){
+                console.log("POINTS "+final_list[j].split("*")[0]+" "+final_list[j].split("*")[1])
+                points.push({x:final_list[j].split("*")[0],y:final_list[j].split("*")[1]});
 
+            }
 
+            ctx.lineWidth = 9;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'rgba(255,255,0, 0.3)';
+            //ctx.globalAlpha = 0.2
+            drawPoints(ctx,points)
         }
 
-        ctx.lineWidth = 9;
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(255,255,0, 0.3)';
-        //ctx.globalAlpha = 0.2
-        drawPoints(ctx,points)
         //drawHighlighter()
     }
     function drawHighlighter(ctx,points){

@@ -39,16 +39,18 @@ function Question(question_text,optionList,right_answer,tag,number,passage,test_
 Question.prototype.addDraw_History=function (draw_object){
 
     //console.log("setting draw histroy"+draw_history);
-
-    for(var i=1;i< draw_object.length;++i){
+    var temp_list=[];
+    for(var i=0;i< draw_object.length;++i){
 
         const tuple = {
             x: draw_object[i].x,
             y: draw_object[i].y
         }
+        temp_list.push(tuple)
 
-        this.Draw_History.push(tuple);
     }
+    this.Draw_History.push(temp_list);
+    console.log("Draw HIstory added "+this.Draw_History.length)
     //console.log("Completed draw histroy "+this.Draw_History)
     }
     Question.prototype.setDraw_History=function(draw_history){
@@ -59,6 +61,7 @@ Question.prototype.addDraw_History=function (draw_object){
     }
     Question.prototype.getDrawHistory=function (){
         var temp=[];
+        var temp_final=[];
         if(this.Draw_History.length==0){
             console.log("no draw histroy")
             return [];
@@ -67,9 +70,14 @@ Question.prototype.addDraw_History=function (draw_object){
 
         for(var i=0;i<this.Draw_History.length;++i){
             //console.log("tehre is draw history"+this.Draw_History[i].x+" "+this.Draw_History[i].y);
-            temp.push(this.Draw_History[i].x+"*"+this.Draw_History[i].y)
+            for(var j=0;j<this.Draw_History[i].length;++j){
+                temp.push(this.Draw_History[i][j].x+"*"+this.Draw_History[i][j].y)
+            }
+            temp_final.push(temp);
+            temp=[];
         }
-        return temp
+        temp_final.push(temp);
+        return temp_final;
     }
     Question.prototype.getDrawHistory_Database=function(){
         var temp=[];
@@ -80,8 +88,11 @@ Question.prototype.addDraw_History=function (draw_object){
         console.log("there is draw histroy")
 
         for(var i=0;i<this.Draw_History.length;++i){
+            for (var j=0;j<this.Draw_History.length;++j){
+                temp.push({x:this.Draw_History[i][j].x,y:this.Draw_History[i][j].y})
+            }
             //console.log(this.Draw_History[i].x+" "+this.Draw_History[i].y);
-            temp.push({x:this.Draw_History[i].x,y:this.Draw_History[i].y})
+
         }
         return temp
     }

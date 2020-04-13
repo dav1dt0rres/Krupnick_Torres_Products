@@ -1294,7 +1294,7 @@ module.exports= class Database {
     }
     async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history,eliminated_answers,checked_answers){
         console.log("saving response "+response+" "+time+" "+check_answer)
-
+        console.log("saving responses' highlights "+this.Last_Question.Draw_History)
         var Object_ID;
         if (this.CheckBox_List.includes('Clues') && confidence!=undefined){
             console.log("submitted confidence!")
