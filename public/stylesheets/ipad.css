@@ -575,6 +575,15 @@ textarea {
     word-wrap: break-word;
     color:black;
 }
+canvas {
+
+    left:55px;
+    position:absolute;
+
+}
+.highlight {
+    background-color: yellow;
+}
 .highlights, textarea {
     padding: 10px;
     font: 15px/22px 'Open Sans', sans-serif;

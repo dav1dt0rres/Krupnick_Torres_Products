@@ -22,8 +22,9 @@ var Current_Sessions=[]
 
 
 router.get('/', (req, res, next) => {
-   console.log("INside AaddQuestions")
+   console.log("INside AaddQuestions "+" "+req.query.add_question)
     var Database_Object=new Database("MISC",0,Current_Sessions.length,[0,1,2]);
+
     Current_Sessions.push(Database_Object)
     res.render('AddQuestions',{checkbox_math_science:false,Database_Index:Current_Sessions.length-1})
 
@@ -123,6 +124,17 @@ router.get('/ShowQuestions',async (req,res,next)=>{
 
         return
     }
+    if(req.query.Delete_Mode=="delete"){
+        console.log("inside ShowQuesitons for deletion "+req.query.Database_Index+" "+req.query.Final_Questions_holder+" "+req.query.Test_Type_Holder+" "+req.query.Test_Holder);
+        await Database_Object.DeleteQuestion(req.query.Final_Questions_holder,req.query.Test_Type_Holder,req.query.Test_Holder )
+        const title='Successful Deletion of Question, if you would like to Edit any more Questions you can..'
+
+        res.render('AddQuestions',{ title,Database_Index:req.body.Database_Index
+        })
+        return;
+
+
+    }
     if(req.query.Final_Questions_holder=="MISC"){
         console.log("redirecting MISC"+req.query.Database_Index)
         const title='Successful Entry of all the Question(s), if you would like to Edit any more Questions you can..'
@@ -215,7 +227,7 @@ router.get('/ShowQuestions',async (req,res,next)=>{
 })
 
 router.post('/Search_Question',async (req, res, next) => {
-        console.log("inside Search QUestion (AddQUestions)")
+        console.log("inside Search QUestion (AddQUestions) "+req.body.normal_Question_Index)
         var Database_Object=Current_Sessions[req.body.Database_Index]
         console.log("Databse index"+" "+req.body.Database_Index+" "+Current_Sessions.length)
 
@@ -233,15 +245,28 @@ router.post('/Search_Question',async (req, res, next) => {
 
         if(question_list.length>0){
             console.log("insisde Show Questions")
-            var title="Here are the Questions"
 
-            res.render('Show_Questions', {title:title,
-                Database_Index: req.body.Database_Index,
+            if(req.body.normal_Question_Index=="delete"){
+                var title="Here are the Questions (select one to delete)"
+                res.render('Show_Questions', {title:title,
+                    Database_Index: req.body.Database_Index,
                     Final_Questions_holder:question_list,
                     Test_Type_Holder:req.body.Test_Type,
-                    Test_Holder:req.body.Test
+                    Test_Holder:req.body.Test,
+                    Delete_Mode:req.body.normal_Question_Index
+                })
+            }
+            else{
+                var title="Here are the Questions"
+                res.render('Show_Questions', {title:title,
+                    Database_Index: req.body.Database_Index,
+                    Final_Questions_holder:question_list,
+                    Test_Type_Holder:req.body.Test_Type,
+                    Test_Holder:req.body.Test,
+                    Delete_Mode:""
+                })
+            }
 
-            })
             Current_Sessions[req.body.Database_Index]=Database_Object;
             return;
         }
@@ -345,6 +370,14 @@ router.post('/ScrollEditQuestions',upload.array("file",8), async (req, res, next
 
 
     }
+    else if(req.body.ReadIn_Button=="delete"){
+        console.log("Delete Button was pressed! "+Current_Sessions.length)
+
+        var title="DELETE a Question"
+        res.render('EditQuestion',{title,Database_Index: req.body.Database_Index,normal_Question_Index: "delete"})
+
+        }
+
 
     else if (req.body.submission=="true"){//ADd Question was pressed
         var targetPath="";
@@ -408,8 +441,9 @@ router.post('/ScrollEditQuestions',upload.array("file",8), async (req, res, next
         const title='Successful Entry of Question, if you would like to Edit any more Questions you can..'
 
         res.render('AddQuestions',{ title,Database_Index:req.body.Database_Index
-          })
+        })
         return;
+
     }
     else if (req.body.checkbox_math_science){//Math and Science rendering
         console.log("math checbox "+" "+req.body.Test_Type+" "+req.body.Test+" "+req.body.RightAnswer)

@@ -191,6 +191,9 @@ module.exports= class Database {
 
 
     }
+    setPermission(LastName){
+        this.Student=LastName;
+    }
     setTimeLimit(question_time_limit,test_time_limit ){
 
         this.Question_Time_Limit=question_time_limit;
@@ -999,23 +1002,23 @@ module.exports= class Database {
         console.log("its a new question_Math"+" "+BodyList[12])
         var global=true;
         var temp_objects=await Passage_table.find({});
-        console.log("length of passages being returned"+" "+temp_objects.length)
+        console.log("length of passages being returned_Math"+" "+temp_objects.length)
         //Checks to see if the new Passage exists already in the database
-        if(BodyList[10].length>3){
-            for(var i=0;i<temp_objects.length;++i){
-                console.log("Passage being returned" + " "+i+ + temp_objects[i]._id);
-                if (temp_objects[i].Passage.length>1 ){
+        //if(BodyList[10].length>3){
+          //  for(var i=0;i<temp_objects.length;++i){
+                //console.log("Passage being returned" + " "+i+ + temp_objects[i]._id);
+                //if (temp_objects[i].Passage.length>1 ){
 
-                    if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
-                        console.log("Passage already in database" + " " +temp_objects[i].id);
-                        new_passageId=temp_objects[i].id
-                        global=false;
-                        break;
-                    }
-                }
+                   // if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
+                       // console.log("Passage already in database" + " " +temp_objects[i].id);
+                       // new_passageId=temp_objects[i].id
+                      //  global=false;
+                      //  break;
+                   // }
+              //  }
 
-            }
-        }
+           // }
+     //   }
 
         console.log("global "+global)
         if(global){
@@ -1288,7 +1291,7 @@ module.exports= class Database {
         if(draw_object==undefined){
             return;
         }
-        console.log("draw_object"+draw_object.length );
+        console.log("draw_object"+draw_object);
         //console.log("draw_object"+draw_object.x +" "+draw_object.y );
         this.Last_Question.addDraw_History(draw_object);
     }
@@ -2071,10 +2074,13 @@ module.exports= class Database {
             }
         }
     }
-    DeleteEntries() {
+    DeleteQuestion(number, test_type, test) {
 
+        console.log("inside delete question "+number+" "+test_type+" "+test);
 
-        Question_database.find({ }).remove().exec();
+        dict[test_type].findOneAndRemove({ Test: test,Number:number }, function (err) {  if(err) console.log(err);
+            console.log("Successful deletion");});
+        //Question_database.find({ }).remove().exec();
         // this.getNumberofQuestions();
 
 

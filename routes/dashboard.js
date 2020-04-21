@@ -394,7 +394,7 @@ router.get('/Question_Loop',async function (req, res, next) {
 })
 router.post('/Question_Loop_Math_1',function(req,res,next){
     //console.log("REq query Database INdesx");
-    console.log("REq query Database Hover_History_Math"+req.body.Draw_Object.length);
+    //console.log("REq query Database Hover_History_Math"+req.body.Draw_Object.length);
     var Database_Object=Current_Sessions[req.body.Database_Index];
 
     Database_Object.saveDrawHistory(req.body.Draw_Object);

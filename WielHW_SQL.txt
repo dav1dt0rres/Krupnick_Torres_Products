@@ -80,3 +80,45 @@ Temp_table.Essn=Employee.Fname
 WHERE Temp_table.Count=(Select Count(*) as Total_Projects
                         FROM Project;)
 
+PART 2:
+INSERT INTO DEPT_LOCATIONS (Dnumber, Dlocation)
+VALUES ('3','Chicago');
+
+INSERT INTO DEPARTMENT (Dname, Dnumber, Mgr_ssn, Mfr_start_date)
+VALUES ('Technology','3', '888665555', '6/19/1971');
+
+INSERT INTO EMPLOYEE (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno)
+VALUES ('David', 'A', 'Torres', '399873233', '7/8/1988','2710 W Cortez','M', '120000','888665555','3');
+
+INSERT INTO DEPENDENT (Essn, Dependent_name, Sex, Bdate, Relationship)
+VALUES ('777711118','Mirza','F', '3/21/1960','Mother');
+
+INSERT INTO PROJECT (Pname, Pnumber, Plocation,Dnum)
+VALUES ('Server_Construction', '8', Chicago, '3');
+
+INSERT INTO WORKS_ON (Essn, Pno, Hours)
+VALUES ('399873233', '8','88.8');
+
+UPDATE WORKS_ON 
+SET Hours= '40.0'
+WHERE Essn='123456789' AND Pno='1';
+
+UPDATE Employee
+SET Salary='140000', Dno='3'
+WHERE Lname='Smith';
+
+Update DEPT_LOCATIONS
+SET Dlocation='Chicago'
+WHERE Dnumber='5';
+
+DELETE FROM DEPENDENT
+WHERE Essn='399873233';
+
+DELETE FROM WORKS_ON
+WHERE Essn='399873233';
+
+DELETE FROM PROJECT
+WHERE Pname='Server_Construction';
+
+
+

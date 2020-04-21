@@ -19,7 +19,7 @@
     <input type="hidden" id="tutor_boolean" name="tutor_boolean" value="{{tutor_boolean}}"  />
     <input type="hidden" id="Test_Type_Holder" name="Test_Type_Holder" value="{{Test_Type_Holder}}"  />
     <input type="hidden" id="Test_Holder" name="Test_Holder" value="{{Test_Holder}}"  />
-
+    <input type="hidden" id="Delete_Mode" name="Delete_Mode" value="{{Delete_Mode}}"  />
     <label class="" for="Final_Questions">
         List of Questions that were in incorrect
         (Select One if you want to go back to the problem)
@@ -143,6 +143,7 @@
     window.onload = function () {
 
         loadFinalQuestions();
+
         //loadQuestionBody()
         // console.log("inside passage box"+document.getElementById("Passage_Box").textContent)
         //console.log("Print First"+" "+y)
