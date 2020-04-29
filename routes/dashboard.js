@@ -548,7 +548,7 @@ router.get('/Question_Loop_Math',async function(req,res,next){
 
     console.log("current time correct "+req.query.Total_Time_Holder)
 
-    res.render('register_Question_Math', {Question_Body_Display:title, Question_Number: Question_object.Number, Passage_Holder:element.value, Answer_A:optionsList[0],
+    res.render('register_Question_Math', {Question_Body_Display:title, Question_Number: Question_object.Number, Passage_Holder:findAllbrackets_Math(element.value.split(" ")), Answer_A:optionsList[0],
         Answer_B:optionsList[1],Answer_C:optionsList[2],
         Answer_D: optionsList[3], Answer_E:optionsList[4],
         Database_Index: req.query.Database_Index,

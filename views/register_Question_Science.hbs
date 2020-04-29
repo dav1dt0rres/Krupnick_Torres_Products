@@ -885,6 +885,7 @@
         recordHover('scrolling '+document.getElementById("Passage_Box").scrollTop)
     }
     function reloadMathJax(){
+        console.log("reloading math Jax")
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
@@ -974,6 +975,7 @@
             document.getElementById("container").appendChild(para)
         }
         if(Passage.length>end+20){
+            console.log("Turning the passage into a para element")
             var png_index=Passage.indexOf(".png");
             temp_Passage=Passage.substring(png_index+4)
             var para = document.createElement("p");

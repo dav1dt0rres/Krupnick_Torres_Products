@@ -831,8 +831,8 @@
 
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src  = "https://polyfill.io/v3/polyfill.min.js?features=es6";
-        document.getElementById("container").appendChild(script);
+        script.src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+        document.getElementById("header_1").appendChild(script)
     }
     function clickedOption_Picture(element){
         console.log("inside clicked option picture")
@@ -933,11 +933,13 @@
             start=end;
             end=Passage.indexOf("Picture",start+1);
             temp_Passage=Passage.substring(start,end)
-            //console.log("passage text "+temp_Passage)
+
             var para = document.createElement("p");
-            para.innerHTML=temp_Passage.replace(/\n/g, '<br>\n');;
+
             para.setAttribute("align","left")
             para.style.marginLeft="55px"
+            para.innerHTML=temp_Passage.replace(/\n/g, '<br>\n');;
+            console.log("passage text "+para.innerHTML)
             document.getElementById("container").appendChild(para)
             var image = document.createElement("img");
 
@@ -945,6 +947,12 @@
             image.style.marginLeft="55px"
             //document.getElementById("container").appendChild(image);
             document.getElementById("container").appendChild(image)
+            var para = document.createElement("p");
+            para.setAttribute("align","left")
+            //para.style.left = "100px"
+            para.style.marginLeft="55px"
+
+            document.getElementById("container").appendChild(para)
         }
         if(Passage.length>end+20){
             console.log("Turning the passage into a para element")
@@ -956,6 +964,7 @@
             para.style.marginLeft="55px"
             document.getElementById("container").appendChild(para)
         }
+
         reloadMathJax();
     }
 
@@ -996,7 +1005,7 @@
     }
     function mapImage(Passage_Section){
         var picture_list_objects=document.getElementById("Image_List_Holder").value.replace(/^\s+|\s+$/g, '').split('*');
-        console.log("picture objects "+picture_list_objects)
+        //console.log("picture objects "+picture_list_objects)
         console.log("Passage going in "+Passage_Section)
         for (var i=0;i<picture_list_objects.length;++i){
             var filename=picture_list_objects[i].split(" ")[0]
