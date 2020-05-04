@@ -4233,7 +4233,7 @@
       <change afterPath="$PROJECT_DIR$/../vcpkg-master/triplets/x86-uwp.cmake" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../vcpkg-master/triplets/x86-windows-static.cmake" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../vcpkg-master/triplets/x86-windows.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Objects/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -4759,7 +4759,7 @@
       <workItem from="1588185408669" duration="2700000" />
       <workItem from="1588280668978" duration="15209000" />
       <workItem from="1588358074411" duration="597000" />
-      <workItem from="1588564819371" duration="297000" />
+      <workItem from="1588564819371" duration="896000" />
     </task>
     <task id="LOCAL-00001" summary="lenovo yoga">
       <created>1550904201748</created>
@@ -4779,7 +4779,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3263728000" />
+    <option name="totallyTimeSpent" value="3264327000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">

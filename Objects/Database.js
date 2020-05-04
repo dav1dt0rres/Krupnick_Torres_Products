@@ -1159,8 +1159,8 @@ module.exports= class Database {
                     if(temp_objects[i].Passage ==null){
                         console.log("its NOT DEFINED AND SKIPPINg");
                     }
-                    ////this.comparePassages(temp_objects[i].Passage,BodyList[10]))
-                    else  {
+                    ////
+                    else if (this.comparePassages(temp_objects[i].Passage,BodyList[10])) {
                         console.log("Passage already in database" + " " +temp_objects[i].id);
                         new_passageId=temp_objects[i].id
                         global=false;
