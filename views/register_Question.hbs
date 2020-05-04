@@ -1275,9 +1275,11 @@
         // clear both canvases!
 
         this.clear = function() {
-            console.log("inside clear")
+            console.log("inside clear");
+            document.getElementById("draw_history").value="";
             context.clearRect(0, 0, 900, 900);
             memCtx.clearRect(0, 0, 900, 900);
+
         };
     }
     function ev_canvas(ev) {
@@ -1317,7 +1319,7 @@
             ctx.lineWidth = 9;
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
-            ctx.strokeStyle = 'rgba(255,255,0, 0.3)';
+            ctx.strokeStyle = 'rgba(0,0,255, 0.4)';
             //ctx.globalAlpha = 0.2
             drawPoints(ctx,points)
         }
@@ -1330,7 +1332,7 @@
         ctx.lineWidth = 9;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(255,255,0, 0.3)';
+        ctx.strokeStyle = 'rgba(0,0,255, 0.4)';
         //ctx.globalAlpha = 0.2
         drawPoints(ctx,points)
 

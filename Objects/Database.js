@@ -19,7 +19,7 @@ var dict = {
 };
 var dict_tags={
     "ACT-Reading":"" ,
-    "ACT-Math": ["Algebra","Geometry","Probability","Trigonometry"],
+    "ACT-Math": ["Algebra","Geometry","Probability","Trigonometry","IES",],
     "ACT-English": ["Commas","Agreement","Economy","Context","Vocab","Cat 2","Cat 3"],
     "ACT-Science":""
 
@@ -350,7 +350,19 @@ module.exports= class Database {
         return this.Test_Time_Current
     }
    async InitializeQuestions(given_tag,semi_tag,number_of_questions,erase_history){
-        if (given_tag!=undefined){
+        console.log("inside initilze question for tags "+given_tag+" "+semi_tag)
+        if (this.Test_Type=="ACT-Math" && semi_tag!=undefined ){
+            console.log("Math_Tag: "+given_tag)
+            if(erase_history=="True"){
+                await this.initialize_Tag_history(given_tag)//this doesnt really take in considereation the tag given, just recalls from the response table and aggragrates on right constraints
+            }
+
+            given_tag=semi_tag;
+
+            await this.initializeTagged_List_regex(given_tag,number_of_questions);//this collects all questions that have tags with regex
+
+        }
+        else if (given_tag!=undefined){
             if(erase_history=="True"){
                 await this.initialize_Tag_history(given_tag)//this doesnt really take in considereation the tag given, just recalls from the response table and aggragrates on right constraints
             }
@@ -582,6 +594,13 @@ module.exports= class Database {
                         Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                         Question_object.setFirstHint(Questions[i].Hint_1);
                         Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
+                        if (Question_object.Test_Type=="ACT-Math"){
+
+                            Question_object.setPNGPictures(Questions[i].Img_List)
+                        }
+                        if(Question_object.Test_Type=="ACT-Science"){
+                            Question_object.setPNGPictures(Questions[i].Img_List)
+                        }
                         keywords[counter]=Question_object;
                         ++counter;
                         //console.log("counter"+" "+counter+" "+keywords.length);
@@ -1136,8 +1155,11 @@ module.exports= class Database {
             for(var i=0;i<temp_objects.length;++i){
                 //console.log("Passage being returned" + " " + temp_objects[i].Passage);
                 if (temp_objects[i].Passage.length>1 ){
-                    //console.log("its DEFINED "+temp_objects[i].Passage+" "+temp_objects[i]._id+temp_objects[i].Passage)
-                    if( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
+                   // console.log("its DEFINED "+temp_objects[i]._id+" "+temp_objects[i].Passage+" ");
+                    if(temp_objects[i].Passage ==null){
+                        console.log("its NOT DEFINED AND SKIPPINg");
+                    }
+                    else( this.comparePassages(temp_objects[i].Passage,BodyList[10])){
                         console.log("Passage already in database" + " " +temp_objects[i].id);
                         new_passageId=temp_objects[i].id
                         global=false;
@@ -1506,7 +1528,14 @@ module.exports= class Database {
                     }
                     Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                     Question_object.setFirstHint(Questions[i].Hint_1);
-                    Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
+                    Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight);
+                    if (Question_object.Test_Type=="ACT-Math"){
+
+                        Question_object.setPNGPictures(Questions[i].Img_List)
+                    }
+                    if(Question_object.Test_Type=="ACT-Science"){
+                        Question_object.setPNGPictures(Questions[i].Img_List)
+                    }
                     keywords[counter]=Question_object;
                     ++counter;
 

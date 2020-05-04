@@ -77,6 +77,41 @@ router.get('/', async function (req, res, next) {
     else if(req.query.Type_Holder=="Load_Sub_Tags"){
         console.log("inside loadSemiTags "+req.query.Tag_List)
         var Database_Object=new Database(req.query.Test_Type,"not null",Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);
+        if(req.query.Test_Type=="ACT-Math"){
+            console.log("Loading Math Results "+req.query.Math_Search)
+            var test_list=await Database_Object.getTests();
+            var tests=document.createElement('select')
+            for(var i =0; i<test_list.length;++i){
+
+                var option=document.createElement('option')
+                option.value=test_list[i]
+                option.text=test_list[i];
+                tests.add(option)
+            }
+            var option=document.createElement('option')
+            option.value='Set'
+            option.text="Set of Questions (Practice Mode)"
+            tests.add(option)
+
+
+
+            var Semi_Tags=await Database_Object.getSemiTags(req.query.Math_Search);
+            var semi_tags=document.createElement('select');
+            var option=document.createElement('option')
+            option.value="Please Choose One"
+            option.text="Please Choose One";
+            semi_tags.add(option)
+            for(var i =0; i<Semi_Tags.length;++i){
+
+                var option=document.createElement('option')
+                option.value=Semi_Tags[i]
+                option.text=Semi_Tags[i];
+
+                semi_tags.add(option)
+            }
+            res.render('Test_Options',{title,Math_Search:req.query.Math_Search,Semi_Tags:semi_tags, Load_Math_Search:"results",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests})
+            return;
+        }
         //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
         var test_list=await Database_Object.getTests();
         var tag_list=await Database_Object.getTags();
@@ -146,7 +181,11 @@ router.get('/', async function (req, res, next) {
         option.value='Set'
         option.text="Set of Questions (Practice Mode)"
         tests.add(option)
-
+        if (req.query.Test_Type=="ACT-Math"){
+            console.log("Rendering the Math Interface")
+            res.render('Test_Options',{title,Load_Math_Search:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests});
+            return;
+        }
 
         var tags=document.createElement('select');
         var option=document.createElement('option')
@@ -184,7 +223,7 @@ router.get('/', async function (req, res, next) {
 
     title="This is a Sample Question, please press Submit(Next Question)"
     if(Database_Object.Test_Type=="ACT-Math"){
-        console.log("")
+
         res.render('register_Question_Math', {Question_Body_Holder:title, Answer_A:"Sample A",
             Answer_B:"SampleB",Answer_C:"Sample C",
             Passage_Display_Holder:Database_Object.DisplayQuestionsList(),
@@ -221,6 +260,7 @@ router.get('/', async function (req, res, next) {
 router.post('/Question_Loop_1',async function(req,res,next) {
     //console.log("Database index for hover histroy "+req.body.Database_Index)
     //console.log("REq query Database Hover_History" + req.body.Hover_history);
+    console.log("Inside questionloop_1");
     var Database_Object=Current_Sessions[req.body.Database_Index];
 
     Database_Object.saveDrawHistory(req.body.Draw_Object);

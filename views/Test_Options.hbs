@@ -9,6 +9,8 @@
     <input type="hidden" id="Type_Holder" name="Type_Holder" value="{{Type_Holder}}"  />
     <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}"  />
     <input type="hidden" id="Load_Tags" name="Load_Tags" value="{{Load_Tags}}"  />
+    <input type="hidden" id="Load_Math_Search" name="Load_Math_Search" value="{{Load_Math_Search}}"  />
+
     <input type="hidden" id="Tag_Holder" name="Tag_Holder" value="{{Tag_Holder}}"  />
 
     <label id="test_type_label" name="test_type_label">
@@ -34,7 +36,13 @@
     </label>
 
 
+    <label style="display: none;" id="Math_Search_label" name="Math_Search_label">
+        Type in any Math tag (Press Enter to search)
 
+
+            <input id="Math_Search" name="Math_Search" value="{{Math_Search}}" />
+
+    </label>
     <label style="display: none;" id="Tag_List_label" name="Tag_List_label">
         What Tags?
         <select style="display: none;" onchange="load_sub_tags()" id = "Tag_List" name="Tag_List"  value="{{Tag_List}}">
@@ -172,6 +180,51 @@
             document.getElementById("Semi_Tags").style.display="inline-block";
 
 
+            return;
+        }
+        if(document.getElementById("Load_Math_Search").value=="true"){
+            document.getElementById("Number_Questions_label").style.display="block";
+            document.getElementById("Number_Questions").style.display="block";
+            document.getElementById("Math_Search_label").style.display="block";
+            document.getElementById("Math_Search").style.display="block";
+            document.getElementById("Test").value="Set of Questions (Practice Mode)"
+            document.getElementById("Math_Search").addEventListener("keydown", function(event) {
+
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    document.getElementById("Type_Holder").value="Load_Sub_Tags"
+                    // Cancel the default action, if needed
+                    console.log("submitting Math search results!!!")
+                    // Trigger the button element with a click
+                    //document.getElementById("form").submit()
+                }
+            });
+            loadTestTypes();
+            return;
+        }
+        if(document.getElementById("Load_Math_Search").value=="results"){
+            console.log("Inside loading math results")
+            document.getElementById("Number_Questions_label").style.display="block";
+            document.getElementById("Number_Questions").style.display="block";
+            document.getElementById("Math_Search_label").style.display="block";
+            document.getElementById("Math_Search").style.display="block";
+            document.getElementById("Semi_Tags_Label").style.display="inline-block";
+            document.getElementById("Semi_Tags").style.display="inline-block";
+
+
+            document.getElementById("Test").value="Set of Questions (Practice Mode)"
+            document.getElementById("Math_Search").addEventListener("keydown", function(event) {
+
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    document.getElementById("Type_Holder").value="Load_Sub_Tags"
+                    // Cancel the default action, if needed
+                    console.log("submitting Math search results!!!")
+                    // Trigger the button element with a click
+                    //document.getElementById("form").submit()
+                }
+            });
+            loadTestTypes();
             return;
         }
 

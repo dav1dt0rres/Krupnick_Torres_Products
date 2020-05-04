@@ -4239,6 +4239,7 @@
       <change beforePath="$PROJECT_DIR$/Models/QuestionSchema.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Student.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Student_Schema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Student_Schema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Objects/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Database.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/QuestionsDatabaseKrupnick_4_3_2019.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" afterPath="$PROJECT_DIR$/bin/www" afterDir="false" />
@@ -4259,7 +4260,6 @@
       <change beforePath="$PROJECT_DIR$/views/register.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register.hbs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/register_Question.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register_Question.hbs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/register_Question_Math.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register_Question_Math.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/register_Question_Science.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register_Question_Science.hbs" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -4290,47 +4290,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Objects/Database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4114">
-              <caret line="242" column="31" selection-start-line="242" selection-start-column="31" selection-end-line="242" selection-end-column="31" />
+            <state relative-caret-position="22185">
+              <caret line="1305" column="42" selection-start-line="1305" selection-start-column="21" selection-end-line="1305" selection-end-column="42" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8500">
-              <caret line="550" column="173" selection-start-line="550" selection-start-column="173" selection-end-line="550" selection-end-column="173" />
-              <folding>
-                <element signature="e#3852#5911#0" />
-              </folding>
+            <state relative-caret-position="122">
+              <caret line="269" column="61" selection-start-line="269" selection-start-column="61" selection-end-line="269" selection-end-column="61" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/AddQuestions.js">
+        <entry file="file://$PROJECT_DIR$/Objects/Question.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7429">
-              <caret line="437" selection-start-line="437" selection-end-line="437" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/Show_Questions.hbs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1853">
-              <caret line="109" column="34" selection-start-line="109" selection-start-column="34" selection-end-line="109" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/EditQuestion.hbs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="50" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="50" />
+            <state relative-caret-position="782">
+              <caret line="46" column="31" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -4338,8 +4317,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/register_Question.hbs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2448">
-              <caret line="144" column="9" selection-start-line="144" selection-start-column="9" selection-end-line="144" selection-end-column="9" />
+            <state relative-caret-position="21165">
+              <caret line="1245" column="64" selection-start-line="1245" selection-start-column="49" selection-end-line="1245" selection-end-column="64" />
             </state>
           </provider>
         </entry>
@@ -4353,11 +4332,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/register_Question_Math.hbs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="975" column="93" lean-forward="true" selection-start-line="975" selection-start-column="93" selection-end-line="975" selection-end-column="93" />
+            <state relative-caret-position="22321">
+              <caret line="1313" column="33" selection-start-line="1313" selection-start-column="33" selection-end-line="1313" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -4367,6 +4346,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="9112">
               <caret line="536" selection-start-line="536" selection-end-line="536" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="32" column="30" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -4393,36 +4381,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>readin_</find>
-      <find>butt</find>
-      <find>INside AaddQuestions</find>
-      <find>submi</find>
-      <find>EditQuestion</find>
-      <find>req.</find>
-      <find>normal_Question_Index</find>
-      <find>Database Normal COnstructor_MISC</find>
-      <find>.onclick</find>
-      <find>insisde Show Questions</find>
-      <find>inside ShowQuesitons</find>
-      <find>Number outside</find>
-      <find>suc</find>
-      <find>delete</find>
-      <find>Successful deletio</find>
-      <find>comparePassages</find>
-      <find>length of passages bein</find>
-      <find>Going in-Save Button</find>
-      <find>container</find>
+      <find>inside loadTags</find>
+      <find>Load_Sub_Tags</find>
+      <find>Rendering the Math</find>
+      <find>inside getSemiTags</find>
+      <find>oad_Tags</find>
+      <find>inside loadtests</find>
+      <find>inside loadSemiTags</find>
+      <find>nside initilze quest</find>
+      <find>showPictureOptions</find>
       <find>mapImage</find>
-      <find>scroll</find>
-      <find>eloading MathJax</find>
-      <find>header_1</find>
-      <find>reloadMathJax</find>
-      <find>passage text</find>
-      <find>Turning the passage into</find>
-      <find>Passage going in</find>
-      <find>Inside Question_Loop_Science</find>
-      <find>findAllbrackets_Math</find>
-      <find>passage_holder</find>
+      <find>showPicturePassage</find>
+      <find>InitializeQuestions</find>
+      <find>inside get Dashboard TO Start</find>
+      <find>oadTestTypes</find>
+      <find>Size of List Tagged Quesstion (minus the history)_</find>
+      <find>Math_Tag:</find>
+      <find>initializeNormal_List</find>
+      <find>initialize_Tag</find>
+      <find>initialize_Ta</find>
+      <find>initializeTa</find>
+      <find>highlighter</find>
+      <find>rgba</find>
+      <find>draw HIstory</find>
+      <find>clear</find>
+      <find>inside drawHighlighter</find>
+      <find>Draw HIstory added</find>
+      <find>Draw HIstory</find>
+      <find>Question_Loop_1</find>
+      <find>mouseup</find>
+      <find>Setting hover history</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -4460,7 +4448,6 @@
         <option value="$PROJECT_DIR$/Models/MathSchema.js" />
         <option value="$PROJECT_DIR$/views/layout.hbs" />
         <option value="$PROJECT_DIR$/public/stylesheets/mobile.css" />
-        <option value="$PROJECT_DIR$/views/Test_Options.hbs" />
         <option value="$PROJECT_DIR$/views/dashboard.hbs" />
         <option value="$PROJECT_DIR$/views/Test_Options_send_email.hbs" />
         <option value="$PROJECT_DIR$/views/Ending.hbs" />
@@ -4472,17 +4459,18 @@
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/Models/ResponseSchema.js" />
         <option value="$PROJECT_DIR$/Objects/Question.js" />
-        <option value="$PROJECT_DIR$/views/register_Question.hbs" />
         <option value="$PROJECT_DIR$/public/stylesheets/ipad.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
         <option value="$PROJECT_DIR$/views/AddQuestions.hbs" />
         <option value="$PROJECT_DIR$/views/register.hbs" />
         <option value="$PROJECT_DIR$/views/EditQuestion.hbs" />
         <option value="$PROJECT_DIR$/views/Show_Questions.hbs" />
-        <option value="$PROJECT_DIR$/Objects/Database.js" />
         <option value="$PROJECT_DIR$/routes/AddQuestions.js" />
         <option value="$PROJECT_DIR$/views/register_Question_Science.hbs" />
+        <option value="$PROJECT_DIR$/views/Test_Options.hbs" />
         <option value="$PROJECT_DIR$/views/register_Question_Math.hbs" />
+        <option value="$PROJECT_DIR$/Objects/Database.js" />
+        <option value="$PROJECT_DIR$/views/register_Question.hbs" />
         <option value="$PROJECT_DIR$/routes/dashboard.js" />
       </list>
     </option>
@@ -4494,8 +4482,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="95" />
-    <option name="y" value="167" />
+    <option name="x" value="140" />
+    <option name="y" value="71" />
     <option name="width" value="1890" />
     <option name="height" value="675" />
   </component>
@@ -4505,6 +4493,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -4556,7 +4545,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -4794,7 +4782,9 @@
       <workItem from="1587503631157" duration="1823000" />
       <workItem from="1587601476008" duration="627000" />
       <workItem from="1588099687111" duration="7950000" />
-      <workItem from="1588185408669" duration="1469000" />
+      <workItem from="1588185408669" duration="2700000" />
+      <workItem from="1588280668978" duration="15209000" />
+      <workItem from="1588358074411" duration="597000" />
     </task>
     <task id="LOCAL-00001" summary="lenovo yoga">
       <created>1550904201748</created>
@@ -4814,7 +4804,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3246394000" />
+    <option name="totallyTimeSpent" value="3263431000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -4829,7 +4819,7 @@
     <frame x="-7" y="-7" width="2062" height="838" extended-state="6" />
     <layout>
       <window_info id="Structure" order="0" sideWeight="0.08659794" side_tool="true" weight="0.14385614" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.7185185" side_tool="true" visible="true" weight="0.11938062" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.7185185" side_tool="true" visible="true" weight="0.12237762" />
       <window_info id="npm" order="2" sideWeight="0.094017096" side_tool="true" weight="0.1757085" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -4838,7 +4828,7 @@
       <window_info id="Favorites" order="7" sideWeight="0.28148147" side_tool="true" weight="0.2680162" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.23024523" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4965035" visible="true" weight="0.57901907" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4965035" weight="0.58583105" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4995005" weight="0.28746593" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -4878,7 +4868,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/routes/dashboard.js</url>
-          <line>1150</line>
+          <line>1190</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
@@ -4958,20 +4948,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="211">
           <caret line="40" column="31" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/Test_Options_send_email.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="153" column="9" selection-start-line="153" selection-start-column="9" selection-end-line="153" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/Test_Options.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="170" column="41" selection-start-line="170" selection-start-column="41" selection-end-line="170" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -5056,13 +5032,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="58" column="2" selection-start-line="58" selection-start-column="2" selection-end-line="58" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/ModelPredictor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -5088,13 +5057,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="70">
           <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Objects/Question.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="79" column="26" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -5148,23 +5110,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Objects/Database.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4114">
-          <caret line="242" column="31" selection-start-line="242" selection-start-column="31" selection-end-line="242" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8500">
-          <caret line="550" column="173" selection-start-line="550" selection-start-column="173" selection-end-line="550" selection-end-column="173" />
-          <folding>
-            <element signature="e#3852#5911#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/AddQuestions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7429">
@@ -5186,10 +5131,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/Test_Options_send_email.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="153" column="9" selection-start-line="153" selection-start-column="9" selection-end-line="153" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/Test_Options.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1181">
+          <caret line="211" column="78" selection-start-line="211" selection-start-column="78" selection-end-line="211" selection-end-column="78" />
+          <folding>
+            <element signature="n#style#0;n#select#0;n#label#3;n#form#0;n#body#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Objects/Database.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22185">
+          <caret line="1305" column="42" selection-start-line="1305" selection-start-column="21" selection-end-line="1305" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Objects/Question.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="46" column="31" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/register_Question.hbs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2448">
-          <caret line="144" column="9" selection-start-line="144" selection-start-column="9" selection-end-line="144" selection-end-column="9" />
+        <state relative-caret-position="21165">
+          <caret line="1245" column="64" selection-start-line="1245" selection-start-column="49" selection-end-line="1245" selection-end-column="64" />
         </state>
       </provider>
     </entry>
@@ -5200,10 +5176,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/register_Question_Math.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22321">
+          <caret line="1313" column="33" selection-start-line="1313" selection-start-column="33" selection-end-line="1313" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9112">
           <caret line="536" selection-start-line="536" selection-end-line="536" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="32" column="30" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -5214,10 +5204,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/register_Question_Math.hbs">
+    <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="975" column="93" lean-forward="true" selection-start-line="975" selection-start-column="93" selection-end-line="975" selection-end-column="93" />
+        <state relative-caret-position="122">
+          <caret line="269" column="61" selection-start-line="269" selection-start-column="61" selection-end-line="269" selection-end-column="61" />
         </state>
       </provider>
     </entry>

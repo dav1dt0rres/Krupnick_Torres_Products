@@ -944,6 +944,7 @@
             var image = document.createElement("img");
 
             image.src = mapImage(Passage.substring(end,end+20))
+            console.log("made it out of MapImage")
             image.style.marginLeft="55px"
             //document.getElementById("container").appendChild(image);
             document.getElementById("container").appendChild(image)
@@ -1002,10 +1003,11 @@
                 parent.appendChild(image)
             }
         }
+        console.log("finised showing picture pictures")
     }
     function mapImage(Passage_Section){
         var picture_list_objects=document.getElementById("Image_List_Holder").value.replace(/^\s+|\s+$/g, '').split('*');
-        //console.log("picture objects "+picture_list_objects)
+        console.log("picture objects "+picture_list_objects.length)
         console.log("Passage going in "+Passage_Section)
         for (var i=0;i<picture_list_objects.length;++i){
             var filename=picture_list_objects[i].split(" ")[0]
@@ -1309,7 +1311,7 @@
             var element = document.getElementById("tagged_question_list");
             element.classList.toggle("open") });
 
-
+        console.log("NEAR THE END")
         classname=document.getElementById("menu_1-button_hint");
         classname.addEventListener("mouseenter",function(){
             console.log("event lister for tagge questions-2")
