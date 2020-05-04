@@ -238,7 +238,7 @@ module.exports= class Database {
 
         }
         else if(argument.includes("finished")){
-            var string="http://krupnickapproach.ngrok.io/dashboard/automatedEmail?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
+            var string="http://ec2-13-58-234-92.us-east-2.compute.amazonaws.com:4000/dashboard/automatedEmail?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
                 "Test_Type="+this.Test_Type+"&"+"Session="+argument.split(",")[1]+"&"+"get_test=true&"
             var mailOptions = {
                 from: 'bot@gmail.com',
@@ -269,7 +269,7 @@ module.exports= class Database {
             }
 
             console.log("Sending Time LImits: "+this.Question_Time_Limit+" "+this.Test_Time_Limit+" "+this.Test_Type+" "+this.Test+" "+tag_list+" "+semi_tag)
-            var string="http://krupnickapproach.ngrok.io/dashboard/automatedEmail_Student?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
+            var string="http://ec2-13-58-234-92.us-east-2.compute.amazonaws.com:4000/dashboard/automatedEmail_Student?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
                 "Test_Type="+this.Test_Type+"&"+"Time_Limit_Question="+this.Question_Time_Limit+"&"+"Time_Limit_Test="+this.Test_Time_Limit+"&"+"Tag_List="+tag_list+"&"+"Number_Questions="+req.query.Number_Questions+"&"+
                 "Semi_Tag="+semi_tag
             console.log("The complete string "+string)
@@ -888,6 +888,9 @@ module.exports= class Database {
 
         while(temp_list.length<6 && List_P2.length>i){
             //console.log("list p2 "+List_P2[i])
+            if(List_P1[i]==undefined){
+                break;
+            }
             if (List_P1[i].toString().length>5){
                 temp_list.push(List_P1[i].toString());
                 if(temp_list2.indexOf(List_P1[i].toString())>0){
@@ -1087,7 +1090,7 @@ module.exports= class Database {
         console.log("its a new question"+" "+BodyList[12])
         var global=true;
         var temp_objects=await Passage_table.find({});
-        console.log("length of passages being returned"+" "+temp_objects.length)
+        console.log("length of passages being returned_science"+" "+temp_objects.length)
         //Checks to see if the new Passage exists already in the database
         if(BodyList[10].length>3){
             for(var i=0;i<temp_objects.length;++i){
