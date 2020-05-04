@@ -135,6 +135,14 @@ router.get('/ShowQuestions',async (req,res,next)=>{
 
 
     }
+    if(req.query.Delete_Mode=="delete_all"){
+        console.log("inside delete all ")
+        const title='Successful Deletion of Question, if you would like to Edit any more Questions you can..'
+        await Database_Object.DeleteAll(req.query.Test_Type_Holder,req.query.Test_Holder )
+        res.render('AddQuestions',{ title,Database_Index:req.body.Database_Index
+        })
+        return;
+    }
     if(req.query.Final_Questions_holder=="MISC"){
         console.log("redirecting MISC"+req.query.Database_Index)
         const title='Successful Entry of all the Question(s), if you would like to Edit any more Questions you can..'

@@ -2107,6 +2107,12 @@ module.exports= class Database {
             }
         }
     }
+    DeleteAll(test_type,test){
+        console.log("inside delete question "+test_type+" "+test);
+
+        dict[test_type].remove({ Test: test }, function (err) {  if(err) console.log(err);
+            console.log("Successful deletion");});
+    }
     DeleteQuestion(number, test_type, test) {
 
         console.log("inside delete question "+number+" "+test_type+" "+test);

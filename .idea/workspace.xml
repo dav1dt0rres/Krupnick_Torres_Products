@@ -4234,6 +4234,9 @@
       <change afterPath="$PROJECT_DIR$/../vcpkg-master/triplets/x86-windows-static.cmake" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../vcpkg-master/triplets/x86-windows.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Objects/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/AddQuestions.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/AddQuestions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/EditQuestion.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/EditQuestion.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Show_Questions.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Show_Questions.hbs" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -4264,17 +4267,26 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Objects/Database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="272" column="142" lean-forward="true" selection-start-line="272" selection-start-column="142" selection-end-line="272" selection-end-column="142" />
+            <state relative-caret-position="244">
+              <caret line="2113" column="50" selection-start-line="2113" selection-start-column="50" selection-end-line="2113" selection-end-column="50" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Objects/Question.js">
+        <entry file="file://$PROJECT_DIR$/routes/AddQuestions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="782">
-              <caret line="46" column="31" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
+            <state relative-caret-position="280">
+              <caret line="140" column="40" selection-start-line="140" selection-start-column="40" selection-end-line="140" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/Show_Questions.hbs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="284">
+              <caret line="92" column="8" lean-forward="true" selection-start-line="92" selection-start-column="8" selection-end-line="92" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -4327,7 +4339,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/stylesheets/ipad.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9061">
+            <state relative-caret-position="537">
               <caret line="533" column="10" selection-start-line="533" selection-start-column="1" selection-end-line="533" selection-end-column="10" />
             </state>
           </provider>
@@ -4346,14 +4358,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>inside getSemiTags</find>
-      <find>oad_Tags</find>
-      <find>inside loadtests</find>
-      <find>inside loadSemiTags</find>
-      <find>nside initilze quest</find>
-      <find>showPictureOptions</find>
-      <find>mapImage</find>
-      <find>showPicturePassage</find>
       <find>InitializeQuestions</find>
       <find>inside get Dashboard TO Start</find>
       <find>oadTestTypes</find>
@@ -4375,7 +4379,15 @@
       <find>Setting hover history</find>
       <find>comparepassage</find>
       <find>length of passa</find>
+      <find>readin</find>
+      <find>search_</find>
+      <find>normal_Question_Index</find>
+      <find>submitFinal</find>
+      <find>showques</find>
       <find>send_ema</find>
+      <find>long_lu</find>
+      <find>delete</find>
+      <find>delete_a</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -4428,14 +4440,14 @@
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
         <option value="$PROJECT_DIR$/views/AddQuestions.hbs" />
         <option value="$PROJECT_DIR$/views/register.hbs" />
-        <option value="$PROJECT_DIR$/views/EditQuestion.hbs" />
-        <option value="$PROJECT_DIR$/views/Show_Questions.hbs" />
-        <option value="$PROJECT_DIR$/routes/AddQuestions.js" />
         <option value="$PROJECT_DIR$/views/register_Question_Science.hbs" />
         <option value="$PROJECT_DIR$/views/Test_Options.hbs" />
         <option value="$PROJECT_DIR$/views/register_Question_Math.hbs" />
         <option value="$PROJECT_DIR$/views/register_Question.hbs" />
         <option value="$PROJECT_DIR$/routes/dashboard.js" />
+        <option value="$PROJECT_DIR$/views/EditQuestion.hbs" />
+        <option value="$PROJECT_DIR$/views/Show_Questions.hbs" />
+        <option value="$PROJECT_DIR$/routes/AddQuestions.js" />
         <option value="$PROJECT_DIR$/Objects/Database.js" />
       </list>
     </option>
@@ -4750,7 +4762,7 @@
       <workItem from="1588185408669" duration="2700000" />
       <workItem from="1588280668978" duration="15209000" />
       <workItem from="1588358074411" duration="597000" />
-      <workItem from="1588564819371" duration="3367000" />
+      <workItem from="1588564819371" duration="6360000" />
     </task>
     <task id="LOCAL-00001" summary="lenovo yoga">
       <created>1550904201748</created>
@@ -4770,7 +4782,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3266798000" />
+    <option name="totallyTimeSpent" value="3269791000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -4795,7 +4807,7 @@
       <window_info id="Favorites" order="7" sideWeight="0.28148147" side_tool="true" weight="0.2680162" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.23024523" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4965035" visible="true" weight="0.22752044" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4965035" visible="true" weight="0.17711172" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4995005" weight="0.28746593" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -5077,27 +5089,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/AddQuestions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7429">
-          <caret line="437" selection-start-line="437" selection-end-line="437" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/Show_Questions.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1853">
-          <caret line="109" column="34" selection-start-line="109" selection-start-column="34" selection-end-line="109" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/EditQuestion.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="50" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/Test_Options_send_email.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="128">
@@ -5157,13 +5148,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/ipad.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9061">
-          <caret line="533" column="10" selection-start-line="533" selection-start-column="1" selection-end-line="533" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
@@ -5171,10 +5155,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/EditQuestion.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/ipad.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="537">
+          <caret line="533" column="10" selection-start-line="533" selection-start-column="1" selection-end-line="533" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/Show_Questions.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="284">
+          <caret line="92" column="8" lean-forward="true" selection-start-line="92" selection-start-column="8" selection-end-line="92" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/AddQuestions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="140" column="40" selection-start-line="140" selection-start-column="40" selection-end-line="140" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Objects/Database.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="272" column="142" lean-forward="true" selection-start-line="272" selection-start-column="142" selection-end-line="272" selection-end-column="142" />
+        <state relative-caret-position="244">
+          <caret line="2113" column="50" selection-start-line="2113" selection-start-column="50" selection-end-line="2113" selection-end-column="50" />
         </state>
       </provider>
     </entry>
