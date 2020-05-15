@@ -87,15 +87,7 @@ td {
     padding-left: 15px;
     text-indent: -15px;
 }
-.Passage_Box{
-    width: 450px;
-    height: 600px;
-    float: left;
-    display: block;
-    margin: 0 auto;
-    transform: translateZ(0);
-    -webkit-text-size-adjust: none;
-}
+
 label {
     margin: 10px 0;
     display: flex;
@@ -523,12 +515,28 @@ circle{
     from {opacity: 0;}
     to {opacity:1 ;}
 }
+
+.Passage_Box{
+    width: 600px;
+    height: 750px;
+    color:transparent;
+    border: white;
+}
+.container, .backdrop, textarea {
+    width: 600px;
+    height: 800px;
+    left:55px;
+    position:absolute;
+    background: green;
+}
 .container {
-    display: block;
+
+
     margin: 0 auto;
     transform: translateZ(0);
     -webkit-text-size-adjust: none;
-    position: relative;
+
+
 }
 textarea {
     display: block;
@@ -543,44 +551,60 @@ textarea {
     resize: none;
     transition: transform 1s;
 }
-.backdrop {
 
+.backdrop {
+    position: absolute;
     z-index: 1;
     border: 2px solid #685972;
     background-color: #fff;
     overflow: auto;
     pointer-events: none;
     transition: transform 1s;
+}
+.highlight {
+    background-color: yellow;
+}
+.highlights {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color:black;
+}
+canvas {
 
+    left:55px;
+    position:absolute;
 
 }
-.backdrop, .container, textarea {
-    width: 450px;
-    height: 600px;
-    position: absolute;
-    left: 55px;
+.highlights, textarea {
+    padding: 10px;
+    font: 15px/22px 'Open Sans', sans-serif;
+    letter-spacing: 1px;
+}
+
+mark {
+    border-radius: 3px;
+    color: transparent;
+    background-color: #d4e9ab; /* or whatever */
+}
+underline{
+    text-decoration: underline;
+    text-decoration-color: red;
+}
+
+.underline_black{
+    text-decoration: underline;
+    text-decoration-color: black;
 }
 .text_area_input, .container_input{
     width: 500px;
     height: 600px;
     position: absolute;
-    top:500px;
+    top:560px;
     left: 10px;
-}
-.highlights, textarea {
-    padding: 10px;
-    font: 20px/28px 'Open Sans', sans-serif;
-    letter-spacing: 1px;
-
-}
-.highlights {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    color: transparent;
 }
 
 .container_1{
-    width: 400px;
+    width: 500px;
     height: 800px;
     float: right;
     display: block;
@@ -588,12 +612,9 @@ textarea {
     transform: translateZ(0);
     -webkit-text-size-adjust: none;
     position: relative;
-    left: 10px;
+    left: 0px;
 }
-mark {
-    color: transparent;
-    background-color: #d4e9ab; /* or whatever */
-}
+
 .menu {
     text-transform: uppercase;
     color:#454C4E;;
@@ -743,7 +764,10 @@ a:hover {
     background-color: #000;
     color: white;
 }
-
+.previous {
+    background-color: #000;
+    color: white;
+}
 .round {
     border-radius: 50%;
 }
@@ -986,3 +1010,4 @@ tr td:hover { background: #666; color: #FFF; }
     position: absolute;
     z-index: 1;
 }
+
