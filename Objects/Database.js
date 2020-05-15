@@ -238,12 +238,12 @@ module.exports= class Database {
 
         }
         else if(argument.includes("finished")){
-            var string="http://ec2-13-58-234-92.us-east-2.compute.amazonaws.com:4000/dashboard/automatedEmail?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
+            var string="http://192.168.1.3:4000/dashboard/automatedEmail?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
                 "Test_Type="+this.Test_Type+"&"+"Session="+argument.split(",")[1]+"&"+"get_test=true&"
             var mailOptions = {
                 from: 'bot@gmail.com',
                 //to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com,cameronmarshall.gong@gmail.com',
-                to: 'davidtorres7888@gmail.com,joekrupnick@gmail.com',
+                to: 'davidtorres7888@gmail.com',
                 subject: this.Student.firstName+" "+this.Student.lastName+" just finished: "+this.Test+" "+this.Test_Type,
                 text: 'That was easy!',
 
@@ -267,9 +267,13 @@ module.exports= class Database {
                 tag_list=req.query.Tag_List.replace(/ /g, '_')
                 semi_tag=req.query.Semi_Tags.replace(/ /g,'_')
             }
-
+            if(this.Test_Type=="ACT-Math" && this.Test.includes("Set") ){
+                console.log("sending math set of questions "+req.query.Math_Search+":"+req.query.Semi_Tags+":")
+                tag_list=req.query.Math_Search.replace(/ /g, '_')
+                semi_tag=req.query.Semi_Tags.replace(/ /g,'_')
+            }
             console.log("Sending Time LImits: "+this.Question_Time_Limit+" "+this.Test_Time_Limit+" "+this.Test_Type+" "+this.Test+" "+tag_list+" "+semi_tag)
-            var string="http://ec2-13-58-234-92.us-east-2.compute.amazonaws.com:4000/dashboard/automatedEmail_Student?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
+            var string="http://192.168.1.3:4000/dashboard/automatedEmail_Student?"+"firstName="+this.Student.firstName+"&"+"lastName="+this.Student.lastName+"&"+"email="+this.Student.email+"&"+"Test="+this.Test+"&"+
                 "Test_Type="+this.Test_Type+"&"+"Time_Limit_Question="+this.Question_Time_Limit+"&"+"Time_Limit_Test="+this.Test_Time_Limit+"&"+"Tag_List="+tag_list+"&"+"Number_Questions="+req.query.Number_Questions+"&"+
                 "Semi_Tag="+semi_tag
             console.log("The complete string "+string)
@@ -713,10 +717,11 @@ module.exports= class Database {
     }
     getNormalLast_Question(string_package){//This is so that higlights can actually show when tutor is looking back (or student)
         var current_index=parseInt(string_package.split(" ")[0]);
+        console.log("normal lasgt quesetion package"+string_package.split(" ")[1]);
         for (var i=0;i<this.Normal_History.length;++i){
-            if((parseInt(this.Normal_History[i].Number)==parseInt(current_index))){
-                console.log("normal history last "+parseInt(this.Normal_History[i].Number));
-                console.log("getting normal last question "+this.Normal_History[i].getDrawHistory().join(" "))
+            if((parseInt(this.Normal_History[i].Number)==parseInt(current_index))&&string_package.split(" ")[1]==this.Normal_History[i].Test ){
+                //console.log("normal history last "+parseInt(this.Normal_History[i].Number));
+                console.log("getting normal last question "+this.Normal_History[i].getDrawHistory())
                 return this.Normal_History[i];
             }
         }
@@ -730,7 +735,7 @@ module.exports= class Database {
             console.log("Set Problem Review  "+string_package)
 
             for (var i=0;i<this.List_Questions.length;++i){
-                if((parseInt(this.List_Questions[i].Number)==parseInt(current_index)) && this.List_Questions[i].Test==test_requested){
+                if((parseInt(this.List_Questions[i].Number)==parseInt(current_index)) && this.List_Questions[i].Test==test_requested ){
 
                     this.Last_Question=this.List_Questions[i];
                     console.log("FOUND the same problem to set Last Question "+this.Last_Question.Test+' '+this.Last_Question.Number)
@@ -749,7 +754,7 @@ module.exports= class Database {
         var keywords=[];
 
         //console.log("Length of Normal History"+" "+this.Normal_History.length);
-        console.log("current_Final_Review"+" "+current_index);
+        console.log("current_Final_Review"+" "+this.List_Questions[current_index]);
         this.Last_Question=this.List_Questions[current_index];
 
         //this.Last_Question=this.Normal_History[current_index]
@@ -1317,13 +1322,22 @@ module.exports= class Database {
         if(draw_object==undefined){
             return;
         }
-        console.log("draw_object"+draw_object);
-        //console.log("draw_object"+draw_object.x +" "+draw_object.y );
+
         this.Last_Question.addDraw_History(draw_object);
     }
     async saveResponse(response,confidence,time,First_Hint_holder,check_answer,old_answer,hover_history,eliminated_answers,checked_answers){
         console.log("saving response "+response+" "+time+" "+check_answer)
-        console.log("saving responses' highlights "+this.Last_Question.Draw_History)
+        console.log("saving responses' highlights "+this.Last_Question.Draw_History.length);
+        var database_save=[]
+        var final_database_save=[];
+        for (var i=0;i<this.Last_Question.Draw_History.length;++i){
+            for (var j=0;j<this.Last_Question.Draw_History[i].length;++j){
+                console.log(this.Last_Question.Draw_History[i][j].x+"*"+this.Last_Question.Draw_History[i][j].y)
+                database_save.push({x:this.Last_Question.Draw_History[i][j].x,y:this.Last_Question.Draw_History[i][j].y});
+            }
+
+            database_save.push({x:-1,y:-1});
+        }
         var Object_ID;
         if (this.CheckBox_List.includes('Clues') && confidence!=undefined){
             console.log("submitted confidence!")
@@ -1348,6 +1362,8 @@ module.exports= class Database {
         this.Last_Question.setCheckAnswer(check_answer);
 
         this.Normal_History.push(this.Last_Question);
+
+
         if(time.split(":")[1]!=undefined){
             if (time.split(":")[1].length>2){
                 console.log("saving because its negative "+parseInt(time.split(":")[1].split("-")[1]));
@@ -1379,7 +1395,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
-                Draw_History:this.Last_Question.Draw_History,
+                Draw_History:database_save,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1407,7 +1423,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
-                Draw_History:this.Last_Question.Draw_History,
+                Draw_History:database_save,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1435,7 +1451,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
-                Draw_History:this.Last_Question.Draw_History,
+                Draw_History:database_save,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1463,7 +1479,7 @@ module.exports= class Database {
                 Views:this.Last_Question.Views,
                 Total_Time:this.Test_Time_Current,
                 Hover_History:this.Last_Question.Hover_History,
-                Draw_History:this.Last_Question.Draw_History,
+                Draw_History:database_save,
                 Confidence:confidence
             });
             await newReponse.save(function(err,object){
@@ -1646,7 +1662,7 @@ module.exports= class Database {
 
                     var Question_object=new Question(questions[i].English_Question.Question_body.join(" "),questions[i].English_Question.Choices,questions[i].English_Question.Right_Answer,questions[i].English_Question.Tag,questions[i].English_Question.Number,
                         questions[i].English_Question.Passage_ID.Passage.join(" "),questions[i].English_Question.Test_Type,questions[i].English_Question.Test,-1);
-
+                    Question_object.setDraw_History_Database(questions[i].Draw_History)
                     Question_object.setHover_History(questions[i].Hover_History);
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
@@ -1667,7 +1683,7 @@ module.exports= class Database {
 
                     var Question_object=new Question(questions[i].Reading_Question.Question_body.join(" "),questions[i].Reading_Question.Choices,questions[i].Reading_Question.Right_Answer,questions[i].Reading_Question.Tag,questions[i].Reading_Question.Number,
                         questions[i].Reading_Question.Passage_ID.Passage.join(" "),questions[i].Reading_Question.Test_Type,questions[i].Reading_Question.Test,-1);
-
+                    Question_object.setDraw_History_Database(questions[i].Draw_History)
                     Question_object.setHover_History(questions[i].Hover_History);
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
@@ -1690,7 +1706,7 @@ module.exports= class Database {
                         " ",questions[i].Math_Question.Test_Type,questions[i].Math_Question.Test,-1);
 
                     Question_object.setHover_History(questions[i].Hover_History);
-
+                    Question_object.setDraw_History_Database(questions[i].Draw_History)
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
                     Question_object.setResponse(questions[i].Response);
@@ -1712,7 +1728,7 @@ module.exports= class Database {
                     var Question_object=new Question(questions[i].Science_Question.Question_body.join(" "),questions[i].Science_Question.Choices,questions[i].Science_Question.Right_Answer,questions[i].Science_Question.Tag,questions[i].Science_Question.Number,
                         " ",questions[i].Science_Question.Test_Type,questions[i].Science_Question.Test,-1);
                     Question_object.setHover_History(questions[i].Hover_History);
-
+                    Question_object.setDraw_History_Database(questions[i].Draw_History)
                     Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                     Question_object.setCheckAnswer(questions[i].Check_Answer)
                     Question_object.setResponse(questions[i].Response);
@@ -1725,15 +1741,30 @@ module.exports= class Database {
                     Question_object.setConfidence(questions[i].Confidence)
                     keywords.push(Question_object)
                 }
+                for(var x=0;x<keywords.length-1;++x){
+                    if(keywords[x].Number==keywords[keywords.length-1].Number && keywords[x].Test_Type==keywords[keywords.length-1].Test_Type){
+                        console.log("Deleting found another View "+keywords.length);
+                        console.log("new drawing histroy:"+keywords[keywords.length-1].Draw_History.length)
+                        keywords[x].Draw_History=keywords[keywords.length-1].Draw_History;
+                        keywords.pop();
+
+                        console.log("Deleting found another View "+keywords.length);
+                        break;
+                    }
+                }
             }
+
+
+
+
 
         });
         this.Normal_History=keywords;
 
-
+        this.Test_Type=list[0];
 
         this.List_Questions=keywords;
-        console.log("Successfully recalled the Set of Questions "+this.Normal_History.length)
+        console.log("Successfully recalled the Set of Questions "+this.Normal_History.length+" "+ this.Test_Type)
     }
     async getFinishedTest(test_package){
         var dict_schema_1 = {
@@ -1748,7 +1779,7 @@ module.exports= class Database {
 
         var temp_session=parseInt(test_list[2])
         this.Session=temp_session
-        console.log("test package "+test_package)
+        console.log("test package_getfinished test "+test_package)
         if(test_list[1].includes("Set")){//If the Tutor selects a Set of problems the Student did.
             await this.getFinishedTest_Set(test_list)
             return
@@ -1809,7 +1840,7 @@ module.exports= class Database {
                         var Question_object=new Question(" ",[" "],questions[i].English_Question.Right_Answer,questions[i].English_Question.Tag,questions[i].English_Question.Number,
                             " ",questions[i].English_Question.Test_Type,questions[i].English_Question.Test,-1);
                         Question_object.setHover_History(questions[i].Hover_History);
-                        Question_object.setDraw_History(questions[i].Draw_History);
+                        Question_object.setDraw_History_Database(questions[i].Draw_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                         Question_object.setCheckAnswer(questions[i].Check_Answer)
                         Question_object.setResponse(questions[i].Response);
@@ -1832,7 +1863,7 @@ module.exports= class Database {
                         var Question_object=new Question(" ",[" "],questions[i].Reading_Question.Right_Answer,questions[i].Reading_Question.Tag,questions[i].Reading_Question.Number,
                             " ",questions[i].Reading_Question.Test_Type,questions[i].Reading_Question.Test,-1);
                         Question_object.setHover_History(questions[i].Hover_History);
-                        Question_object.setDraw_History(questions[i].Draw_History);
+                        Question_object.setDraw_History_Database(questions[i].Draw_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                         Question_object.setCheckAnswer(questions[i].Check_Answer)
                         Question_object.setResponse(questions[i].Response);
@@ -1853,8 +1884,9 @@ module.exports= class Database {
                         console.log("responses being returned Math"+" "+questions[i].Math_Question.Number+" "+questions[i].Math_Question.Test+" "+questions[i].Math_Question.Tag+" "+questions[i].Math_Question.Right_Answer+" -->"+questions[i].Checked_Answers[0]);
                         var Question_object=new Question(" ",[" "],questions[i].Math_Question.Right_Answer,questions[i].Math_Question.Tag,questions[i].Math_Question.Number,
                             " ",questions[i].Math_Question.Test_Type,questions[i].Math_Question.Test,-1);
+
                         Question_object.setHover_History(questions[i].Hover_History);
-                        Question_object.setDraw_History(questions[i].Draw_History);
+                        Question_object.setDraw_History_Database(questions[i].Draw_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
                         Question_object.setCheckAnswer(questions[i].Check_Answer)
                         Question_object.setResponse(questions[i].Response);
@@ -1875,6 +1907,7 @@ module.exports= class Database {
                         console.log("responses being returned Science"+" "+questions[i].Science_Question.Number+" "+questions[i].Science_Question.Test+" "+questions[i].Science_Question.Tag+" "+questions[i].Science_Question.Right_Answer+" -->"+questions[i].Checked_Answers[0]);
                         var Question_object=new Question(" ",[" "],questions[i].Science_Question.Right_Answer,questions[i].Science_Question.Tag,questions[i].Science_Question.Number,
                             " ",questions[i].Science_Question.Test_Type,questions[i].Science_Question.Test,-1);
+
                         Question_object.setDraw_History(questions[i].Draw_History);
                         Question_object.setHover_History(questions[i].Hover_History);
                         Question_object.Checked_Answers=questions[i].Checked_Answers[0].split(",");
@@ -1896,6 +1929,7 @@ module.exports= class Database {
         this.Normal_History=temp_list;
         this.Test=test_list[0]//in order for scaled_scores() function to work well.
         this.Test_Type=test_list[1];
+
         var temp_Object=dict[test_list[1]].find({Test: test_list[0],Test_Type: test_list[1]}).populate("Passage_ID").lean()
         var Question_object;
         var keywords=[]
@@ -1911,7 +1945,10 @@ module.exports= class Database {
                 Question_object=new Question(Questions[i].Question_body.join(" "),Questions[i].Choices,Questions[i].Right_Answer,Questions[i].Tag,Questions[i].Number,Questions[i].Passage_ID.Passage.join(' '),Questions[i].Test_Type,Questions[i].Test,Questions[i]._id)
                 Question_object.setFirstHint(Questions[i].Hint_1);
 
-
+                if(test_list[1]=="ACT-Math" ||test_list[1]=="ACT-Science" ) {
+                    //console.log("image list "+Questions[i].Img_List);
+                    Question_object.setPNGPictures(Questions[i].Img_List);
+                }
                 Question_object.setPresentation_Highlight(Questions[i].Presentation_Highlight)
                 keywords[counter]=Question_object;
                 //console.log("keywords "+counter)
@@ -2318,9 +2355,24 @@ module.exports= class Database {
         var arr = Array.apply(null, Array(n));
         return arr.map(function (x, i) { return i });
     }
+    findTrueMatch(response_index){//only for problem sets when the student ends the test.
+        parseInt(this.Normal_History[response_index].Number);
+        var j=0;
+        console.log("the response question "+this.Normal_History[response_index].Number+" "+this.Normal_History[response_index].Test)
+        while(j<this.List_Questions.length){
+            console.log("comparing true match "+this.List_Questions[j].Number+" "+this.List_Questions[j].Test);
+            if(this.List_Questions[j].Number==this.Normal_History[response_index].Number && this.List_Questions[j].Test==this.Normal_History[response_index].Test){
+                return j;
+            }
+
+
+            ++j
+        }
+    }
     async DisplayResults_Problem_Set(){
         var temp_List=[];
         var questions_answered=[];
+        console.log("comparing lengths problem set "+this.Normal_History.length+" "+this.List_Questions.length)
         for  (var i=0;i<this.Normal_History.length;++i){
 
             if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
@@ -2329,8 +2381,9 @@ module.exports= class Database {
                 //temp_list.push(temp);
                 console.log("Displaying Results Got it Wrong_Problem Set "+temp)
                 temp_List.push(temp)
-                //console.log("temp_list so far "+temp_list)
-                this.List_Questions[i].Response=this.Normal_History[i].Response
+                //console.log("temp_list so far "+temp_list);
+
+                this.List_Questions[this.findTrueMatch(i)].Response=this.Normal_History[i].Response
             }
             else{
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
@@ -2339,7 +2392,8 @@ module.exports= class Database {
                 console.log("Displaying Results Got it Right_Problem Set "+temp)
                 temp_List.push(temp)
                 //console.log("temp_list so far "+temp_list)
-                this.List_Questions[i].Response=this.Normal_History[i].Response
+
+                this.List_Questions[this.findTrueMatch(i)].Response=this.Normal_History[i].Response
             }
             //console.log("temp_list so far: "+temp_list)
             questions_answered.push(i);
@@ -2428,7 +2482,8 @@ module.exports= class Database {
         for  (var i=0;i<this.Normal_History.length;++i){
 
             if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
-                console.log("tag replace "+this.Normal_History[i].Tag.replace(",","-").replace(",","-"))
+                //console.log("tag replace "+this.Normal_History[i].Tag.replace(",","-").replace(",","-"))
+                console.log("Draw__Histroy length "+this.Normal_History[i].Draw_History.length)
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
                     this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
                     ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence+";"+this.Normal_History[i].Checked_Answers.join("/")
@@ -2470,7 +2525,8 @@ module.exports= class Database {
         for  (var i=0;i<this.Normal_History.length;++i){
 
             if ( this.Normal_History[i].Response != this.Normal_History[i].Right_Answer ){
-                console.log("tag replace "+this.Normal_History[i].Hover_History[0]+" ")
+                //console.log("tag replace "+this.Normal_History[i].Hover_History[0]+" ")
+                console.log("tag replace "+this.Normal_History[i].Draw_History.length)
                 var temp=this.Normal_History[i].Number+";"+this.Normal_History[i].Test_Type+";"+this.Normal_History[i].Test+";"+this.Normal_History[i].Time+";"+
                     this.Normal_History[i].Tag.replace(",","-").replace(",","-")+";"+ this.Normal_History[i].Hint_Selection+";"+this.Normal_History[i].Check_Answer+";"+this.Normal_History[i].Response+";"+this.Normal_History[i].Right_Answer+";"+(this.Normal_History[i].Repeats-1)+";"+this.Normal_History[i].Views+
                     ";"+this.Normal_History[i].Time_Stamp+";"+this.Normal_History[i].Hover_History[0].split(',').join("/")+";"+this.Normal_History[i].Confidence+";"+this.Normal_History[i].Checked_Answers.join("/")

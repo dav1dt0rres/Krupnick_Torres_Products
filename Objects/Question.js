@@ -46,6 +46,7 @@ Question.prototype.addDraw_History=function (draw_object){
             x: draw_object[i].x,
             y: draw_object[i].y
         }
+        console.log("Draw HIstory added tuple"+tuple)
         temp_list.push(tuple)
 
     }
@@ -53,30 +54,51 @@ Question.prototype.addDraw_History=function (draw_object){
     console.log("Draw HIstory added "+this.Draw_History.length)
     //console.log("Completed draw histroy "+this.Draw_History)
     }
+    Question.prototype.setDraw_History_Database=function(draw_history){
+        var inner=[];
+        var outer=[];
+        for (var i=0;i<draw_history.length;++i){
+            if(draw_history[i].x!=-1){
+                inner.push({x:draw_history[i].x,y:draw_history[i].y})
+            }
+            else{
+                //console.log("refreshing"+draw_history[i].x)
+                outer.push(inner);
+                inner=[]
+            }
+
+        }
+        console.log("Draw histroy from database "+outer)
+        this.Draw_History=outer;
+    }
     Question.prototype.setDraw_History=function(draw_history){
 
         this.Draw_History=draw_history;
-        console.log("setting draw histroy");
+        console.log("setting draw histroy "+this.Draw_History);
 
     }
     Question.prototype.getDrawHistory=function (){
         var temp=[];
         var temp_final=[];
+        //console.log("getting draw history!!! "+this.Draw_History.length)
         if(this.Draw_History.length==0){
-            console.log("no draw histroy")
+            console.log("getting draw history, but no history")
             return [];
         }
 
 
         for(var i=0;i<this.Draw_History.length;++i){
-            //console.log("tehre is draw history"+this.Draw_History[i].x+" "+this.Draw_History[i].y);
+
             for(var j=0;j<this.Draw_History[i].length;++j){
-                temp.push(this.Draw_History[i][j].x+"*"+this.Draw_History[i][j].y)
+
+                temp.push(this.Draw_History[i][j].x+"*"+this.Draw_History[i][j].y);
+
             }
             temp_final.push(temp);
             temp=[];
         }
-        temp_final.push(temp);
+        //temp_final.push(temp);
+        //console.log("getting draw history!!! "+temp_final)
         return temp_final;
     }
     Question.prototype.getDrawHistory_Database=function(){
@@ -278,7 +300,8 @@ Question.prototype.addDraw_History=function (draw_object){
     this.Picture_png_Objects.forEach(function(object){
         temp_list.push(object.filename+" "+object.data);
 
-    })
+    });
+    console.log("returning picture objects "+temp_list.length)
     return temp_list.join("*")
 }
     Question.prototype.Math_Algo=function(section){

@@ -30,7 +30,7 @@
         </ul>
     </label>
     <button name="butt" id="butt" type="button" onclick="submitFinal()" value="save_question">Save Questions</button>
-    <button type="button"  onclick="deleteAll()" id="delete_test" name="delete_test" type="submit">Delete Entire Test</button>
+
 
 
 
@@ -88,9 +88,10 @@
         tbl.appendChild(tr)
     }
     function deleteAll(){
-        document.getElementById("Delete_Mode").value="delete_all";
+        //document.getElementById("Delete_Mode").value="delete_all";
+        //<button type="button"  onclick="deleteAll()" id="delete_test" name="delete_test" type="submit">Delete Entire Test</button>
         console.log("inside deletig all")
-        document.getElementById("form").submit()
+        //document.getElementById("form").submit()
     }
     function submitFinal(){
         console.log("inside final submit")
@@ -147,9 +148,9 @@
         display.innerHTML=question.value
     }
     window.onload = function () {
-        document.getElementById("delete_test").style.visibility="hidden";
+        //document.getElementById("delete_test").style.visibility="hidden";
         if( document.getElementById("Delete_Mode").value=="delete"){
-            document.getElementById("delete_test").style.visibility="visible";
+            //document.getElementById("delete_test").style.visibility="visible";
         }
         loadFinalQuestions();
 

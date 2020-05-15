@@ -174,6 +174,10 @@
             return;
         }
         var xhr_1 = new window.XMLHttpRequest();
+        xhr_1.ontimeout = function () {
+            console.error("The request for " + " timed out.");
+        };
+        xhr_1.timeout = 500;
         xhr_1.open('POST', '/dashboard/Question_Loop_1',true);
         xhr_1.setRequestHeader('Content-Type', 'application/json');
         console.log("inititation the json object "+document.getElementById("normal_Question_Index").value );
@@ -1170,11 +1174,12 @@
         var memCtx = memCanvas.getContext('2d');
         this.points = [];
         this.context=context;
-        if(document.getElementById("draw_history").value.split(" ").length>0){
+        if(document.getElementById("draw_history").value.length>0){
+            console.log("No draw history in object Pen")
             context.clearRect(0, 0, 900, 900);
             // put back the saved content
             context.drawImage(memCanvas, 0, 0);
-            displayHighlighter(context)
+            this.context=displayHighlighter(context)
         }
 
 
@@ -1203,7 +1208,7 @@
         this.mousemove = function(ev) {
             if (tool.started) {
                 if(tool.Off==1){
-                    tool.context.clearRect(0, 0, 900, 900);
+                    //tool.context.clearRect(0, 0, 900, 900);
                     // put back the saved content
                     tool.context.drawImage(memCanvas, 0, 0);
                     tool.points.push({
@@ -1244,6 +1249,10 @@
                     var data = JSON.stringify({'Draw_Object':tool.final_points,"Database_Index":document.getElementById("Database_Index").value});
                     var xhr = new window.XMLHttpRequest();
                     xhr.open('POST', '/dashboard/Question_Loop_1',true);
+                    xhr.ontimeout = function () {
+                        console.error("The request for " + " timed out.");
+                    };
+                    xhr.timeout = 500;
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     console.log("length of poitns bein sent: "+tool.final_points.length);
                     xhr.send(data);
@@ -1306,33 +1315,41 @@
     }
     function displayHighlighter(ctx){//Calls the element by ID draw history from string to list of tuples and passes the points list
         var temp_list=document.getElementById("draw_history").value.split(" ");
-        for (var i=0;i<temp_list.length;++i){
-            var final_list=temp_list[i].split(",")
-            var  points=[];
-            console.log("length of draw history "+final_list.length)
-            for(var j=0;j<final_list.length;++j){
-                console.log("POINTS "+final_list[j].split("*")[0]+" "+final_list[j].split("*")[1])
-                points.push({x:final_list[j].split("*")[0],y:final_list[j].split("*")[1]});
-
+        var  points=[];
+        var final_points_display=[]
+        console.log("length of draw display "+temp_list[0])
+        console.log("length of draw display "+temp_list[1])
+        for(var i=0;i<temp_list.length;++i){
+            for(var j=0;j<temp_list[i].split(",").length;++j){
+                console.log("POINTS "+temp_list[i].split(",")[j].split("*")[0]+" : "+temp_list[i].split(",")[j].split("*")[1])
+                points.push({x:temp_list[i].split(",")[j].split("*")[0],y:temp_list[i].split(",")[j].split("*")[1]});
             }
+            final_points_display.push(points);
+            points=[];
+            console.log("NEXT LIST OF POINTS")
+
+        }
 
             ctx.lineWidth = 9;
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
             ctx.strokeStyle = 'rgba(0,0,255, 0.4)';
             //ctx.globalAlpha = 0.2
-            drawPoints(ctx,points)
+        for(var i=0;i<final_points_display.length;++i){
+            ctx=drawPoints(ctx,final_points_display[i])
         }
+        return ctx;
+
 
         //drawHighlighter()
     }
     function drawHighlighter(ctx,points){
-        console.log("inside drawHighlighter")
+        console.log("inside drawHighlighter_bLUE")
 
-        ctx.lineWidth = 9;
+        ctx.lineWidth = 2;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(0,0,255, 0.4)';
+        ctx.strokeStyle = 'rgba(255,0,0, 0.1)';
         //ctx.globalAlpha = 0.2
         drawPoints(ctx,points)
 
@@ -1354,6 +1371,7 @@
             ctx.quadraticCurveTo(points[i].x, points[i].y, c, d)
         }
         ctx.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y), ctx.stroke()
+        return ctx;
     }
     window.onload = function () {
         var canvas = document.getElementById('canvas');

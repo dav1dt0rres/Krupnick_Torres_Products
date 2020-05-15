@@ -1043,26 +1043,29 @@
         var memCtx = memCanvas.getContext('2d');
         this.points = [];
         this.context=context;
-        if(document.getElementById("draw_history").value.split(" ").length>0){
+        console.log("draw history has something!! "+document.getElementById("draw_history").value.length)
+        if(document.getElementById("draw_history").value.length>0){
+
             context.clearRect(0, 0, 900, 900);
             // put back the saved content
             context.drawImage(memCanvas, 0, 0);
-            displayHighlighter(context)
+            this.context=displayHighlighter(context);
+
         }
 
 
         this.mousedown = function(ev) {
             console.log("mousDOWN "+tool.Off)
-            if(tool.Off==1){//highlighter
+            if(tool.Off==2){//regular ink
 
-                console.log("inside mousedown ")
+                console.log("inside mousedown regular ink")
                 tool.points.push({
                     x: ev._x,
                     y: ev._y
                 });
                 tool.started = true;
             }
-            else if(tool.Off==2){//regular ink
+            else if(tool.Off==1){//Highlighter
                 console.log("inside mousedown")
                 tool.points.push({
                     x: ev._x,
@@ -1075,8 +1078,8 @@
 
         this.mousemove = function(ev) {
             if (tool.started) {
-                if(tool.Off==1){
-                    tool.context.clearRect(0, 0, 900, 900);
+                if(tool.Off==2){
+                    //tool.context.clearRect(0, 0, 900, 900);
                     // put back the saved content
                     tool.context.drawImage(memCanvas, 0, 0);
                     tool.points.push({
@@ -1087,7 +1090,11 @@
                     console.log("point "+ev._x+" "+ev._y)
 
                     tool.final_points.push({x:ev._x,y:ev._y});
-                    drawHighlighter(tool.context,tool.points)
+                    tool.context.lineWidth = 2;
+                    tool.context.lineJoin = 'round';
+                    tool.context.lineCap = 'round';
+                    tool.context.strokeStyle = 'rgba(0,0,0,1)';
+                    drawPoints(tool.context,tool.points)
                     return;
                 }
 
@@ -1104,7 +1111,7 @@
                 context.lineJoin = 'round';
                 context.lineCap = 'round';
                 context.strokeStyle = 'rgba(0,0,0,1)';
-                drawPoints(context, tool.points);
+                drawHighlighter(context, tool.points);
             }
         };
 
@@ -1115,6 +1122,10 @@
                 // to the in-memory canvas
                 var data = JSON.stringify({'Draw_Object':tool.final_points,"Database_Index":document.getElementById("Database_Index").value});
                 var xhr = new window.XMLHttpRequest();
+                xhr.ontimeout = function () {
+                    console.error("The request for " + " timed out.");
+                };
+                xhr.timeout = 500;
                 xhr.open('POST', '/dashboard/Question_Loop_Math_1',true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 console.log("length of poitns bein sent: "+tool.final_points.length);
@@ -1128,13 +1139,11 @@
         this.tool_of=function(){
             console.log("Setting up mode ")
             if(tool.Off==0){
-                tool.Off=1;//higlighter
+                tool.Off=2;//pencil
+                console.log("Setting up mode pencil ")
                 document.getElementById("html").style.cursor = "crosshair";
             }
-            else if(tool.Off==1){
-                tool.Off=2;//pencil
-                document.getElementById("html").style.cursor = "initial";
-            }
+
             else{
                 tool.Off = 0;//OFF
             }
@@ -1170,21 +1179,33 @@
             func(ev);
         }
     }
-    function displayHighlighter(ctx){//Calls the element by ID draw history from string to list of tuples and passes the points list
+    function displayHighlighter(ctx){//Calls the element by ID draw history from string to list of tuples and passes the points list///This actually drawing black ink!
         var temp_list=document.getElementById("draw_history").value.split(" ");
         var  points=[];
-        console.log("length of draw history "+temp_list.length)
+        var final_points_display=[]
+        console.log("length of draw display "+temp_list[0])
+        console.log("length of draw display "+temp_list[1])
         for(var i=0;i<temp_list.length;++i){
-            points.push({x:temp_list[i].split("*")[0],y:temp_list[i].split("*")[1]});
+            for(var j=0;j<temp_list[i].split(",").length;++j){
+                console.log("POINTS "+temp_list[i].split(",")[j].split("*")[0]+" : "+temp_list[i].split(",")[j].split("*")[1])
+                points.push({x:temp_list[i].split(",")[j].split("*")[0],y:temp_list[i].split(",")[j].split("*")[1]});
+            }
+            final_points_display.push(points);
+            points=[];
+            console.log("NEXT LIST OF POINTS")
 
         }
-
-        ctx.lineWidth = 9;
+        ////black ink
+        console.log("length of points display "+points.length)
+        ctx.lineWidth = 2;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(255,255,0, 0.3)';
+        ctx.strokeStyle = 'rgba(0,0,0,1)';
         //ctx.globalAlpha = 0.2
-        drawPoints(ctx,points)
+        for(var i=0;i<final_points_display.length;++i){
+            ctx=drawPoints(ctx,final_points_display[i])
+        }
+        return ctx;
         //drawHighlighter()
     }
     function drawHighlighter(ctx,points){
@@ -1209,12 +1230,14 @@
         }
         ctx.beginPath(), ctx.moveTo(points[0].x, points[0].y);
         for (i = 1; i < points.length - 2; i++) {
-            //console.log("Drawing the folowing points "+points[i].x+" "+points[i].y)
+            console.log("Drawing the folowing points "+points[i].x+" "+points[i].y)
             var c = (points[i].x + points[i + 1].x) / 2,
                     d = (points[i].y + points[i + 1].y) / 2;
             ctx.quadraticCurveTo(points[i].x, points[i].y, c, d)
         }
-        ctx.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y), ctx.stroke()
+        console.log("LENGTH OF PTX "+points.length)
+        ctx.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y), ctx.stroke();
+        return ctx;
     }
     window.onload = function () {
         var canvas = document.getElementById('canvas');

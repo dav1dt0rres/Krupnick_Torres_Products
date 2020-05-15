@@ -53,7 +53,7 @@ Math_Question.prototype.setPNGPictures=function (picture_objects){
         return;
     }
     picture_objects.forEach(function(object) {
-        console.log("Translationing...Math "+object.filename)
+
         var tuple={
             filename:object.filename,
             data:"data:image/png;base64,"+object.data.toString('base64')
@@ -111,11 +111,12 @@ Math_Question.prototype.getMathQuestionText=function(){
 }
 Math_Question.prototype.getPicture_png_Objects=function(){
     var temp_list=[];
+    console.log("returning picture objects_Math "+this.Picture_png_Objects.length)
     for (var i=0;i<this.Picture_png_Objects.length;++i){
         temp_list.push(this.Picture_png_Objects[i].filename+" "+this.Picture_png_Objects[i].data);
         console.log("temp list so far_PNG "+temp_list)
     }
-
+    console.log("returning picture objects_Math "+temp_list.length)
     return temp_list.join("*")
 }
 Math_Question.prototype.getMathDisplayOptions=function(){

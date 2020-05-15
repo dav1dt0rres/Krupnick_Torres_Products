@@ -17,7 +17,6 @@ var EnglishSchema = new Schema( {
     Hint_1:[String],
     Deleted_Choices:[Number],
     Presentation_Highlight:[String]
-
 });
 
 

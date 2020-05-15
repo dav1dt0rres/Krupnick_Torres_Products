@@ -19,7 +19,6 @@ MathSchema = new Schema({
     Deleted_Choices: [Number],
     Presentation_Highlight: [String],
     Img_List:[{ filename: String, data: Buffer,contentType: String }]
-
 });
 
 
