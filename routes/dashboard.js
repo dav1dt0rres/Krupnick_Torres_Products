@@ -80,6 +80,7 @@ router.get('/', async function (req, res, next) {
         if(req.query.Test_Type=="ACT-Math"){
             console.log("Loading Math Results "+req.query.Math_Search)
             var test_list=await Database_Object.getTests();
+
             var tests=document.createElement('select')
             for(var i =0; i<test_list.length;++i){
 
@@ -210,10 +211,10 @@ router.get('/', async function (req, res, next) {
         //Current_Sessions.push(Database_Object);
         return;
     }
-    console.log("inside get Dashboard TO Start the TEst"+req.query.Test+" "+req.query.checkbox_historical)
+    console.log("inside get Dashboard TO Start the TEst"+req.query.Test+" "+req.query.Math_Search)
 
     var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);//keeping record of the index in Current_Session
-
+    Database_Object.Math_Tag_Sets=req.query.Math_Search///FOr math specifically it doenst have a "Tag_List" element from html
     Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
 
     var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also
@@ -1001,6 +1002,7 @@ router.get('/automatedEmail_Student_Send',async function(req,res,next){
         if(req.query.Test_Type=="ACT-Math"){
             console.log("Loading Math Results_automatedemail "+req.query.Math_Search)
             var test_list=await Database_Object.getTests();
+            Database_Object.Math_Tag_Sets=req.query.Math_Search;
             var tests=document.createElement('select')
             for(var i =0; i<test_list.length;++i){
 

@@ -60,6 +60,7 @@ module.exports= class Database {
             this.CheckBox_List=option_list.join(" ")
             this.Total_Time_Display;
             this.Session;
+            this.Math_Tag_Sets=null;
         }
         else if(Test_Type==0){
             console.log("inside search student database constructor")
@@ -107,6 +108,7 @@ module.exports= class Database {
                 return
             }
             this.Confidence=false;
+            this.Math_Tag_Sets=null;
         }
         else if(Test!=null){
             this.database_index=index  ;
@@ -157,6 +159,7 @@ module.exports= class Database {
                 return
             }
             this.Confidence=false;
+            this.Math_Tag_Sets=null;
 
         } //If the Constructor that carries a lot is to be called
         else{
@@ -187,6 +190,7 @@ module.exports= class Database {
             this.CheckBox_List=option_list.join(" ")
             this.Total_Time_Display;
             this.Session;
+            this.Math_Tag_Sets=null;
         }//The constructor to form Weakness Questions
 
 
@@ -355,13 +359,19 @@ module.exports= class Database {
     }
    async InitializeQuestions(given_tag,semi_tag,number_of_questions,erase_history){
         console.log("inside initilze question for tags "+given_tag+" "+semi_tag)
-        if (this.Test_Type=="ACT-Math" && semi_tag!=undefined ){
-            console.log("Math_Tag: "+given_tag)
+        if ((this.Test_Type=="ACT-Math" && semi_tag!=undefined)){
+            console.log("Math_Tag: "+this.Math_Tag_Sets)
             if(erase_history=="True"){
                 await this.initialize_Tag_history(given_tag)//this doesnt really take in considereation the tag given, just recalls from the response table and aggragrates on right constraints
             }
+            if(semi_tag.includes("Please")){//What if the user never selected a sub-tag but just stayed with the Main Tag
+                console.log("USER NEVER SELECTED A SEIM TAG!! "+this.Math_Tag_Sets)
+                given_tag=this.Math_Tag_Sets
+            }
+            else{
+                given_tag=semi_tag;
+            }
 
-            given_tag=semi_tag;
 
             await this.initializeTagged_List_regex(given_tag,number_of_questions);//this collects all questions that have tags with regex
 
