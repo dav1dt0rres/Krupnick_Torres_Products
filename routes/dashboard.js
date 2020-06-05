@@ -1105,9 +1105,18 @@ router.get('/automatedEmail_Student_Send',async function(req,res,next){
         option.value='Set'
         option.text="Set of Questions (Practice Mode)"
         tests.add(option)
+        if (req.query.Test_Type=="ACT-Math"){
+            console.log("Rendering the Math Interface")
+            res.render('Test_Options_send_email',{title,Load_Math_Search:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests});
+            return;
+        }
 
+        var tags=document.createElement('select');
+        var option=document.createElement('option')
+        option.value=""
+        option.text="Please Select Tag";
 
-        var tags=document.createElement('select')
+        tags.add(option)
         for(var i =0; i<tag_list.length;++i){
 
             var option=document.createElement('option')
@@ -1116,8 +1125,15 @@ router.get('/automatedEmail_Student_Send',async function(req,res,next){
 
             tags.add(option)
         }
+        var semi_tags=document.createElement('select');
+        var option=document.createElement('option')
+        option.value="Please Choose One"
+        option.text="Please Choose One";
+        semi_tags.add(option)
 
-        res.render('Test_Options_send_email',{title, Load_Math_Search:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests})
+
+        res.render('Test_Options_send_email',{title, Semi_Tags:semi_tags,Load_Tags:"true",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests,Tag_List:tags})
+        //res.render('Test_Options_send_email',{title, Load_Math_Search:"false",Test_Type_Holder:req.query.Test_Type,FirstName:req.query.FirstName,LastName:req.query.LastName,Email:req.query.Email,Test:tests})
         return;
         //Current_Sessions.push(Database_Object);
     }
