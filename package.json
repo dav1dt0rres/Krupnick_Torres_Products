@@ -23,7 +23,7 @@
     "gs": "0.0.2",
     "hbs": "~4.0.1",
     "html-element": "^2.3.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jsdom": "^11.1.0",
     "jsonwebtoken": "^7.1.9",
     "line-reader": "^0.4.0",
