@@ -2,6 +2,7 @@ const express = require('express')
 var mongoose = require('mongoose');
 const Question = require('../Objects/Question.js');
 var Database=require('../Objects/Database.js');
+var MYSQLInstance=require('../Objects/MYSQLInstance.js');
 const Student = require('../Objects/Student.js');
 var fs              = require('fs')
 var {JSDOM} = require("jsdom");
@@ -21,9 +22,9 @@ var Student_Object;
 var title;
 var counter=0;
 var Current_Sessions=[]; //MAINTAINS THE ENTIRE LIST OF THREADS OF STUDENTS, THIS IS AN ARRAY OF TYPE DATABASE.JS
-
+var CurrentSQLInstances=[]
 router.get('/', async function (req, res, next) {
-    //console.log("inside get Dashboard TO Start the TEst "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Time_Limit_Question+" "+req.query.Time_Limit_Test);
+
 
     if (req.query.Type_Holder=="Weakness"){
 
@@ -211,15 +212,21 @@ router.get('/', async function (req, res, next) {
         //Current_Sessions.push(Database_Object);
         return;
     }
-    console.log("inside get Dashboard TO Start the TEst"+req.query.Test+" "+req.query.Math_Search)
+    console.log("inside get Dashboard TO Start the TEst"+req.query.Test+" "+req.query.Math_Search+" CONTINUED "+req.query.BookMark+" "+req.query.Session)
 
     var Database_Object=new Database(req.query.Test_Type,req.query.Test,Current_Sessions.length,[req.query.checkbox_time,req.query.checkbox_1,req.query.checkbox_2]);//keeping record of the index in Current_Session
-    Database_Object.Math_Tag_Sets=req.query.Math_Search///FOr math specifically it doenst have a "Tag_List" element from html
+    Database_Object.Math_Tag_Sets=req.query.Math_Search///FOr math specifically it doenst have a "Tag_List" element from html;\
+    Database_Object.Tag=req.query.Semi_Tags;
+    console.log("established Tag math "+Database_Object.Tag)
     Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
 
-    var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also
+    var id=await Database_Object.getStudentID(req.query.FirstName,req.query.LastName,req.query.Email);//INitializes the Student Object here also;
+    if(req.query.BookMark){
+        console.log('THIS IS CONTINUED SO SUBTRACTING A SESSION')
+        await Database_Object.subtractSession(req.query.FirstName,req.query.LastName,req.query.Email,req.query.Session)//basically because hes continuing last session so subtract the one that exists in mongoose.
+    }
     Database_Object.send_email("started")
-    await Database_Object.InitializeQuestions(req.query.Tag_List,req.query.Semi_Tags,req.query.Number_Questions,req.query.checkbox_historical);
+    await Database_Object.InitializeQuestions(req.query.Session,req.query.BookMark,req.query.Tag_List,req.query.Semi_Tags,req.query.Number_Questions,req.query.checkbox_historical);
 
 
     title="This is a Sample Question, please press Submit(Next Question)"
@@ -281,11 +288,11 @@ router.get('/Question_Loop',async function (req, res, next) {
     console.log("Index being requested"+" "+req.query.normal_Question_Index+" "+Database_Object.Test)
     //console.log("argument passed"+" "+req.query.tagged_Questions_holder);//brings back the index for the tagged question
     if (Database_Object.Count==0){
-
+        console.log("Count =0 ")
         ++Database_Object.Count;
         Database_Object.startTime();//Only keeps track of total time.
         Question_object=Database_Object.Last_Question
-        Database_Object.Normal_Index=0;
+
         //await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
         //await Database_Object.initializeTagged_List();//erasing past ones
         //Database_Object.orderTagged_List();//Usually means shuffling
@@ -293,7 +300,7 @@ router.get('/Question_Loop',async function (req, res, next) {
     else if(req.query.Exit_bool=="true"){
         console.log("Entering Exit")
         console.log("Length before"+Current_Sessions.length)
-
+        Database_Object.SetContinuedEmail(req)
         //Current_Sessions.splice(req.query.Database_Index,1)
 
         title="Welcome to your Dashboard, "+Database_Object.Student.firstName;
@@ -326,6 +333,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         return;
     }
     else if(parseInt(req.query.normal_Question_Index)!=parseInt(Database_Object.Last_Question.Number)-1 ){//He switched to a another question number from the buttons
+        console.log((parseInt(req.query.normal_Question_Index)+1) +"vs"+ Database_Object.Last_Question.Number)
         console.log("Inside get next question at an index (buttons)")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
         Database_Object.setTest_Time_Current(req.query.Total_Time_Holder)
@@ -369,7 +377,7 @@ router.get('/Question_Loop',async function (req, res, next) {
         };
         Question_object=Database_Object.Last_Question
     }
-    else if (req.query.hasOwnProperty("next_question")){
+    else if (req.query.hasOwnProperty("next_question")){//pressed the right arrow or left
         console.log("Inside next Question")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks+" "+req.query.Combo_Holder)
         Database_Object.setTest_Time_Current(req.query.Total_Time_Holder)
@@ -463,15 +471,15 @@ router.get('/Question_Loop_Math',async function(req,res,next){
         ++Database_Object.Count;
         Database_Object.startTime();//Only keeps track of total time.
         Question_object=Database_Object.Last_Question
-        Database_Object.Normal_Index=0;
+
         //await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
         //await Database_Object.initializeTagged_List();//erasing past ones
         //Database_Object.orderTagged_List();//Usually means shuffling
     }
     else if(req.query.Exit_bool=="true"){
-        console.log("Entering Exit")
+        console.log("Entering Exit_Math")
         console.log("Length before"+Current_Sessions.length)
-
+        Database_Object.SetContinuedEmail(req)
         //Current_Sessions.splice(req.query.Database_Index,1)
 
         title="Welcome to your Dashboard, "+Database_Object.Student.firstName;
@@ -506,7 +514,9 @@ router.get('/Question_Loop_Math',async function(req,res,next){
         })
         return;
     }
-    else if((parseInt(req.query.normal_Question_Index)!=parseInt(Database_Object.Last_Question.Number)-1) && Database_Object.Test.includes("Set")==false ){//He switched to a another question number from the buttons
+    //
+
+    else if( parseInt(req.query.normal_Question_Index)!=parseInt(Database_Object.Last_Question.Number)-1 && Database_Object.Test.includes("Set")==false) {//He switched to a another question number from the buttons
         console.log("Inside get next question at an index_Math")
         console.log("req.time "+req.query.time+" "+req.query.First_Hint_holder+" "+req.query.number_checks)
         Database_Object.setTest_Time_Current(req.query.Total_Time_Holder)
@@ -642,7 +652,7 @@ router.get('/Question_Loop_Science',async function(req,res,next){
         ++Database_Object.Count;
         Database_Object.startTime();//Only keeps track of total time.
         Question_object=Database_Object.Last_Question
-        Database_Object.Normal_Index=0;
+        Database_Object.Normal_Index=Question_object.Number-1;
         //await Database_Object.initialize_Tag_history();//collect a history of already done Tagged qestions
         //await Database_Object.initializeTagged_List();//erasing past ones
         //Database_Object.orderTagged_List();//Usually means shuffling
@@ -793,6 +803,9 @@ router.get('/Question_Loop_Science',async function(req,res,next){
     ++counter;
 })
 function readScaledScore_Tutor_Review(Database_Object){
+    if(Database_Object.Test ==undefined){
+        return -1;
+    }
     if(Database_Object.Test.includes("Set")){
         return -1;
     }
@@ -915,6 +928,7 @@ router.get('/SAT',function (req, res, next) {
 })
 router.get('/automatedEmail',async function (req,res,next){
     console.log("inside automated Email "+req.query.firstName+" "+req.query.lastName+" "+req.query.email+" "+req.query.Test+" "+req.query.Test_Type+" "+req.query.Session+req.query.get_test+" "+req.query.Number_Questions+" "+req.query.Tag_List)
+    console.log("inside automated Email "+req.query.get_test+" "+req.query.show_final)
     if(req.query.get_test=="true"){
         var title="Test: "+req.query.Test+"    ---->>    "+req.query.lastName+", "+req.query.firstName+", "+req.query.email
 
@@ -932,6 +946,7 @@ router.get('/automatedEmail',async function (req,res,next){
     }
 
     else if(req.query.show_final=="true"){
+        console.log("Ending")
         var Database_Object=Current_Sessions[req.query.Database_Index]
         var scaled=readScaledScore_Tutor_Review(Database_Object)
         var display_list=await Database_Object.DisplayResultList_Tutor_View(scaled);
@@ -954,7 +969,7 @@ router.get('/automatedEmail_Student', async function(req,res,next){
     //Database_Object.setTimeLimit(req.query.Time_Limit_Question,req.query.Time_Limit_Test)
     var test_list=[req.query.Test]
     var tests=document.createElement('select')
-    title="Are you ready? "+req.query.FirstName+", to take the ACT?"
+    title="Are you ready? "+req.query.firstName+", to take the ACT?"
     for(var i =0; i<test_list.length;++i){
 
         var option=document.createElement('option')
@@ -971,8 +986,31 @@ router.get('/automatedEmail_Student', async function(req,res,next){
 
 
 
+    if(req.query.BookMark!=undefined){//Continuing
+        console.log("The student will continue-->BookMark "+req.query.BookMark+" "+req.query.Session);
+        if(req.query.Test.includes("Set")){
+            var tag_list=document.createElement('select');
+            option=document.createElement('option')
+            option.value=req.query.Tag_List.toString().replace(/_/g,' ')
+            option.text=req.query.Tag_List.toString().replace(/_/g,' ')
+            tag_list.add(option)
 
-    if(req.query.Test.includes("Set")){
+            var semi_tag=document.createElement('select');
+            option=document.createElement('option')
+            option.value=req.query.Semi_Tag.toString().replace(/_/g,' ')
+            option.text=req.query.Semi_Tag.toString().replace(/_/g,' ')
+            semi_tag.add(option)
+            res.render('Test_Options',{title,Load_Tags:"true",Number_Questions:req.query.Number_Questions,Tag_List:tag_list, Test_Type_Holder:req.query.Test_Type,FirstName:req.query.firstName,LastName:req.query.lastName,Time_Limit_Test:req.query.Time_Limit_Test,Time_Limit_Question:req.query.Time_Limit_Question,Email:req.query.email,Test:tests,
+                Semi_Tags:semi_tag,BookMark:req.query.BookMark,Session:req.query.Session})
+        }
+        else{
+            res.render('Test_Options',{title,Test_Type_Holder:req.query.Test_Type,FirstName:req.query.firstName,LastName:req.query.lastName,Time_Limit_Test:req.query.Time_Limit_Test,
+                Time_Limit_Question:req.query.Time_Limit_Question,Email:req.query.email,Test:tests,BookMark:req.query.BookMark,Session:req.query.Session})
+        }
+
+
+    }
+    else if(req.query.Test.includes("Set")){//whole new set of questions
         var tag_list=document.createElement('select');
         option=document.createElement('option')
         option.value=req.query.Tag_List.toString().replace(/_/g,' ')
@@ -1003,6 +1041,7 @@ router.get('/automatedEmail_Student_Send',async function(req,res,next){
             console.log("Loading Math Results_automatedemail "+req.query.Math_Search)
             var test_list=await Database_Object.getTests();
             Database_Object.Math_Tag_Sets=req.query.Math_Search;
+
             var tests=document.createElement('select')
             for(var i =0; i<test_list.length;++i){
 
@@ -1314,28 +1353,76 @@ router.get('/Skill',function (req, res, next) {
 
 router.post('/', async function (req, res, next) {
     console.log("inside get Dashboard!!!!!!"+req.body.firstName)
-    title="Welcome to your Dashboard,"+req.body.firstName
+    title="Welcome to your Dashboard, "+req.body.firstName
+    var SQL_Instance=new MYSQLInstance(req.body.firstName,req.body.lastName)
+
+
+    CurrentSQLInstances.push(SQL_Instance);
+    console.log("LENGTH AFTER"+CurrentSQLInstances.length)
+    var index=CurrentSQLInstances.length-1
 
     if (req.body.hasOwnProperty("new_student")){
         console.log("inside new student")
         var Database_Object=new Database(0,0,Current_Sessions.length,['student',0,0]);
-        var temp_boolean=await Database_Object.addNewStudent(req.body.firstName,req.body.lastName,req.body.email)==-1
+        var temp_boolean=await Database_Object.addNewStudent(req.body.firstName,req.body.lastName,req.body.email)
         if(temp_boolean==-1){
             console.log("inside adding new student "+temp_boolean)
             res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
             return;
         }
+
         Database_Object.send_email("registered")
-        res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
+        res.render('dashboard', {title,SQL_Index:index,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
     }
     else{
-        res.render('dashboard', {title,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
+        res.render('dashboard', {title,SQL_Index:index,FirstName:req.body.firstName,LastName:req.body.lastName, Email: req.body.email})
     }
 
 
 })
+router.get('/Charts',async function (req, res, next){
+
+    var sql_instance= CurrentSQLInstances[req.query.SQL_Index]
+    console.log("INSIDE CHARTS ROUTER"+" "+req.query.student_input+" "+req.query.deeper_query);
+    console.log("sql certification? "+sql_instance.certification);
+    if(req.query.deeper_query.length>0){
+        console.log("Deeper query once Students has been inputted ");
+        await sql_instance.run_deeperQuery(req.query.deeper_query,function(err,rows){
+            console.log("done with deeper query")
+        })
+        await sql_instance.run(req.query.FirstName,req.query.LastName,req.query.student_input,req.query.deeper_query,function(err,rows){
+            if(!err){
+                //console.log(rows);
+
+            }else{
+                console.log(err);}
+        })
+        res.render('dashboard', {title:"DEEPER QUERY",deeper_query:"true",deeper_query_options:req.query.deeper_query+","+sql_instance.QuizNames.join(","),certification: sql_instance.certification.toString(),SQL_Index:req.query.SQL_Index,data_table:sql_instance.Collections,
+
+            student_input_server:req.query.student_input,FirstName:req.query.FirstName,LastName:req.query.LastName, Email: req.query.email})
+        return;
+    }
+    else if (req.query.student_input!=undefined){
+        console.log("INSIDE because SPECIFIC studen input has been detected ")
+        await sql_instance.run_search_student(req.query.FirstName,req.query.LastName,req.query.student_input.toLowerCase(),function(err,rows){
+            if(!err){
+                //console.log(rows);
+
+            }else{
+                console.log(err);}
+        })
+        res.render('dashboard', {title,certification: sql_instance.certification.toString(),deeper_query_options:req.query.deeper_query_options,SQL_Index:req.query.SQL_Index,data_table:sql_instance.Collections,student_input_server:req.query.student_input,FirstName:req.query.FirstName,LastName:req.query.LastName, Email: req.query.email})
+        return;
+
+    }
+
+    //await sql_instance.run()
 
 
+    //await sql_instance.run()
+    console.log("length of data"+" "+sql_instance.Collections.length)
+    res.render('dashboard', {title,certification: sql_instance.certification.toString(),SQL_Index:req.query.SQL_Index,data_table:sql_instance.Collections,FirstName:req.query.FirstName,LastName:req.query.LastName, Email: req.query.email})
+})
 
 function SimilarMethod(){
   var duration=1*60

@@ -69,7 +69,7 @@ router.get('/loadSearches',function(req,res,next){
 
 })
 router.get('/Calculate_Odds',function(req,res,next){
-    console.log("Inside Caclulate_Odds get (SVM)")
+    console.log("Inside Caclulate_Odds get (SVM) "+req.query.university+" "+req.query.highschool+" "+req.query.GPA)
 
 
 

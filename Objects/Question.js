@@ -173,6 +173,14 @@ Question.prototype.addDraw_History=function (draw_object){
         this.Right_Answer=Right_Answer;
         this.Passage=Passage;
     }
+    Question.prototype.setResponseContinued=function(Question_Object){
+
+        this.Confidence=Question_Object.Confidence;
+        this.Response=Question_Object.Response;
+
+        console.log("Copying the questions so he can continue "+this.Response);
+
+    }
     Question.prototype.setResponse_Long=function (response,confidence,old_answer,eliminated_answers,checked_answers){
         console.log("setting Response LONG"+response+" "+old_answer)
         if (response!=old_answer){

@@ -9,8 +9,8 @@ var fs              = require('fs'),
 var GoogleSpreadsheet = require('google-spreadsheet');
 const XLSX = require('xlsx')
 
-const workbook=XLSX.readFile('./biotech cos ipo_1.xlsm')
-const sheet_name_list= workbook.SheetNames
+//const workbook=XLSX.readFile('./biotech cos ipo_1.xlsm')
+//const sheet_name_list= workbook.SheetNames
 var title;
 
 router.post('/',(req,res,next)=>{
@@ -21,7 +21,7 @@ router.post('/',(req,res,next)=>{
 
 router.get('/calculate', function (req, res, next) {
     console.log("inside calculate")
-    var sheet=workbook.Sheets[sheet_name_list[0]]
+  //  var sheet=workbook.Sheets[sheet_name_list[0]]
     var tt = 0;
     var data = [];
     for (var i = 0; i < z.length; i++) {

@@ -1,6 +1,57 @@
 <h1>{{user.profile.firstName}}'s Dashboard</h1>
 
 <p>Please Select what kind of test you would like?</p>
+<!-- Add a svg area, empty -->
+<div  id="Area" type="hidden" >
+    <link href= "/Clusterize.js-master/clusterize.css" rel="stylesheet">
+    <script src="/Clusterize.js-master/clusterize.min.js"></script>
+
+    <form id="Chart" action="/dashboard/Charts" method="get">
+        <button name="Charts" id="Charts" type="submit" >Show Charts</button>
+        <label style="visibility: hidden" id="Student_SQL_label" name="Student_SQL_label" for="Student_SQL">
+            Student  <------    Pick me First    <--------
+            <select style="visibility: hidden" onchange="loadStudentBox()" id="Student_SQL"  name="Student_SQL" value="{{Student_SQL}}" >
+
+                <option value="0">Select Student(s)</option>
+                <option value="all_students">All Students</option>
+                <option value="specific">A Student</option>
+
+
+            </select>
+        </label>
+
+
+
+            <table >
+                <thead >
+                <tr id="header_2">
+
+                </tr>
+                </thead>
+            </table>
+            <table id='tbl' border=1></table>
+
+        <input  type="hidden"  id="SQL_Index" name="SQL_Index"  value="{{SQL_Index}}" />
+        <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}" />
+        <input type="hidden" id="FirstName" name="FirstName" value="{{FirstName}}" />
+        <input  type="hidden"  id="LastName" name="LastName" value="{{LastName}}" />
+        <input  type="hidden"  id="Email" name="Email" value="{{Email}}" />
+        <input  type="hidden"  id="deeper_query" name="deeper_query" value="{{deeper_query}}" />
+        <input  type="hidden"  id="deeper_query_options" name="deeper_query_options" value="{{deeper_query_options}}" />
+
+    </form>
+
+
+
+</div>
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<input  type="hidden"  id="data_table" name="data_table"  value="{{data_table}}" />
+<input  type="hidden"  id="certification" name="certification"  value="{{certification}}" />
+<input  type="hidden"  id="student_input_server" name="student_input_server"  value="{{student_input_server}}" />
+<input  type="hidden"  id="student_ID_server" name="student_ID_server"  value="{{student_ID_server}}" />
+
 
 <form action="/Test_Options" method="get">
     <label for="FirstName">
@@ -25,14 +76,6 @@
 </form>
 
 
-<form id="weakness" action="/dashboard/Weakness" method="get">
-    <input type="hidden" id="Database_Index" name="Database_Index" value="{{Database_Index}}" />
-    <input type="hidden" id="FirstName" name="FirstName" value="{{FirstName}}" />
-    <input  type="hidden"  id="LastName" name="LastName" value="{{LastName}}" />
-    <input  type="hidden"  id="Email" name="Email" value="{{Email}}" />
-<button name="Weakness_Button" id="Weakness_Button">Address Your Weaknesses</button>
-</form>
-
 <button onclick="Prediction()">Prediction Model </button>
 <script type="text/javascript">
     function Prediction() {
@@ -45,6 +88,411 @@
         console.log("Go back home function")
         window.location.href = '/register'
     }
+
+    function loadDeepQuery(){//Loads all the deep query options (, these could be filled already, or they might need to be just presented.
+        var deeper_query_options_list=document.getElementById("deeper_query_options").value.split(",")
+
+        var section=deeper_query_options_list[0];
+        console.log("Complete List of Deeper Query Options "+deeper_query_options_list)
+        var tests=deeper_query_options_list[1]
+        console.log("selecting the right "+section)
+        var section_list=["'Math'","'English'","'Science'","'Reading'"]
+        var sections=document.createElement('select');
+
+        sections.setAttribute("id","sections");
+        var option=document.createElement('option')
+        option.value="All Sections"
+        option.text="Select Section";
+        sections.add(option)
+        for(var i =0; i<section_list.length;++i){
+
+            var option=document.createElement('option')
+            option.value=section_list[i]
+            option.text=section_list[i];
+            sections.add(option)
+
+        }
+        sections.addEventListener('change', (event) => {
+            var e = document.getElementById("sections");
+            var strUser = e.options[e.selectedIndex].value;
+            console.log("submitting because of change of section selection-deeperquery. "+strUser)
+            //document.getElementById("deeper_query").value="true"
+
+            //var student_input=document.createElement('input')
+            //student_input.setAttribute("id","student_input");
+            //student_input.setAttribute("name","student_input");
+
+           // document.getElementById("Chart").appendChild(student_input);
+            //document.getElementById("student_input").value="All Students";
+
+
+
+            document.getElementById("deeper_query").value=strUser
+
+            document.getElementById("Chart").submit()
+        });
+        var newlabel = document.createElement("Label");
+        newlabel.setAttribute("id","label_sections");
+        newlabel.setAttribute("for","sections");
+        newlabel.innerHTML = "CHOOSE Section";
+        document.getElementById("Chart").appendChild(newlabel)
+        document.getElementById("Chart").appendChild(sections);
+        document.getElementById("sections").value=section;
+
+        if(document.getElementById("student_input_server").value=="All Students"){
+            document.getElementById("Student_SQL").value="all_students";
+
+        }
+        else{
+            document.getElementById("Student_SQL").value="specific";
+        }
+        //nOW MAKE SURE THE SELECT ELEMENT "STUDENT_SQL_QUERY" shows "All students"
+        loadTests();
+        //loadTags()
+    }
+    function takeAwayChart(){
+        d3.selectAll("svg > *").remove();
+    }
+    function sortByDateAscending(a, b) {
+        // Dates will be cast to numbers automagically:
+
+        return new Date(a.Date) - new Date(b.Date);
+    }
+    function loadGraphics(){//loads Graphics for DeepQueries or shallow queries
+        document.getElementById("Area").style.display="block";
+        // set the dimensions and margins of the graph
+        var percent;
+        var date;
+        var tuple;
+        var data_list=[]
+        var data_tuples=document.getElementById("data_table").value.split(",")
+        for (var i=0;i<data_tuples.length;++i){
+            percent=data_tuples[i].split(";")[0];
+            date=data_tuples[i].split(";")[1];
+            tuple={Date:date,Percent:percent}
+            //console.log("Tuple_Inserting "+tuple.Date+" "+tuple.Percent)
+            data_list.push(tuple);
+        }
+        data_list = data_list.sort(sortByDateAscending);
+
+        var margin = {top: 10, right: 60, bottom: 30, left: 60},
+                width = 550 - margin.left - margin.right+800,
+                height = 400 - margin.top - margin.bottom;
+        // Select the svg area
+
+        var svg = d3.select("#Area")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+//Read the data
+        var parseDate = d3.timeParse("%Y-%m-%d")
+        var x = d3.scaleTime()
+                            .domain(d3.extent(data_list, function(d) {
+                                //console.log("domain "+parseDate(d.Date))
+                                return parseDate(d.Date); }))
+                            .range([ 0, width ]);
+        svg.append("g")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(d3.axisBottom(x));
+                    // Add Y axis
+        var y = d3.scaleLinear()
+                            .domain( [0, 1])
+                            .range([ height, 0 ]);
+        svg.append("g")
+                            .call(d3.axisLeft(y));
+                    // Add the line
+        svg.append("path")
+                            .datum(data_list)
+                            .attr("fill", "none")
+                            .attr("stroke", "#69b3a2")
+                            .attr("stroke-width", 1.5)
+                            .attr("d", d3.line()
+                                    .x(function(d) {
+                                       // console.log("x coordinate for line "+d.Date)
+
+                                        return x(parseDate(d.Date)) })
+                                    .y(function(d) {
+                                       // console.log("y coordinate for line "+d.Percent)
+                                        return y(d.Percent) })
+                            )
+                    // Add the points
+        svg.append("g").selectAll("dot")
+                            .data(data_list)
+                            .enter()
+                            .append("circle")
+                            .attr("cx", function(d) {
+                                //console.log("x coordinate "+d.Date)
+                                return x(parseDate(d.Date)) } )
+                            .attr("cy", function(d) {
+                               // console.log("y coordinate "+d.Percent)
+                                return y(d.Percent) } )
+                            .attr("r", 5)
+                            .attr("fill", "#69b3a2")
+
+    }
+    function loadTests(){
+
+        var test_list=document.getElementById("deeper_query_options").value.split(",")
+        console.log("Loading all the tests")
+        var sections=document.createElement('select');
+
+        sections.setAttribute("id","test_sections");
+        var option=document.createElement('option')
+        option.value="All Tests"
+        option.text="Select QuizName";
+        sections.add(option)
+        for(var i =1; i<test_list.length;++i){//make sure to start with an offset for i=1, because the firs tfew might be other arguments passed by the server
+
+            var option=document.createElement('option')
+            option.value=test_list[i]
+            option.text=test_list[i];
+            sections.add(option)
+
+        }
+        sections.addEventListener('change', (event) => {
+            var e = document.getElementById("sections");
+            var strUser = e.options[e.selectedIndex].value;
+            console.log("submitting because of change of section selection. "+strUser)
+            //document.getElementById("deeper_query").value="true"
+
+            document.getElementById("deeper_query").value=strUser
+
+            //document.getElementById("Chart").submit()
+        });
+        var newlabel = document.createElement("Label");
+        newlabel.setAttribute("id","label_test_sections");
+        newlabel.setAttribute("for","test_sections");
+        newlabel.innerHTML = "CHOOSE Quizname";
+        document.getElementById("Chart").appendChild(newlabel)
+        document.getElementById("Chart").appendChild(sections);
+    }
+    function loadStudentBox(){//ONCHANGE FUNCTION set off by change in Student Drop Down. (Two choices)
+
+
+        if(document.getElementById("Student_SQL").value=="specific"){
+            console.log("Loading specific student")
+            console.log("showing sections undefined "+document.getElementById("sections"))
+            if(document.getElementById("sections")!=null){
+                console.log("TAKING AWAY ELEMENTS because user chose specific")
+                takeAwayChart()
+
+            }
+
+            console.log("A STUDENT!!!")
+
+            var student_input=document.createElement('input')
+            student_input.setAttribute("id","student_input");
+            student_input.setAttribute("name","student_input");
+            student_input.setAttribute("value","")
+            var newlabel = document.createElement("Label");
+            newlabel.setAttribute("id","student_input_label");
+            newlabel.setAttribute("for","sections");
+            newlabel.innerHTML = " Input Student Name";
+
+            document.getElementById("Chart").appendChild(newlabel)
+            document.getElementById("Chart").appendChild(student_input);
+            document.getElementById("student_input").addEventListener("keyup", function(event) {
+                console.log("inside listener 3 chars "+this.value.length)
+                // Number 13 is the "Enter" key on the keyboard
+                if (this.value.length>3){
+                    console.log("longer than 3 chars");
+                    if (document.getElementById("sections") == null){
+                        document.getElementById("deeper_query").value="";
+                    }
+                    else{
+                        var e = document.getElementById("sections");
+                        var strUser = e.options[e.selectedIndex].value;
+                        console.log("submitting because of change of 3 cahrs . "+strUser)
+                        document.getElementById("deeper_query").value="";
+                        document.getElementById("deeper_query_options").value=strUser
+                    }
+
+
+                    document.getElementById("Chart").submit()
+                }
+            });
+            //document.getElementById("student_input_label").style.visibility = "visible";
+            //document.getElementById("student_input").style.visibility = "visible";
+
+
+        }
+        else{//selected "ALL Students"
+            console.log("loading All Students")
+            if(document.getElementById("student_input")!=null){
+                console.log("TAKING AWAY student Input")
+                takeAwayChart();
+
+                var elem=document.getElementById("student_input");
+                var parent=document.getElementById("Charts");
+                elem.parentNode.removeChild(elem);
+
+                elem=document.getElementById("student_input_label");
+                elem.parentNode.removeChild(elem);
+            }
+            if(document.getElementById("sections")==null){
+                console.log("No sections element exists so adding one")
+                var section_list=["'Math'","'English'","'Science'","'Reading'"]
+                var sections=document.createElement('select');
+
+                sections.setAttribute("id","sections");
+                var option=document.createElement('option')
+                option.value=""
+                option.text="Select Section";
+                sections.add(option)
+                for(var i =0; i<section_list.length;++i){
+
+                    var option=document.createElement('option')
+                    option.value=section_list[i]
+                    option.text=section_list[i];
+                    sections.add(option)
+
+                }
+                sections.addEventListener('change', (event) => {
+                    var e = document.getElementById("sections");
+                    var strUser = e.options[e.selectedIndex].value;
+                    console.log("submitting because of change of section selection. "+strUser)
+                    //document.getElementById("deeper_query").value="true"
+                    var student_input=document.createElement('input')
+                    student_input.setAttribute("id","student_input");
+                    student_input.setAttribute("name","student_input");
+                    student_input.setAttribute("value",document.getElementById("student_input_server").value)
+                    document.getElementById("Chart").appendChild(student_input);
+
+
+
+
+                    document.getElementById("deeper_query").value=strUser
+
+                    document.getElementById("Chart").submit()
+                });
+                var newlabel = document.createElement("Label");
+                newlabel.setAttribute("id","label_sections");
+                newlabel.setAttribute("for","sections");
+                newlabel.innerHTML = "CHOOSE Section";
+                document.getElementById("Chart").appendChild(newlabel)
+                document.getElementById("Chart").appendChild(sections);
+                document.getElementById("student_input_server").value="All Students"
+                return;
+            }
+
+            document.getElementById("Chart").submit()
+
+            //document.getElementById("student_input_label").style.display="block";
+            //document.getElementById("student_input").style.display="block";
+        }
+
+
+    }
+
+    function loadStudentInput(){//reloading the student input after it calls back the Server;
+        console.log("reloading the student Input element "+document.getElementById("student_input_server").value);
+        if (document.getElementById("student_input_server").value=="All Students"){
+            return;
+        }
+        console.log("reloading the student Input element");
+        document.getElementById("Student_SQL").value='specific'
+        var student_input=document.createElement('input')
+        student_input.setAttribute("id","student_input");
+        student_input.setAttribute("name","student_input");
+        student_input.setAttribute("value",document.getElementById("student_input_server").value)
+        var newlabel = document.createElement("Label");
+        newlabel.setAttribute("id","student_input_label");
+        newlabel.setAttribute("for","sections");
+        newlabel.innerHTML = " Input Student Name";
+
+        document.getElementById("Chart").appendChild(newlabel)
+        document.getElementById("Chart").appendChild(student_input);
+        document.getElementById("student_input").addEventListener("keyup", function(event) {
+            console.log("inside listener 3 chars "+this.value.length)
+            // Number 13 is the "Enter" key on the keyboard
+            if (this.value.length>3){
+                console.log("longer than 3 chars");
+                document.getElementById("Chart").submit()
+            }
+        });
+    }
+    function loadData_Names(){//fills out the grid with names of students
+        var table_header=document.getElementById('header_2');
+        var th= document.createElement("td");
+        th.innerHTML ="Name";
+        table_header.appendChild(th)
+        th = document.createElement("td");
+        th.innerHTML ="ID";
+
+        table_header.appendChild(th)
+
+        var rows=document.getElementById("data_table").value.split(",");
+        var data=[]
+        var tbl = document.getElementById('tbl');
+        for ( var index=0;index<rows.length;++index){
+            console.log("one row "+rows[index])
+            var columns=rows[index].split("-");
+
+           // data.push('<tr><td>'+columns[0]+'</td>' +
+                   // '<td>'+columns[1]+'</td>' +
+                   // '<td>'+columns[2]+'</td>' +
+                   // '</tr>')
+            //data.push('<div>'+columns[0]+'</div>','<div>'+columns[1]+'</div>','<div>'+columns[2]+'</div>');
+
+            var tr = document.createElement('tr');
+
+            var td = document.createElement('td');
+            td.style.color='red'
+            td.innerHTML = columns[0].replace(/\s/g,'')+" "+columns[1].replace(/\s/g,'');
+            td.innerText=columns[0].replace(/\s/g,'')+" "+columns[1].replace(/\s/g,'')+";"+columns[2].replace(/\s/g,'');
+            td.value=columns[2].replace(/\s/g,'');
+            tr.appendChild(td)
+
+            td=document.createElement('td');
+            td.style.color='red'
+            td.innerHTML = columns[2].replace(/\s/g,'');
+
+            tr.appendChild(td)
+
+            tr.onclick=async function(event) {
+                document.getElementById("deeper_query").value="true"///this should hold something at least, but its really meant for later on if user wants to query more complcated;
+                document.getElementById("deeper_query").value="All Sections"
+                document.getElementById("student_input").value=this.firstChild.innerText
+                console.log('clicked!!!! '+this.firstChild.innerText);
+                document.getElementById("Chart").submit()
+
+            }
+            tbl.appendChild(tr);
+        }
+
+    }
+    window.onload = function () {
+        console.log("inside onload fuction ")
+        if(document.getElementById("certification").value=="true"){
+            console.log("Checking if data tables has anything "+document.getElementById("data_table").value.length)
+            if (document.getElementById("data_table").value.length>0 && document.getElementById("deeper_query").value!="true" ){
+                loadStudentInput();//Usually called when a specific student is written in
+                loadData_Names();//loads the grid with just the Name information.
+            }
+            else if(document.getElementById("data_table").value.length>0 && document.getElementById("deeper_query").value=="true" ){
+                console.log("loading stuff for deeper query")
+
+                loadGraphics();
+                loadStudentInput();
+                loadDeepQuery();
+            }
+            console.log("Displaying Charts!, certified")
+            document.getElementById("Student_SQL_label").style.visibility="visible";
+            document.getElementById("Student_SQL").style.visibility="visible";
+
+
+
+
+
+
+        }
+
+
+    }
+
 </script>
 
 

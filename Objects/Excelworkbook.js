@@ -411,11 +411,11 @@ module.exports= class Excelworkbook {
         var pythonProcess;
         var dataString = '';
 
-        console.log("Spawning out SVM Python program"+" "+req.query.checkbox_1 +" "+ req.query.checkbox_2 +" "+ req.query.checkbox_3+" "+req.query.checkbox_4+" "+
-            req.query.checkbox_5+" "+req.query.checkbox_6+" "+req.query.checkbox_7)
+        console.log("Spawning out SVM Python program"+" ")
         pythonProcess = spawn('python',["C:\\Users\\david\\IdeaProjects\\CalculateOdds\\main.py",highschool,university,req.query.ACT,req.query.GPA,req.query.checkbox_1+" "+ req.query.checkbox_2+" "+
-                req.query.checkbox_3+" "+req.query.checkbox_4+" "+req.query.checkbox_5+" "+req.query.checkbox_6+" "+req.query.checkbox_7]);
-
+             req.query.checkbox_3+" "+req.query.checkbox_4+" "+req.query.checkbox_5+" "+req.query.checkbox_6+" "+req.query.checkbox_7]);
+       // pythonProcess = spawn('python',["C:\\Users\\david\\IdeaProjects\\Twiter_Bot_Study\\Firehouse_Class.py",highschool,university,req.query.ACT,req.query.GPA]);
+        pythonProcess.stderr.pipe(process.stderr);
         pythonProcess.stdout.on('data', function(data) {
             console.log("Returning from Python program"+" "+data.toString())
 
@@ -427,7 +427,7 @@ module.exports= class Excelworkbook {
 
 
         pythonProcess.stdout.on('end', function(){
-            //console.log("Final string its sending"+" "+dataString)
+            console.log("Final string its sending"+" "+dataString)
             dataString=dataString+'\n'+'-------------------------->-------------------->---------------->Seperation'+'\n'
             fs.appendFile('../past_searches.txt',  dataString, (err) => {
                 // throws an error, you could also catch it here
