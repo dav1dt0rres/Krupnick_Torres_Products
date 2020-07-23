@@ -424,7 +424,7 @@ module.exports= class Database {
             }
 
 
-            await this.initializeTagged_List_regex(this.Tag,number_of_questions);//this collects all questions that have tags with regex
+            await this.initializeTagged_List_regex(continued,session,this.Tag,number_of_questions);//this collects all questions that have tags with regex
 
         }
         else if (given_tag!=undefined){
@@ -441,7 +441,7 @@ module.exports= class Database {
             }
             else{
                 console.log("Semi tag NOT inputted")
-                await this.initializeTagged_List_regex(given_tag,number_of_questions);//this collects all questions that have tags with regex
+                await this.initializeTagged_List_regex(continued,session,given_tag,number_of_questions);//this collects all questions that have tags with regex
             }
 
             if(this.List_Questions.length==0){
@@ -610,8 +610,10 @@ module.exports= class Database {
         var keywords=[]
         var counter=0;
         var past_responses=[]
+        var past_responses_questions=[]
+        var temp_normal_history=[]
         if(continued){
-            console.log("Recalling the Past for continiuation purposes_TAG_PRoblem SET")
+            console.log("Recalling the Past for continiuation purposes")
             var dict_schema_1 = {
                 "ACT-Reading":"ReadingQuestion" ,
                 "ACT-Math": "MathQuestion",
@@ -625,7 +627,7 @@ module.exports= class Database {
                 "ACT-Science": "Science_Question"
             }
             var past_responses_query=Response_table.find({Student_ID:this.Student.ID,Model_Name:dict_schema_1[this.Test_Type],Session:session}).populate(dict_schema_2[this.Test_Type]);
-            var past_responses_questions=[]
+
             await past_responses_query.exec(function(err,Responses){
 
                 if (Responses==null){
@@ -731,7 +733,7 @@ module.exports= class Database {
                         console.log("SETTING RESPONSE BECAUSE FOUND SOME Continued"+Question_object.Number);
                         var index_place_holder=past_responses.indexOf(Question_object.Number)
                         Question_object.setResponseContinued(past_responses_questions[index_place_holder])
-
+                        temp_normal_history.push(past_responses_questions[index_place_holder])
                     }
                     keywords[counter]=Question_object;
                     ++counter;
@@ -740,7 +742,7 @@ module.exports= class Database {
             });
 
 
-
+        this.Normal_History=temp_normal_history
         this.List_Questions=keywords
         console.log("List of normal questions"+" "+this.List_Questions.length)
 
@@ -755,8 +757,9 @@ module.exports= class Database {
         var counter=0;
         var past_responses=[]
         var keywords = [];
-
+        var past_responses_questions=[]
         var temp_History_List=this.List_Tagged_History;
+        var temp_normal_history=[]
         //console.log("Tag its looking for "+" "+this.Last_Question.Tag)
         //var last_question_id=this.Last_Question._id
         if(continued){
@@ -774,7 +777,7 @@ module.exports= class Database {
                 "ACT-Science": "Science_Question"
             }
             var past_responses_query=Response_table.find({Student_ID:this.Student.ID,Model_Name:dict_schema_1[this.Test_Type],Session:session+"Set"}).populate(dict_schema_2[this.Test_Type]);
-            var past_responses_questions=[]
+
             await past_responses_query.exec(function(err,Responses){
 
                 if (Responses==null){
@@ -884,7 +887,7 @@ module.exports= class Database {
                             console.log("SETTING RESPONSE BECAUSE FOUND SOME Continued"+Question_object.Number);
                             var index_place_holder=past_responses.indexOf(Question_object.Number)
                             Question_object.setResponseContinued(past_responses_questions[index_place_holder])
-
+                            temp_normal_history.push(past_responses_questions[index_place_holder])
                         }
                         keywords[counter]=Question_object;
                         ++counter;
@@ -896,10 +899,12 @@ module.exports= class Database {
         });
         if(number_of_problems.length==0 || number_of_problems=="undefined"){
             this.List_Questions=keywords;
+            this.Normal_History=temp_normal_history
             console.log("Size of List Tagged Quesstion (minus the history)_no number of problems"+this.List_Questions.length);
             return;
         }
         this.List_Questions=keywords.slice(0, number_of_problems);
+        this.Normal_History=temp_normal_history
         console.log("Size of List Tagged Quesstion (minus the history)"+this.List_Questions.length);
     }
 
@@ -1618,7 +1623,7 @@ module.exports= class Database {
         console.log("Length "+List.length+" "+this.List_Questions.length)
         if(List.length<this.List_Questions.length-2){
 
-            this.BookMark=List[List.length-1] //this needs to be ordered first?
+            this.BookMark=List.length-1 //this needs to be ordered first?
 
             this.send_email("Continued",req)
             console.log("Sending Email To Be Continued "+this.Test+" "+this.Test_Type+" "+this.BookMark)
@@ -1831,13 +1836,117 @@ module.exports= class Database {
         });
         return Array.from(set)
     }
-    async initializeTagged_List_regex(Main_Tag,number_of_problems){//collects all questions whose tag contains the regular expression of the main tag
+    async initializeTagged_List_regex(continued,session,Main_Tag,number_of_problems){//collects all questions whose tag contains the regular expression of the main tag
         var string=".*"+Main_Tag.toLowerCase()+".*"
         var temp_History_List=this.List_Tagged_History;
         console.log("Main Tag going IN for regex "+Main_Tag)
         var Question_object;
         var keywords=[];
+        var past_responses=[];
+        var past_responses_questions=[]
+        var temp_normal_history=[]
         var counter=0;
+        if(continued){
+            console.log("Recalling the Past for continiuation purposes_Tagged List")
+            var dict_schema_1 = {
+                "ACT-Reading":"ReadingQuestion" ,
+                "ACT-Math": "MathQuestion",
+                "ACT-English": "EnglishQuestion",
+                "ACT-Science":"ScienceQuestion"
+            }
+            var dict_schema_2={
+                "ACT-Reading":"Reading_Question" ,
+                "ACT-Math": "Math_Question",
+                "ACT-English": "English_Question",
+                "ACT-Science": "Science_Question"
+            }
+            var past_responses_query=Response_table.find({Student_ID:this.Student.ID,Model_Name:dict_schema_1[this.Test_Type],Session:session+"Set"}).populate(dict_schema_2[this.Test_Type]);
+
+            await past_responses_query.exec(function(err,Responses){
+
+                if (Responses==null){
+
+                    return
+                }
+                for  (var i=0;i<Responses.length;++i){
+
+                    if(Responses[i].Model_Name=="EnglishQuestion"){
+                        console.log(Responses[i].English_Question.Test.toString()+" "+Responses[i].English_Question.Test_Type.toString()+" "+Responses[i].English_Question.Number);
+
+                        past_responses.push(Responses[i].English_Question.Number.toString())
+                        var Question_object=new Question(Responses[i].English_Question.Question_body.join(" "),Responses[i].English_Question.Choices,Responses[i].English_Question.Right_Answer,Responses[i].English_Question.Tag,Responses[i].English_Question.Number,
+                            " ",Responses[i].English_Question.Test_Type,Responses[i].English_Question.Test,-1);
+
+                        Question_object.setHover_History(Responses[i].Hover_History);
+                        Question_object.setDraw_History_Database(Responses[i].Draw_History)
+                        Question_object.Checked_Answers=Responses[i].Checked_Answers[0].split(",");
+                        Question_object.setCheckAnswer(Responses[i].Check_Answer)
+                        Question_object.setResponse(Responses[i].Response);
+                        Question_object.setRepeats(Responses[i].Repeats);
+                        Question_object.setHint_Selection(Responses[i].Hint_Selection);
+                        Question_object.setViews(Responses[i].Views);
+                        Question_object.setTotalTime(Responses[i].Total_Time.toString());
+                        Question_object.setTime(Responses[i].Time);
+                        Question_object.setTime_Stamp(Responses[i].time_stamp)
+                        Question_object.setConfidence(Responses[i].Confidence)
+                        past_responses_questions.push(Question_object)
+                    }
+                    else if(Responses[i].Model_Name=="ReadingQuestion"){
+
+                        console.log(Responses[i].Reading_Question.Test.toString()+" "+Responses[i].Reading_Question.Test_Type.toString()+" "+Responses[i].Reading_Question.Tag);
+                        past_responses.push(Responses[i].Reading_Question.Number.toString())
+                        var Question_object=new Question(Responses[i].Reading_Question.Question_body.join(" "),Responses[i].Reading_Question.Choices,Responses[i].Reading_Question.Right_Answer,Responses[i].Reading_Question.Tag,Responses[i].Reading_Question.Number,
+                            " ",Responses[i].Reading_Question.Test_Type,Responses[i].Reading_Question.Test,-1);
+
+                        Question_object.setHover_History(Responses[i].Hover_History);
+                        Question_object.setDraw_History_Database(Responses[i].Draw_History)
+                        Question_object.Checked_Answers=Responses[i].Checked_Answers[0].split(",");
+                        Question_object.setCheckAnswer(Responses[i].Check_Answer)
+                        Question_object.setResponse(Responses[i].Response);
+                        Question_object.setRepeats(Responses[i].Repeats);
+                        Question_object.setHint_Selection(Responses[i].Hint_Selection);
+                        Question_object.setViews(Responses[i].Views);
+                        Question_object.setTotalTime(Responses[i].Total_Time.toString());
+                        Question_object.setTime(Responses[i].Time);
+                        Question_object.setTime_Stamp(Responses[i].time_stamp)
+                        Question_object.setConfidence(Responses[i].Confidence)
+                        past_responses_questions.push(Question_object)
+                    }
+                    else if(Responses[i].Model_Name=="MathQuestion" ){
+
+                        console.log(Responses[i].Math_Question.Test.toString()+" "+Responses[i].Math_Question.Test_Type.toString()+" "+Responses[i].Math_Question.Tag);
+                        past_responses.push(Responses[i].Math_Question.Number.toString())
+
+                        var Question_object=new Question(Responses[i].Math_Question.Question_body.join(" "),Responses[i].Math_Question.Choices,Responses[i].Math_Question.Right_Answer,Responses[i].Math_Question.Tag,Responses[i].Math_Question.Number,
+                            " ",Responses[i].Math_Question.Test_Type,Responses[i].Math_Question.Test,-1);
+
+                        Question_object.setHover_History(Responses[i].Hover_History);
+                        Question_object.setDraw_History_Database(Responses[i].Draw_History)
+                        Question_object.Checked_Answers=Responses[i].Checked_Answers[0].split(",");
+                        Question_object.setCheckAnswer(Responses[i].Check_Answer)
+                        Question_object.setResponse(Responses[i].Response);
+                        Question_object.setRepeats(Responses[i].Repeats);
+                        Question_object.setHint_Selection(Responses[i].Hint_Selection);
+                        Question_object.setViews(Responses[i].Views);
+                        Question_object.setTotalTime(Responses[i].Total_Time.toString());
+                        Question_object.setTime(Responses[i].Time);
+                        Question_object.setTime_Stamp(Responses[i].time_stamp)
+                        Question_object.setConfidence(Responses[i].Confidence)
+                        past_responses_questions.push(Question_object)
+                    }
+
+                    else if(Responses[i].Model_Name=="ScienceQuestion" ){
+
+                        console.log(Responses[i].Science_Question.Test.toString()+" "+Responses[i].Science_Question.Test_Type.toString()+" "+Responses[i].Science_Question.Tag);
+                        past_responses_questions.push(Responses[i].Science_Question.Number.toString())
+                    }
+                }
+
+            });
+        }
+        console.log("length of past responses "+past_responses_questions.length)
+
+
         var temp_Object= dict[this.Test_Type].find({Tag:{$regex:string}}).populate("Passage_ID").lean();
         await temp_Object.exec(function(err,Questions) {
             for (var i=0;i<Questions.length ;++i){
@@ -1856,6 +1965,12 @@ module.exports= class Database {
                     if(Question_object.Test_Type=="ACT-Science"){
                         Question_object.setPNGPictures(Questions[i].Img_List)
                     }
+                    if(past_responses.includes(Question_object.Number) ){
+                        console.log("SETTING RESPONSE BECAUSE FOUND SOME Continued"+Question_object.Number);
+                        var index_place_holder=past_responses.indexOf(Question_object.Number)
+                        Question_object.setResponseContinued(past_responses_questions[index_place_holder])
+                        temp_normal_history.push(past_responses_questions[index_place_holder])
+                    }
                     keywords[counter]=Question_object;
                     ++counter;
 
@@ -1866,10 +1981,12 @@ module.exports= class Database {
 
         if(number_of_problems.length==0 || number_of_problems=="undefined"){
             this.List_Questions=keywords;
+            this.Normal_History=temp_normal_history
             console.log("Size of List Tagged Quesstion (minus the history)_no number of problems"+this.List_Questions.length);
             return;
         }
         this.List_Questions=keywords.slice(0, number_of_problems);
+        this.Normal_History=temp_normal_history
         console.log("Size of List Tagged Quesstion (minus the history)"+this.List_Questions.length);
 
     }

@@ -17,8 +17,6 @@
       <change afterPath="$PROJECT_DIR$/../ClientHive/.idea/scala_compiler.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../ClientHive/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../ClientHive/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/MYSQLInstance.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/Train.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Razvan/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Razvan/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Razvan/Firm.py" afterDir="false" />
@@ -665,22 +663,6 @@
       <change beforePath="$PROJECT_DIR$/../422Project/view_pract_timed_mode.html" beforeDir="false" afterPath="$PROJECT_DIR$/../422Project/view_pract_timed_mode.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Objects/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Database.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Objects/Excelworkbook.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Excelworkbook.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Objects/Question.js" beforeDir="false" afterPath="$PROJECT_DIR$/Objects/Question.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" afterPath="$PROJECT_DIR$/bin/www" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/okta-node.iml" beforeDir="false" afterPath="$PROJECT_DIR$/okta-node.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/AddQuestions.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/AddQuestions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/ModelPredictor.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/ModelPredictor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/ReadWriteSheets.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/ReadWriteSheets.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Test_Options.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Test_Options.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/dashboard.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/dashboard.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/student_credentials.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/student_credentials.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/tutor_credentials.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/tutor_credentials.hbs" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -711,8 +693,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="759" column="53" selection-start-line="759" selection-start-column="32" selection-end-line="759" selection-end-column="53" />
+            <state relative-caret-position="8670">
+              <caret line="510" column="63" selection-start-line="510" selection-start-column="41" selection-end-line="510" selection-end-column="63" />
               <folding>
                 <element signature="n#!!block;n#findAllbrackets_Math#0" />
                 <element signature="n#!!block;n#readScaledScore#0" />
@@ -724,12 +706,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Objects/Database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="106">
-              <caret line="775" column="140" selection-start-line="775" selection-start-column="140" selection-end-line="775" selection-end-column="140" />
-              <folding>
-                <element signature="e#25588#32355#0" />
-                <element signature="e#35870#41771#0" />
-              </folding>
+            <state relative-caret-position="2611">
+              <caret line="1988" column="47" selection-start-line="1988" selection-start-column="47" selection-end-line="1988" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/Test_Options.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" selection-start-line="19" selection-end-line="19" />
             </state>
           </provider>
         </entry>
@@ -792,36 +779,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Semi Tag +Tag</find>
-      <find>+</find>
-      <find>trig</find>
-      <find>contined, Tag _List is being defin</find>
-      <find>ag _List is being def</find>
-      <find>Setting continued index</find>
-      <find>Count =0</find>
-      <find>this.Normal_Index=</find>
-      <find>contined, Tag _List is being define</find>
-      <find>req.query.Math_Search</find>
-      <find>initialize_Tag_histor</find>
-      <find>nside initilze question for tags</find>
-      <find>ontined, Tag _List is being defined</find>
-      <find>nside initilze question for ta</find>
-      <find>established Tag math</find>
-      <find>initializeTagged_List_regex</find>
-      <find>side initilze question for t</find>
-      <find>initializeTagged_List_reg</find>
-      <find>established Tag math</find>
-      <find>initializeNormal_List</find>
-      <find>if(continued)</find>
-      <find>initializeTagged_List</find>
-      <find>initializeTagged_List(</find>
       <find>past_responses</find>
       <find>past_responses_qu</find>
       <find>Size of List Tagged Quesstion (minus the history)</find>
       <find>Recalling the Past for continiuation pur</find>
       <find>counter</find>
-      <find>ecalling the Past for continiuation p</find>
       <find>Recalling the Past for continiuation pu</find>
+      <find>ecalling the Past for continiuation p</find>
+      <find>past_responses_questions</find>
+      <find>setting</find>
+      <find>orderNormal_List</find>
+      <find>InitializeQuestions</find>
+      <find>send_email</find>
+      <find>this.BookMark=</find>
+      <find>this.BookMark</find>
+      <find>BookMark</find>
+      <find>past_responses_ques</find>
+      <find>The student will continue--&gt;BookMar</find>
+      <find>nside initilze question for tag</find>
+      <find>past_response</find>
+      <find>Size of List Tagged Quesstio</find>
+      <find>initializeTagged_List</find>
+      <find>initializeTagged_List_rege</find>
+      <find>initializing Tagged_List</find>
+      <find>initializeTagged_List</find>
+      <find>initializeTagged_List_regex</find>
+      <find>SETTING RESPONSE BECAUSE FOUND SOME Contin</find>
+      <find>f List Tagged Quesstion (minus the history)_no number of probl</find>
+      <find>SETTING RESPONSE BECAUSE FO</find>
+      <find>getNormalLast_Question</find>
+      <find>ONSE BECAUSE FOUND SOME Continued</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -893,10 +880,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-9" />
-    <option name="y" value="2" />
+    <option name="x" value="-10" />
+    <option name="y" value="1" />
     <option name="width" value="2580" />
-    <option name="height" value="1048" />
+    <option name="height" value="1049" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -904,8 +891,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -951,6 +936,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1255,7 +1242,8 @@
       <workItem from="1595117968025" duration="1349000" />
       <workItem from="1595209727784" duration="23346000" />
       <workItem from="1595363751600" duration="9383000" />
-      <workItem from="1595439110247" duration="16961000" />
+      <workItem from="1595439110247" duration="25312000" />
+      <workItem from="1595528404964" duration="995000" />
     </task>
     <task id="LOCAL-00001" summary="lenovo yoga">
       <created>1550904201748</created>
@@ -1275,7 +1263,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3524113000" />
+    <option name="totallyTimeSpent" value="3533459000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1287,10 +1275,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="2" width="2064" height="838" extended-state="0" />
+    <frame x="-8" y="1" width="2064" height="839" extended-state="0" />
     <layout>
       <window_info id="Structure" order="0" sideWeight="0.08659794" side_tool="true" weight="0.08841159" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.7185185" side_tool="true" visible="true" weight="0.102295406" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.7185185" side_tool="true" visible="true" weight="0.083333336" />
       <window_info id="npm" order="2" sideWeight="0.094017096" side_tool="true" weight="0.1757085" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -1299,7 +1287,7 @@
       <window_info id="Favorites" order="7" sideWeight="0.28148147" side_tool="true" weight="0.2680162" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.23024523" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4965035" visible="true" weight="0.33787465" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4965035" visible="true" weight="0.53605443" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4995005" weight="0.43188012" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1337,6 +1325,11 @@
           <url>file://$PROJECT_DIR$/routes/EditQuestion.js</url>
           <line>26</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Objects/Database.js</url>
+          <line>614</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1628,13 +1621,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/Test_Options.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-238">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/Test_Options.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="94">
@@ -1644,6 +1630,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Objects/Student.js">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/router/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="329" column="11" selection-start-line="329" selection-start-column="11" selection-end-line="329" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8670">
+          <caret line="510" column="63" selection-start-line="510" selection-start-column="41" selection-end-line="510" selection-end-column="63" />
+          <folding>
+            <element signature="n#!!block;n#findAllbrackets_Math#0" />
+            <element signature="n#!!block;n#readScaledScore#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/Test_Options.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Objects/Question.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -1680,32 +1691,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/router/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="329" column="11" selection-start-line="329" selection-start-column="11" selection-end-line="329" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="759" column="53" selection-start-line="759" selection-start-column="32" selection-end-line="759" selection-end-column="53" />
-          <folding>
-            <element signature="n#!!block;n#findAllbrackets_Math#0" />
-            <element signature="n#!!block;n#readScaledScore#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Objects/Database.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="775" column="140" selection-start-line="775" selection-start-column="140" selection-end-line="775" selection-end-column="140" />
-          <folding>
-            <element signature="e#25588#32355#0" />
-            <element signature="e#35870#41771#0" />
-          </folding>
+        <state relative-caret-position="2611">
+          <caret line="1988" column="47" selection-start-line="1988" selection-start-column="47" selection-end-line="1988" selection-end-column="47" />
         </state>
       </provider>
     </entry>
